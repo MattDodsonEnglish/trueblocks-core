@@ -20,6 +20,7 @@ static const COption params[] = {
 };
 static const size_t nParams = sizeof(params) / sizeof(COption);
 
+extern string_q getSubcommands(void);
 //---------------------------------------------------------------------------------------------------
 bool COptions::parseArguments(string_q& command) {
     if (!standardOptions(command))
@@ -59,11 +60,11 @@ bool COptions::parseArguments(string_q& command) {
                     exists = true;
             }
 
-            string descr = substitute(substitute(params[0].description, "[", "|"), "]", "|");
+            string subCommands = "|" + getSubcommands() + "|";
             bool isStatus = (mode == "status");
-            if (!isStatus && contains(descr, "|" + arg + "|")) {
+            if (!isStatus && contains(subCommands, "|" + arg + "|")) {
                 if (!mode.empty())
-                    return usage("Please specify " + params[0].description + ". " + mode + ":" + arg);
+                    return usage("Please specify one of " + getSubcommands() + ". " + mode + ":" + arg);
                 mode = arg;
 
 
@@ -318,7 +319,7 @@ const char* cmdList =
     "where|";
 
 //------------------------------------------------------------------------------------------------
-string_q getOptions(void) {
+string_q getSubcommands(void) {
     CStringArray cmds;
     explode(cmds, cmdList, '|');
     ostringstream out;
