@@ -12,29 +12,17 @@ int main(int argc, const char* argv[]) {
     acctlib_init(quickQuitHandler);
 
     ENTER("chifra");
+
+    int r = EXIT_FAILURE;
     COptions options;
-    if (!options.prepareArguments(argc, argv))
-        RETURN(EXIT_FAILURE);
+    if (!options.prepareArguments(argc, argv)) {
+        RETURN(r);
 
-    // for (auto command : options.commandLines)
-    {
-        if (!options.parseArguments(options.commandLines[0])) {
-            acctlib_cleanup();
-            RETURN(EXIT_FAILURE);
-        }
+    } else if (options.parseArguments(options.commandLines[0])) {
+        r = options.handle_commands();
 
-        if (options.mode == "list" || options.mode == "export") {
-            options.tool_flags = substitute(options.tool_flags, "--addrs", "");
-            int r = options.handle_export();
-            acctlib_cleanup();
-            RETURN(r);
-
-        } else {
-            int r = options.handle_commands();
-            acctlib_cleanup();
-            RETURN(r);
-        }
     }
-
-    EXIT_NOMSG(EXIT_SUCCESS);
+    
+    acctlib_cleanup();
+    EXIT_NOMSG(r);
 }

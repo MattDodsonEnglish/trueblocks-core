@@ -21,7 +21,6 @@ class COptions : public COptionsBase {
 
     string_q mode;
     CAddressArray addrs;
-    string_q freshen_flags;
     string_q tool_flags;
 
     COptions(void);

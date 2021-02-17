@@ -10,11 +10,6 @@ bool COptions::handle_commands(void) {
     ENTER("handle_" + mode);
     nodeRequired();
 
-    if (cmdMap[mode].empty()) {
-        LOG_ERR("Should not happen. cmd[", mode, "] is empty.");
-        return EXIT_FAILURE;
-    }
-
     if (mode == "scrape") {
         if (isApiMode() && contains(tool_flags, "run")) {
             cout << "{ \"status\": \"cannot run\" }";
@@ -56,7 +51,7 @@ map<string, string> cmdMap = {{"slurp", "ethslurp"},        {"collections", "eth
                               {"quotes", "ethQuote"},       {"state", "getState"},
                               {"tokens", "getTokenInfo"},   {"when", "whenBlock"},
                               {"where", "whereBlock"},      {"status", "cacheStatus"},
-                              {"rm", "acctExport --rm"},    {"list", "acctExport --appearances"},
+                              {"rm", "acctExport --rm"},    {"list", "acctExport --list"},
                               {"export", "acctExport"},     {"scrape", "blockScrape"},
                               {"dive", "turboDive"},        {"serve", "tbServer"},
                               {"pins", "pinStatus"},        {"explore", "ethscan.py"}};

@@ -34,7 +34,7 @@ bool COptions::hanlde_appearances(void) {
 
     if (!isTestMode())
         LOG_PROGRESS1((freshen ? "Updated" : "Reported"), (first_record + nProcessed), nTransactions,
-                      " appearances for address " + monitors[0].address + "\r");
+                      " appearances for address " + allMonitors[0].address + "\r");
 
     EXIT_NOMSG(true);
 }

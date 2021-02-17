@@ -78,22 +78,6 @@ bool COptions::parseArguments(string_q& command) {
                     return usage("Please specify " + params[0].description + ". " + mode + ":" + arg);
                 mode = arg;
 
-            } else if (contains(arg, ",")) {
-                if (isAddress(arg.substr(0, 42))) {
-                    if (mode == "list") {
-                        CStringArray parts;
-                        explode(parts, arg, ',');
-                        arg = parts[0];
-                        freshen_flags = substitute(parts[1], "=", ":");
-
-                    } else if (!isAddress(arg)) {
-                        return usage("Invalid address: " + arg);
-                    }
-                    if (!exists)
-                        addrs.push_back(lower);
-                } else {
-                    tool_flags += substitute(arg, ",", " ");
-                }
 
             } else if (isAddress(arg) || arg == "--known" || arg == "--monitored") {
                 if (!exists)
@@ -104,11 +88,7 @@ bool COptions::parseArguments(string_q& command) {
                     addrs.push_back(lower);
 
             } else {
-                if (arg == "--staging") {
-                    freshen_flags += (arg + " ");
-                } else {
-                    tool_flags += (arg + " ");
-                }
+                tool_flags += (arg + " ");
             }
         }
     }
@@ -122,8 +102,6 @@ bool COptions::parseArguments(string_q& command) {
         verbose = true;
         return usage("Please specify " + params[0].description);
     }
-
-    establishMonitorFolders();
 
     // Handle base layer options
     if (tool_help)
@@ -144,14 +122,8 @@ bool COptions::parseArguments(string_q& command) {
     if (verbose && !contains(tool_flags, "-v"))
         tool_flags += (" -v:" + uint_2_Str(verbose));
 
-    if (verbose && !contains(freshen_flags, "-v"))
-        freshen_flags += (" -v:" + uint_2_Str(verbose));
-
     tool_flags += addExportMode(expContext().exportFmt);
     tool_flags = trim(tool_flags, ' ');
-
-    freshen_flags += addExportMode(expContext().exportFmt);
-    freshen_flags = trim(freshen_flags, ' ');
 
     if (contains(tool_flags, "help")) {
         if (cmdMap[mode].empty())
@@ -208,7 +180,6 @@ bool COptions::parseArguments(string_q& command) {
             }
         }
         tool_flags += " --mocked ";
-        freshen_flags += " --mocked ";
     }
 
     return true;
@@ -224,7 +195,6 @@ void COptions::Init(void) {
 
     addrs.clear();
     tool_flags = "";
-    freshen_flags = "";
     mode = "";
     minArgs = 0;
 }

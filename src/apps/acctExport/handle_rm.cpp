@@ -9,7 +9,6 @@
  */
 #include "options.h"
 
-#if 0
 const char* STR_NOTFOUND = "Monitor [{ADDRESS}] not found";
 const char* STR_DELETED = "Monitor [{ADDRESS}] was deleted but not removed";
 const char* STR_UNDELETED = "Monitor [{ADDRESS}] was undeleted";
@@ -58,4 +57,3 @@ bool COptions::handle_rm(const CAddressArray& addrs) {
 
     return false;  // do not continue
 }
-#endif

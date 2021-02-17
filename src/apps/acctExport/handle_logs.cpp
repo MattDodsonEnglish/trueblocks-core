@@ -66,7 +66,7 @@ bool COptions::handle_logs(void) {
                     blknum_t current = first_record + nProcessed;
                     blknum_t goal = min(first_record + max_records, nTransactions);
                     ostringstream post;
-                    post << " txs (max " << goal << ") for address " << monitors[0].address << "\r";
+                    post << " txs (max " << goal << ") for address " << allMonitors[0].address << "\r";
                     LOG_PROGRESS1("Reading", current, nTransactions, post.str());
                 }
 
@@ -122,7 +122,7 @@ bool COptions::handle_logs(void) {
                     blknum_t current = first_record + nProcessed;
                     blknum_t goal = min(first_record + max_records, nTransactions);
                     ostringstream post;
-                    post << " txs (max " << goal << ") for address " << monitors[0].address;
+                    post << " txs (max " << goal << ") for address " << allMonitors[0].address;
                     if (!isApiMode())
                         post << " " << app->blk;
                     LOG_PROGRESS1("Extracting", current, nTransactions, post.str() + "\r");
@@ -130,7 +130,7 @@ bool COptions::handle_logs(void) {
             }
 
             for (auto log : trans.receipt.logs) {
-                if (!emitter || log.address == monitors[0].address) {
+                if (!emitter || log.address == allMonitors[0].address) {
                     nProcessed++;
                     if (shouldDisplay) {
                         cout << ((isJson() && !first) ? ", " : "");
@@ -144,9 +144,9 @@ bool COptions::handle_logs(void) {
 
     if (!isTestMode())
         LOG_PROGRESS1((freshen ? "Updated" : "Reported"), (first_record + nProcessed), nTransactions,
-                      " transactions for address " + monitors[0].address + "\r");
+                      " transactions for address " + allMonitors[0].address + "\r");
 
-    for (auto monitor : monitors)
+    for (auto monitor : allMonitors)
         monitor.updateLastExport(lastExported);
 
     reportNeighbors();

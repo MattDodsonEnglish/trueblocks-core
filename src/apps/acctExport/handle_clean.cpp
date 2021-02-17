@@ -16,13 +16,18 @@ bool visitFile(const string_q& path, void* data) {
     } else {
         if (endsWith(path, "acct.bin")) {
             if (isTestMode()) {
-                static bool first = true;
-                if (!first)
-                    cout << ",";
-                first = false;
-                CMonitor m;
-                cout << "{ \"path\": \"" << substitute(path, m.getMonitorPath(""), "$CACHE/") << "\"}" << endl;
-                return !shouldQuit();
+                static CStringArray testAddrs = {
+                    "0x001d14804b399c6ef80e64576f657660804fec0b", "0x1111111111111111111111111111111111111111",
+                    "0x1111122222111112222211111222221111122222", "0x1234567812345678123456781234567812345678",
+                    "0x1234567890123456789012345678901234567890", "0x5555533333555553333355555333335555533333",
+                    "0x9876543210987654321098765432109876543210", "0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359",
+                    "0xfb744b951d094b310262c8f986c860df9ab1de65"};
+                bool found = false;
+                for (auto t : testAddrs)
+                    if (contains(path, t))
+                        found = true;
+                if (!found)
+                    return true;
             }
 
             size_t sizeThen = fileSize(path);
@@ -66,7 +71,13 @@ bool visitFile(const string_q& path, void* data) {
             for (auto item : deduped)
                 archiveOut << item.blk << item.txid;
             archiveOut.Release();
-            cout << path << ": " << sizeThen << " - " << fileSize(path) << endl;
+
+            static bool first = true;
+            if (!first)
+                cout << ",";
+            first = false;
+            CMonitor m;
+            cout << "{ \"path\": \"" << substitute(path, m.getMonitorPath(""), "$CACHE/") << "\", \"sizeThen\": " << sizeThen << ", \"sizeNow\": " << fileSize(path) << "}" << endl;
         }
     }
 
@@ -76,10 +87,8 @@ bool visitFile(const string_q& path, void* data) {
 //---------------------------------------------------------------
 bool COptions::handle_clean(void) {
     CMonitor m;
-    if (isTestMode())
-        cout << "[" << endl;
+    cout << (isTestMode() ? "[" : "");
     bool ret = forEveryFileInFolder(m.getMonitorPath(""), visitFile, NULL);
-    if (isTestMode())
-        cout << "]" << endl;
+    cout << (isTestMode() ? "]" : "");
     return ret;
 }

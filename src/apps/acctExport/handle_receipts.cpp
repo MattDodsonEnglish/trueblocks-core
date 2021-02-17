@@ -87,7 +87,7 @@ bool COptions::handle_receipts(void) {
                 ostringstream os;
                 os << "Exporting " << nProcessed << " ";
                 os << plural(className) << " of ";
-                os << nTransactions << " (max " << nProcessing << ") txs for address " << monitors[0].address;
+                os << nTransactions << " (max " << nProcessing << ") txs for address " << allMonitors[0].address;
                 LOG_INFO(os.str() + "\r");
             }
         }
@@ -95,9 +95,9 @@ bool COptions::handle_receipts(void) {
 
     if (!isTestMode())
         LOG_PROGRESS1((freshen ? "Updated" : "Reported"), (first_record + nProcessed), nTransactions,
-                      " receipts for address " + monitors[0].address + "\r");
+                      " receipts for address " + allMonitors[0].address + "\r");
 
-    for (auto monitor : monitors)
+    for (auto monitor : allMonitors)
         monitor.updateLastExport(lastExported);
 
     reportNeighbors();

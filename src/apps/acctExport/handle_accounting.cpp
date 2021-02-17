@@ -69,7 +69,7 @@ bool COptions::handle_accounting(void) {
                     blknum_t current = first_record + i;
                     // blknum_t goal = min(first_record + max_records, nApps);
                     ostringstream post;
-                    post << " txs for address " << monitors[0].address;
+                    post << " txs for address " << allMonitors[0].address;
                     post << " " << first_record << " " << nProcessed << " " << i << " " << nTransactions << "\r";
                     LOG_PROGRESS1("Reading ", current, nTransactions, post.str());
                 }
@@ -126,7 +126,7 @@ bool COptions::handle_accounting(void) {
                     blknum_t current = first_record + i;
                     // blknum_t goal = min(first_record + max_records, nApp);
                     ostringstream post;
-                    post << " txs for address " << monitors[0].address;
+                    post << " txs for address " << allMonitors[0].address;
                     post << " " << first_record << " " << nProcessed << " " << i << " " << nTransactions << "\r";
                     LOG_PROGRESS1("Extract ", current, nTransactions, post.str());
                 }
@@ -143,12 +143,12 @@ bool COptions::handle_accounting(void) {
 
     if (!isTestMode()) {
         LOG_PROGRESS1((freshen ? "Updated" : "Reported"), (first_record + nProcessed), nTransactions,
-                      " txs for address " + monitors[0].address);
+                      " txs for address " + allMonitors[0].address);
     }
 
     // LOG_INFO("n: ", monitors.size(), " lastExported: ", lastExported);
     // getchar();
-    for (auto monitor : monitors)
+    for (auto monitor : allMonitors)
         monitor.updateLastExport(lastExported);
 
     reportNeighbors();

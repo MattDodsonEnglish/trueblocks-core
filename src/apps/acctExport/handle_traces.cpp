@@ -145,7 +145,7 @@ bool COptions::handle_traces(void) {
                 os << firstBlock << "-[" << cGreen;
                 os << app->blk << cOff << "]-";
                 os << lastBlock << " ";
-                os << "for address " << monitors[0].address;
+                os << "for address " << allMonitors[0].address;
                 LOG_INFO(os.str() + "\r");
             }
         }
@@ -153,9 +153,9 @@ bool COptions::handle_traces(void) {
 
     if (!isTestMode())
         LOG_PROGRESS1((freshen ? "Updated" : "Reported"), (first_record + nProcessed), nTransactions,
-                      " traces for address " + monitors[0].address + "\r");
+                      " traces for address " + allMonitors[0].address + "\r");
 
-    for (auto monitor : monitors)
+    for (auto monitor : allMonitors)
         monitor.updateLastExport(lastExported);
 
     reportNeighbors();
