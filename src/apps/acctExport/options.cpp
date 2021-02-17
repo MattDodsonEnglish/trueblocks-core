@@ -35,8 +35,11 @@ static const COption params[] = {
     COption("end", "E", "<blknum>", OPT_HIDDEN | OPT_DEPRECATED, "last block to process (inclusive)"),
     COption("first_record", "c", "<blknum>", OPT_HIDDEN | OPT_FLAG, "the first record to process"),
     COption("max_records", "e", "<blknum>", OPT_HIDDEN | OPT_FLAG, "the maximum number of records to process before reporting"),  // NOLINT
-    COption("staging", "s", "", OPT_HIDDEN | OPT_SWITCH, "ignored (preserved for backwards compatibility)"),
-    COption("unripe", "u", "", OPT_HIDDEN | OPT_SWITCH, "ignored (preserved for backwards compatibility)"),
+    COption("list", "L", "", OPT_HIDDEN | OPT_SWITCH, "list only the appearances (same as --appearances?)"),
+    COption("staging", "s", "", OPT_HIDDEN | OPT_SWITCH, "enable search of staging (not yet finalized) folder"),
+    COption("unripe", "u", "", OPT_HIDDEN | OPT_SWITCH, "enable search of unripe (neither staged nor finalized) folder (assumes --staging)"),  // NOLINT
+    COption("clean", "", "", OPT_HIDDEN | OPT_SWITCH, "clean (i.e. remove duplicate appearances) from all existing monitors"),  // NOLINT
+    COption("rm", "", "", OPT_SWITCH, "process the request to delete, undelete, or remove monitors"),
     COption("", "", "", OPT_DESCRIPTION, "Export full detail of transactions for one or more Ethereum addresses."),
     // clang-format on
     // END_CODE_OPTIONS
@@ -58,8 +61,10 @@ bool COptions::parseArguments(string_q& command) {
     bool write_traces = false;
     blknum_t start = NOPOS;
     blknum_t end = NOPOS;
+    bool list = false;
     bool staging = false;
     bool unripe = false;
+    bool rm = false;
     // END_CODE_LOCAL_INIT
 
     latestBlock = getLatestBlock_client();
@@ -138,11 +143,20 @@ bool COptions::parseArguments(string_q& command) {
             if (!confirmBlockNum("max_records", max_records, arg, latest))
                 return false;
 
+        } else if (arg == "-L" || arg == "--list") {
+            list = true;
+
         } else if (arg == "-s" || arg == "--staging") {
             staging = true;
 
         } else if (arg == "-u" || arg == "--unripe") {
             unripe = true;
+
+        } else if (arg == "--clean") {
+            clean = true;
+
+        } else if (arg == "--rm") {
+            rm = true;
 
         } else if (startsWith(arg, '-')) {  // do not collapse
 
@@ -179,6 +193,18 @@ bool COptions::parseArguments(string_q& command) {
         write_opt = xor_options(write_txs, write_traces);
         write_opt |= (CACHE_BYUSER);
     }
+
+//#error
+    if (rm)
+        return usage("--rm command is not yet implemented.");
+
+    if (clean) {
+        handle_clean();
+        return false;
+    }
+
+    if (list)
+        return usage("--list command is not yet implemented");
 
     // avoid warnings on Ubuntu 20.04
     if (staging)
@@ -233,6 +259,9 @@ bool COptions::parseArguments(string_q& command) {
 
     if (monitors.size() == 0)
         EXIT_USAGE("You must provide at least one Ethereum address.");
+
+    if (!freshen_internal(monitors, "")) //getEnvStr("FRESHEN_FLAG S")))
+        return usage("'freshen_internal' returned false.");
 
     if (count) {
         if (receipts || logs || traces || emitter || factory)
@@ -392,6 +421,7 @@ void COptions::Init(void) {
     count = false;
     first_record = 0;
     max_records = NOPOS;
+    clean = false;
     // END_CODE_INIT
 
     nProcessed = 0;
@@ -497,3 +527,227 @@ string_q report_cache(int opt) {
 // TODO(tjayrush): writeLastBlock is really weird
 // TODO(tjayrush): We used to write traces sometimes
 // TODO(tjayrush): We used to cache the monitored txs - I think it was pretty fast (we used the monitor staging folder)
+
+#if 0
+/*-------------------------------------------------------------------------
+ * This source code is confidential proprietary information which is
+ * copyright (c) 2018, 2019 TrueBlocks, LLC (http://trueblocks.io)
+ * All Rights Reserved
+ *------------------------------------------------------------------------*/
+/*
+ * Parts of this file were generated with makeClass. Edit only those parts of the code
+ * outside of the BEG_CODE/END_CODE sections
+ */
+#include "options.h"
+
+//---------------------------------------------------------------------------------------------------
+static const COption params[] = {
+    // clang-format off
+    COption("addrs", "", "list<addr>", OPT_REQUIRED | OPT_POSITIONAL, "one or more Ethereum addresses"),
+    COption("staging", "s", "", OPT_HIDDEN | OPT_SWITCH, "enable search of staging (not yet finalized) folder"),
+    COption("unripe", "u", "", OPT_HIDDEN | OPT_SWITCH, "enable search of unripe (neither staged nor finalized) folder (requires --staging)"),  // NOLINT
+    COption("clean", "c", "", OPT_HIDDEN | OPT_SWITCH, "clean (i.e. remove dups) from all existing monitors"),
+    COption("", "", "", OPT_DESCRIPTION, "Add or remove monitors for a given Ethereum address (or collection of addresses)."),  // NOLINT
+    COption("rm", "", "", OPT_SWITCH, "process the request to delete, undelete, or remove monitors"),
+    // clang-format on
+};
+static const size_t nParams = sizeof(params) / sizeof(COption);
+
+//---------------------------------------------------------------------------------------------------
+bool COptions::parseArguments(string_q& command) {
+    ENTER("parseArguments");
+
+    // deprecated
+    CStringArray deprecated = { "--start ", "-S ", "--end ", "-E " };
+    for (auto d : deprecated)
+        command = substitute(command, d, "--noop:");
+
+    if (!standardOptions(command))
+        EXIT_NOMSG(false);
+
+    CAddressArray addrs;
+    bool staging = false;
+    bool unripe = false;
+    bool rm = false;
+
+    // How far does the system think it is?
+    blknum_t unripeBlk, ripeBlk, stagingBlk, finalizedBlk, latest;
+    getLatestBlocks(unripeBlk, ripeBlk, stagingBlk, finalizedBlk, latest);
+
+    Init();
+    explode(arguments, command, ' ');
+    for (auto arg : arguments) {
+        if (false) {
+            // do nothing -- make auto code generation easier
+        } else if (arg == "-s" || arg == "--staging") {
+            staging = true;
+
+        } else if (arg == "-u" || arg == "--unripe") {
+            unripe = true;
+
+        } else if (arg == "-c" || arg == "--clean") {
+            clean = true;
+
+        } else if (arg == "--rm") {
+            rm = true;
+
+        } else if (startsWith(arg, '-')) {  // do not collapse
+            if (!builtInCmd(arg)) {
+                return usage("Invalid option: " + arg);
+            }
+        } else {
+            if (!parseAddressList2(this, addrs, arg))
+                return false;
+        }
+    }
+    // Make sure we have the folders we need (may be redundant, but harmless)...
+    establishMonitorFolders();
+    establishFolder(indexFolder);
+    establishFolder(indexFolder_finalized);
+    establishFolder(indexFolder_blooms);
+    establishFolder(indexFolder_staging);
+    establishFolder(indexFolder_unripe);
+    establishFolder(indexFolder_ripe);
+    establishFolder(configPath("cache/tmp/"));
+
+    // Are we visiting unripe and/or staging in our search?
+    if (staging)
+        visitTypes |= VIS_STAGING;
+    if (unripe) {
+        if (!(visitTypes & VIS_STAGING))
+            EXIT_USAGE("You must also specify --staging when using --unripe.");
+        visitTypes |= VIS_UNRIPE;
+    }
+
+    // Where will we start?
+    blknum_t firstBlockToVisit = NOPOS;
+
+//    if (clean) {
+//        handle_clean();
+//        return false;
+//    }
+
+    // We need at least one address to scrape...
+    if (addrs.size() == 0)
+        EXIT_USAGE("You must provide at least one Ethereum address.");
+
+    // Accumulate the addresses into the monitors list and decide where we should start
+    for (auto addr : addrs) {
+        CMonitor monitor;
+        monitor.setValueByName("address", addr);  // do not remove, this also sets the bloom value for the address
+        monitor.finishParse();
+        monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION : FM_STAGING);
+        string_q msg;
+        if (monitor.isLocked(msg))  // If locked, we fail
+            EXIT_USAGE(msg);
+        firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
+        allMonitors.push_back(monitor);
+    }
+
+    if (rm)
+        return handle_rm(addrs);
+
+    // Last block depends on scrape type or user input `end` option (with appropriate check)
+    // clang-format off
+    blknum_t lastBlockToVisit = max((blknum_t)1, (visitTypes & VIS_UNRIPE)    ? unripeBlk
+                                                 : (visitTypes & VIS_STAGING) ? stagingBlk
+                                                                              : finalizedBlk);
+    // clang-format on
+
+    // Mark the range...
+    scanRange = make_pair(firstBlockToVisit, lastBlockToVisit);
+
+    // If the chain is behind the monitor (for example, the user is re-syncing), quit silently...
+    if (latest < scanRange.first) {
+        LOG4("Chain is behind the monitor.");
+        EXIT_NOMSG(false);
+    }
+
+    // If there's nothing to scrape, quit silently...
+    if (scanRange.first >= scanRange.second) {
+        LOG8("Account scraper is up to date.");
+        EXIT_NOMSG(false);
+    }
+
+    EXIT_NOMSG(true);
+}
+
+//---------------------------------------------------------------------------------------------------
+void COptions::Init(void) {
+    registerOptions(nParams, params);
+    optionOn(OPT_CRUD);
+
+    clean = false;
+
+    minArgs = 0;
+    fileRange = make_pair(NOPOS, NOPOS);
+    visitTypes = VIS_FINAL;
+    allMonitors.clear();
+    possibles.clear();
+}
+
+//---------------------------------------------------------------------------------------------------
+COptions::COptions(void) {
+    setSorts(GETRUNTIME_CLASS(CBlock), GETRUNTIME_CLASS(CTransaction), GETRUNTIME_CLASS(CReceipt));
+    Init();
+    // clang-format off
+    notes.push_back("`addresses` must start with '0x' and be forty two characters long.");
+    // clang-format on
+
+    // BEG_ERROR_MSG
+    // END_ERROR_MSG
+}
+
+//--------------------------------------------------------------------------------
+COptions::~COptions(void) {
+}
+
+const char* STR_NOTFOUND = "Monitor [{ADDRESS}] not found";
+const char* STR_DELETED = "Monitor [{ADDRESS}] was deleted but not removed";
+const char* STR_UNDELETED = "Monitor [{ADDRESS}] was undeleted";
+const char* STR_REMOVED = "Monitor [{ADDRESS}] was permentantly removed";
+const char* STR_DELETEFIRST = "Monitor [{ADDRESS}] must be deleted before it can be removed";
+
+//------------------------------------------------------------------------------------------------
+bool COptions::handle_rm(const CAddressArray& addrs) {
+    CStringArray results;
+    for (auto monitor : allMonitors) {
+        if (!monitor.exists()) {
+            results.push_back(monitor.Format(STR_NOTFOUND));
+            LOG_WARN(monitor.Format(STR_NOTFOUND));
+        } else {
+            if (crudCommand == "remove") {
+                if (monitor.isDeleted()) {
+                    monitor.removeMonitor();
+                    results.push_back(monitor.Format(STR_REMOVED));
+                } else {
+                    results.push_back(monitor.Format(STR_DELETEFIRST));
+                }
+            } else {
+                monitor.isDeleted() ? monitor.undeleteMonitor() : monitor.deleteMonitor();
+                results.push_back(monitor.Format(monitor.isDeleted() ? STR_DELETED : STR_UNDELETED));
+            }
+            LOG_INFO(results[results.size() - 1]);
+        }
+    }
+
+    if (isApiMode()) {
+        expContext().exportFmt = JSON1;
+        cout << exportPreamble("", "");
+        string_q msg;
+        bool first = true;
+        for (auto remove : results) {
+            if (!first)
+                msg += ",";
+            msg += ("\"" + remove + "\"");
+            first = false;
+        }
+        if (msg.empty())
+            msg = "{ \"msg\": \"nothing was removed\" }";
+        cout << msg;
+        cout << exportPostamble(errors, "") << endl;
+    }
+
+    return false;  // do not continue
+}
+#endif

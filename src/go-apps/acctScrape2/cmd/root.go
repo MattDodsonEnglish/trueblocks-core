@@ -216,7 +216,7 @@ func colr(c, s string) string {
 }
 func usage(s string) {
 	fmt.Println("")
-	fmt.Println(" ", colr("yellow", "Usage:"), "    acctScrape [-v|-h] <address> [address...]")
+	fmt.Println(" ", colr("yellow", "Usage:"), "    acctScrape2 [-v|-h] <address> [address...]")
 	fmt.Println(" ", colr("yellow", "Purpose:"), "  Add or remove monitors for a given Ethereum address (or collection of addresses).")
 	fmt.Println("")
 	fmt.Println(" ", colr("yellow", "Where:"))

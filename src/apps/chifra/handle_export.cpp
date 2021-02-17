@@ -38,7 +38,7 @@ bool COptions::handle_export(void) {
 
     if (contains(tool_flags, "--clean") || contains(tool_flags, "-c")) {
         ostringstream os;
-        os << "acctScrape " << tool_flags;
+        os << "acctExport " << tool_flags;
         for (auto a : addrs) {
             os << " " << a;
         }

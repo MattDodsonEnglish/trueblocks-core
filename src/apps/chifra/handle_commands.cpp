@@ -16,7 +16,6 @@ bool COptions::handle_commands(void) {
     }
 
     if (mode == "scrape") {
-        setenv("FRESHEN_FLAGS", freshen_flags.c_str(), true);
         if (isApiMode() && contains(tool_flags, "run")) {
             cout << "{ \"status\": \"cannot run\" }";
             LOG_ERR(
@@ -24,6 +23,7 @@ bool COptions::handle_commands(void) {
                 "scrape run.");
             return EXIT_FAILURE;
         }
+        // setenv("FRESHEN_FLAG S", freshen_flags.c_str(), true);
     }
 
     // URLs require key/value pairs, command lines don't so we remove unneeded keys
@@ -56,7 +56,7 @@ map<string, string> cmdMap = {{"slurp", "ethslurp"},        {"collections", "eth
                               {"quotes", "ethQuote"},       {"state", "getState"},
                               {"tokens", "getTokenInfo"},   {"when", "whenBlock"},
                               {"where", "whereBlock"},      {"status", "cacheStatus"},
-                              {"rm", "acctScrape --rm"},    {"list", "acctScrape"},
+                              {"rm", "acctExport --rm"},    {"list", "acctExport --appearances"},
                               {"export", "acctExport"},     {"scrape", "blockScrape"},
                               {"dive", "turboDive"},        {"serve", "tbServer"},
                               {"pins", "pinStatus"},        {"explore", "ethscan.py"}};

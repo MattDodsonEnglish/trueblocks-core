@@ -126,7 +126,6 @@ bool COptions::parseArguments(string_q& command) {
                     break;
                 been_here = true;
                 tests.push_back("apps/acctExport");
-                tests.push_back("apps/acctScrape");
                 tests.push_back("apps/blockScrape");
                 tests.push_back("apps/cacheStatus");
                 tests.push_back("apps/chifra");
@@ -173,7 +172,6 @@ bool COptions::parseArguments(string_q& command) {
         tests.push_back("tools/whenBlock");
         tests.push_back("tools/whereBlock");
         tests.push_back("apps/acctExport");
-        tests.push_back("apps/acctScrape");
         tests.push_back("apps/blockScrape");
         tests.push_back("apps/cacheStatus");
         tests.push_back("apps/chifra");

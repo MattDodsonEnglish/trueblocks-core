@@ -408,7 +408,7 @@ blknum_t CMonitor::getLastVisited(bool fresh) const {
             // Accounts can receive ETH counter-factually. By default, we ignore
             // this and start our scan from the account's deploy block (in the case
             // of a contract) or the zero block. User can change this setting.
-            if (getGlobalConfig("acctScrape")->getConfigBool("settings", "start-when-deployed", true)) {
+            if (getGlobalConfig("acctExport")->getConfigBool("settings", "start-when-deployed", true)) {
                 blknum_t deployed = getDeployBlock(address);
                 ((CMonitor*)this)->lastVisitedBlock = (deployed == NOPOS ? 0 : deployed); // NOLINT
             }
@@ -732,7 +732,7 @@ bool freshen_internal(CMonitorArray& fa, const string_q& freshen_flags) {
     nodeNotRequired();
 
     ostringstream base;
-    base << "acctScrape " << freshen_flags << " [ADDRS] ;";
+    base << "acctExport " << freshen_flags << " [ADDRS] ;";
 
     size_t cnt = 0, cnt2 = 0;
     string_q tenAddresses;

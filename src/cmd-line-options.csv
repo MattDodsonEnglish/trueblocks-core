@@ -1,12 +1,5 @@
 num,group,tags,api_route,tool,command,hotkey,def_val,is_required,customizeable,core_visible,docs_visible,generate,option_kind,data_type,description
 
-10110,apps,Accounts,list,acctScrape,addrs,,,true,false,true,true,local,positional,list<addr>,one or more Ethereum addresses
-10120,apps,Accounts,list,acctScrape,staging,s,false,false,false,false,false,local,switch,<boolean>,enable search of staging (not yet finalized) folder
-10130,apps,Accounts,list,acctScrape,unripe,u,false,false,false,false,false,local,switch,<boolean>,enable search of unripe (neither staged nor finalized) folder|(requires --staging)
-10145,apps,Accounts,list,acctScrape,clean,c,false,false,false,false,false,header,switch,<boolean>,clean (i.e. remove dups) from all existing monitors
-10170,apps,Accounts,list,acctScrape,,,,false,false,true,true,--,description,,Add or remove monitors for a given Ethereum address (or collection|of addresses).
-10180,apps,Accounts,list,acctScrape,,,,false,false,false,false,--,note,,`addresses` must start with '0x' and be forty two characters long.
-
 10200,apps,Accounts,export,acctExport,addrs,,,true,false,true,true,local,positional,list<addr>,one or more addresses (0x...) to export
 10205,apps,Accounts,export,acctExport,topics,,,false,false,true,true,local,positional,list<topic>,filter by one or more logs topics (only for --logs option)
 10210,apps,Accounts,export,acctExport,appearances,p,,false,false,true,true,header,switch,<boolean>,export a list of appearances
@@ -29,13 +22,14 @@ num,group,tags,api_route,tool,command,hotkey,def_val,is_required,customizeable,c
 10450,apps,Accounts,export,acctExport,end,E,,false,false,false,false,local,deprecated,<blknum>,last block to process (inclusive)
 10453,apps,Accounts,export,acctExport,first_record,c,0,false,false,false,false,header,flag,<blknum>,the first record to process
 10457,apps,Accounts,export,acctExport,max_records,e,,false,false,false,false,header,flag,<blknum>,the maximum number of records to process before reporting
-10060,apps,Accounts,export,acctExport,staging,s,,false,false,false,false,local,switch,<boolean>,ignored (preserved for backwards compatibility)
-10080,apps,Accounts,export,acctExport,unripe,u,,false,false,false,false,local,switch,<boolean>,ignored (preserved for backwards compatibility)
+10050,apps,Accounts,export,acctExport,list,L,,false,false,false,false,local,switch,<boolean>,list only the appearances (same as --appearances?)
+10060,apps,Accounts,export,acctExport,staging,s,,false,false,false,false,local,switch,<boolean>,enable search of staging (not yet finalized) folder
+10080,apps,Accounts,export,acctExport,unripe,u,,false,false,false,false,local,switch,<boolean>,enable search of unripe (neither staged nor finalized) folder|(assumes --staging)
+10085,apps,Accounts,export,acctExport,clean,,false,false,false,false,false,header,switch,<boolean>,clean (i.e. remove duplicate appearances) from all existing monitors
+10090,apps,Accounts,export,acctExport,rm,,,false,false,true,false,local,switch,<boolean>,process the request to delete&#44; undelete&#44; or remove monitors
 10460,apps,Accounts,export,acctExport,,,,false,false,true,true,--,description,,Export full detail of transactions for one or more Ethereum addresses.
 10470,apps,Accounts,export,acctExport,,,,false,false,false,false,--,note,,`addresses` must start with '0x' and be forty two characters long.
 10480,apps,Accounts,export,acctExport,,,,false,false,false,false,--,note,,By default&#44; transactions and traces are cached if the number of exported|items is <= to 1&#44;000 items. Otherwise&#44; if you specify any `write_*` options&#44;|your preference predominates.
-
-10510,apps,Accounts,rm,acctScrape,rm,,,false,false,true,false,local,switch,<boolean>,process the request to delete&#44; undelete&#44; or remove monitors
 
 10600,apps,Admin,scrape,blockScrape,mode,,,true,false,true,true,header,positional,enum[run*|quit|pause|restart],control the block and account scrapers
 10610,apps,Admin,scrape,blockScrape,tool,t,,false,false,true,true,header,flag,list<enum[monitors|index*|none|both]>,process the index&#44; monitors&#44; or both (none means process timestamps|only)

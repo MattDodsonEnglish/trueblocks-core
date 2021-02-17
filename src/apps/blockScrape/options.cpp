@@ -225,8 +225,8 @@ bool COptions::parseArguments(string_q& command) {
     }
 
     // Do not run if the index is being searched...
-    if (isRunning("acctScrape")) {
-        LOG_WARN("Refusing to run while acctScrape is running. Will restart shortly...");
+    if (isRunning("acctExport")) {
+        LOG_WARN("Refusing to run while acctExport is running. Will restart shortly...");
         return false;
     }
 
