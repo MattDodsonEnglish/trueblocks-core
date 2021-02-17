@@ -35,6 +35,10 @@ class COptions : public COptionsBase {
 };
 
 //--------------------------------------------------------------------------------
+extern bool visitIndexFiles(const string_q& path, void* data);
+extern string_q addExportMode(format_t fmt);
+
+//--------------------------------------------------------------------------------
 extern map<string, string> cmdMap;
 
 //--------------------------------------------------------------------------------

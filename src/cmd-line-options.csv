@@ -1,5 +1,8 @@
 num,group,tags,api_route,tool,command,hotkey,def_val,is_required,customizeable,core_visible,docs_visible,generate,option_kind,data_type,description
 
+11200,apps,,,chifra,commands,,,true,false,true,true,local,positional,<string>,which command to run
+11320,apps,,,chifra,,,,false,false,true,true,--,description,,Control all options of the TrueBlocks tools.
+
 10200,apps,Accounts,export,acctExport,addrs,,,true,false,true,true,local,positional,list<addr>,one or more addresses (0x...) to export
 10205,apps,Accounts,export,acctExport,topics,,,false,false,true,true,local,positional,list<topic>,filter by one or more logs topics (only for --logs option)
 10210,apps,Accounts,export,acctExport,appearances,p,,false,false,true,true,header,switch,<boolean>,export a list of appearances
@@ -59,9 +62,6 @@ num,group,tags,api_route,tool,command,hotkey,def_val,is_required,customizeable,c
 10900,apps,Admin,pins,pinStatus,unpin,u,,false,false,true,true,header,flag,<string>,unpin index(es) and blooms given a hash&#44; a filename&#44; or 'all'
 10900,apps,Admin,pins,pinStatus,license,i,,false,false,false,false,header,switch,<boolean>,show the current pinata license information&#44; if any
 10910,apps,Admin,pins,pinStatus,,,,false,false,true,true,--,description,,Report on and manage pinned appearance index and bloom chunks.
-
-11200,apps,,,chifra,commands,,,true,false,true,true,--weird,positional,opt_string,which command to run
-11320,apps,,,chifra,,,,false,false,true,true,--,description,,Main TrueBlocks command line controls.
 
 11660,dev_tools,,,makeClass,files,,,true,false,true,false,local,positional,list<path>,one or more class definition files
 11700,dev_tools,,,makeClass,run,r,,false,false,true,false,local,switch,<boolean>,run the class maker on associated <class_name(s)>
