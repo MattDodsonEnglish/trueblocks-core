@@ -1,8 +1,5 @@
 num,group,tags,api_route,tool,command,hotkey,def_val,is_required,customizeable,core_visible,docs_visible,generate,option_kind,data_type,description
 
-11200,apps,,,chifra,commands,,,true,false,true,true,local,positional,<string>,which command to run
-11320,apps,,,chifra,,,,false,false,true,true,--,description,,Control all options of the TrueBlocks tools.
-
 10200,apps,Accounts,export,acctExport,addrs,,,true,false,true,true,local,positional,list<addr>,one or more addresses (0x...) to export
 10205,apps,Accounts,export,acctExport,topics,,,false,false,true,true,local,positional,list<topic>,filter by one or more logs topics (only for --logs option)
 10210,apps,Accounts,export,acctExport,appearances,p,,false,false,true,true,header,switch,<boolean>,export a list of appearances

@@ -1,5 +1,3 @@
-chifra argc: 3 [1:entities] [2:--help] 
-chifra entities --help 
 chifra entities argc: 3 [1:--entities] [2:--help] 
 chifra entities --entities --help 
 PROG_NAME = [chifra entities]

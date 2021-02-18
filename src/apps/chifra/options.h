@@ -19,35 +19,13 @@ class COptions : public COptionsBase {
     // BEG_CODE_DECLARE
     // END_CODE_DECLARE
 
-    string_q mode;
-    CAddressArray addrs;
-    string_q tool_flags;
-
     COptions(void);
     ~COptions(void);
 
-    bool parseArguments(string_q& command);
+    bool parseArguments(string_q& command) {
+        return true;
+     };
     void Init(void);
-    bool createConfigFile(const address_t& addr);
 
-    bool handle_export(void);
-    bool handle_commands(void);
+    bool call_command(int argc, const char *argv[]);
 };
-
-//--------------------------------------------------------------------------------
-extern bool visitIndexFiles(const string_q& path, void* data);
-extern string_q addExportMode(format_t fmt);
-
-//--------------------------------------------------------------------------------
-extern map<string, string> cmdMap;
-
-//--------------------------------------------------------------------------------
-#define RETURN(a)                                                                                                      \
-    {                                                                                                                  \
-        bool ret = (a);                                                                                                \
-        if (isTestMode) {                                                                                              \
-            EXIT_NOMSG(0);                                                                                             \
-        } else {                                                                                                       \
-            EXIT_NOMSG(ret);                                                                                           \
-        }                                                                                                              \
-    }

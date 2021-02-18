@@ -1,5 +1,3 @@
-chifra argc: 3 [1:export] [2:--help] 
-chifra export --help 
 chifra export argc: 2 [1:--help] 
 chifra export --help 
 PROG_NAME = [chifra export]
@@ -30,7 +28,7 @@ PROG_NAME = [chifra export]
 	-M  (--emitter)       available for --logs option only, export will only export if the address emitted the event
 	-c  (--first_record <num>)the first record to process
 	-e  (--max_records <num>)the maximum number of records to process before reporting
-	-L  (--list)          list only the appearances (same as --appearances?)
+	-L  (--list)          freshen first, then list the appearances of the address(es)
 	-s  (--staging)       enable search of staging (not yet finalized) folder
 	-u  (--unripe)        enable search of unripe (neither staged nor finalized) folder (assumes --staging)
 	#### Hidden options

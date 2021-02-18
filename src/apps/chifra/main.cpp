@@ -8,21 +8,12 @@
 
 //--------------------------------------------------------------
 int main(int argc, const char* argv[]) {
-    nodeNotRequired();  // not every command needs a node
+    nodeNotRequired();
     acctlib_init(quickQuitHandler);
 
-    ENTER("chifra");
-
-    int r = EXIT_FAILURE;
     COptions options;
-    if (!options.prepareArguments(argc, argv)) {
-        RETURN(r);
+    options.call_command(argc, argv);
 
-    } else if (options.parseArguments(options.commandLines[0])) {
-        r = options.handle_commands();
-
-    }
-    
     acctlib_cleanup();
-    EXIT_NOMSG(r);
+    return 0;
 }

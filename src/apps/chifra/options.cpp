@@ -9,49 +9,17 @@
  */
 #include "options.h"
 
+extern string_q getSubcommands(void);
 //---------------------------------------------------------------------------------------------------
 static const COption params[] = {
-    // BEG_CODE_OPTIONS
-    // clang-format off
-    COption("commands", "", "<string>", OPT_REQUIRED | OPT_POSITIONAL, "which command to run"),
+    COption("commands", getSubcommands(), "<string>", OPT_REQUIRED | OPT_POSITIONAL, "which command to run"),
     COption("", "", "", OPT_DESCRIPTION, "Control all options of the TrueBlocks tools."),
-    // clang-format on
-    // END_CODE_OPTIONS
 };
 static const size_t nParams = sizeof(params) / sizeof(COption);
 
-extern string_q getSubcommands(void);
+#if 0
 //---------------------------------------------------------------------------------------------------
 bool COptions::parseArguments(string_q& command) {
-    if (!standardOptions(command))
-        return false;
-
-    // BEG_CODE_LOCAL_INIT
-    // END_CODE_LOCAL_INIT
-
-    bool tool_help = false;
-
-    Init();
-    explode(arguments, command, ' ');
-    for (auto arg : arguments) {
-        if (false) {
-            // do nothing -- make auto code generation easier
-            // BEG_CODE_AUTO
-            // END_CODE_AUTO
-
-        } else if (arg == "-h" || arg == "--help") {
-            if (mode.empty() || mode == "serve") {
-                optionOn(OPT_HELP);
-                verbose = true;
-                return usage();
-            }
-            setenv("PROG_NAME", ("chifra " + mode).c_str(), true);
-            tool_help = true;
-
-        } else if (mode.empty() && startsWith(arg, '-')) {
-            if (!builtInCmd(arg))
-                return usage("Missing mode: " + arg);
-
         } else {
             bool exists = false;
             string_q lower = toLower(arg);
@@ -90,9 +58,6 @@ bool COptions::parseArguments(string_q& command) {
     }
 
     // Handle base layer options
-    if (tool_help)
-        tool_flags += " --help";
-
     if (isNoHeader)
         tool_flags += " --no_header";
 
@@ -107,9 +72,6 @@ bool COptions::parseArguments(string_q& command) {
 
     if (verbose && !contains(tool_flags, "-v"))
         tool_flags += (" -v:" + uint_2_Str(verbose));
-
-    tool_flags += addExportMode(expContext().exportFmt);
-    tool_flags = trim(tool_flags, ' ');
 
     if (contains(tool_flags, "help")) {
         if (cmdMap[mode].empty())
@@ -170,6 +132,7 @@ bool COptions::parseArguments(string_q& command) {
 
     return true;
 }
+#endif
 
 //---------------------------------------------------------------------------------------------------
 void COptions::Init(void) {
@@ -179,10 +142,10 @@ void COptions::Init(void) {
     // BEG_CODE_INIT
     // END_CODE_INIT
 
-    addrs.clear();
-    tool_flags = "";
-    mode = "";
-    minArgs = 0;
+    // addrs.clear();
+    // tool_flags = "";
+    // mode = "";
+    // minArgs = 0;
 }
 
 extern const char* STR_FULL_HELP;
@@ -207,29 +170,51 @@ COptions::COptions(void) {
 COptions::~COptions(void) {
 }
 
-//--------------------------------------------------------------------------------
-string_q addExportMode(format_t fmt) {
-    if (isApiMode() && fmt == API1)
-        return "";
-    if (!isApiMode() && fmt == TXT1)
-        return "";
-    switch (fmt) {
-        case NONE1:
-            return " --fmt none";
-        case JSON1:
-            return " --fmt json";
-        case TXT1:
-            return " --fmt txt";
-        case CSV1:
-            return " --fmt csv";
-        case API1:
-            return " --fmt api";
-        default:
-            break;
+extern map<string, string> cmdMap;
+//------------------------------------------------------------------------------------------------
+bool COptions::call_command(int argc, const char* argv[]) {
+    /*
+        } else if (arg == "-h" || arg == "--help") {
+            if (mode.empty() || mode == "serve") {
+                optionOn(OPT_HELP);
+                verbose = true;
+                return usage();
+            }
+            setenv("PROG_NAME", ("chifra " + mode).c_str(), true);
+            tool_help = true;
+    if (tool_help)
+        tool_flags += " --help";
+    */
+    ENTER("call_command");
+    if (argc < 2) {
+        verbose = true;
+        return usage("You must provide a 'mode' to the chifra command.");
     }
-    return "";
+
+    string_q mode = argv[1];
+    setProgName("chifra");
+    if (argc == 2 && (mode == "-h" || mode == "--help")) {
+        verbose = true;
+        return usage("");
+    }
+
+    if (cmdMap[argv[1]].empty()) {
+        verbose = true;
+        return usage("Invalid mode '" + string_q(argv[1]) + "'.");
+    }
+
+    ostringstream os;
+    os << cmdMap[mode];
+    for (int i = 2; i < argc; i++)
+        os << " " << argv[i];
+
+    setenv("PROG_NAME", ("chifra " + mode).c_str(), true);
+
+    LOG_CALL(os.str());
+    return system(os.str().c_str());
 }
 
+#if 0
 //------------------------------------------------------------------------------------------------
 bool COptions::handle_commands(void) {
     ENTER("handle_" + mode);
@@ -266,6 +251,7 @@ bool COptions::handle_commands(void) {
     return system(os.str().c_str());
     // clang-format on
 }
+#endif
 
 //------------------------------------------------------------------------------------------------
 map<string, string> cmdMap = {{"slurp", "ethslurp"},
