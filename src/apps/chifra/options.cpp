@@ -129,8 +129,8 @@ bool COptions::parseArguments(string_q& command) {
     //     if (origMode == "names") {
     //         if (contains(tool_flags, "tags")) {
     //             origMode = "tags";
-    //         } else if (contains(tool_flags, "collections")) {
-    //             origMode = "collections";
+    //         } else if (contains(tool_flags, "entities")) {
+    //             origMode = "entities";
     //         }
     //     } else if (origMode == "status") {
     //         if (contains(tool_flags, "monitors")) {
@@ -269,7 +269,7 @@ bool COptions::handle_commands(void) {
 
 //------------------------------------------------------------------------------------------------
 map<string, string> cmdMap = {{"slurp", "ethslurp"},
-                              {"collections", "ethNames --collections"},
+                              {"entities", "ethNames --entities"},
                               {"names", "ethNames"},
                               {"tags", "ethNames --tags"},
                               {"abis", "grabABI"},
@@ -284,8 +284,8 @@ map<string, string> cmdMap = {{"slurp", "ethslurp"},
                               {"when", "whenBlock"},
                               {"where", "whereBlock"},
                               {"status", "cacheStatus"},
-                              {"monitors", "acctExport monitors"},
-                              {"export", "acctExport export"},
+                              {"monitor", "acctExport"},
+                              {"export", "acctExport"},
                               {"scrape", "blockScrape"},
                               {"dive", "turboDive"},
                               {"serve", "tbServer"},
@@ -296,7 +296,7 @@ map<string, string> cmdMap = {{"slurp", "ethslurp"},
 const char* cmdList =
     "monitor|"
     "export|"
-    "collections|"
+    "entities|"
     "names|"
     "tags|"
     "abis|"
@@ -336,7 +336,7 @@ const char* STR_FULL_HELP =
                 "  monitor       add, remove, clean, and list appearances of address(es) on the chain|"
                 "  export        export details for each appearance (as transacitons, logs, traces, balances, etc.)|"
                 "SHARED DATA|"
-                "  collections   list and/or share collections (groups of addresses)|"
+                "  entities      list and/or share entities (groups of addresses)|"
                 "  names         list and/or share named addresses|"
                 "  tags          list and/or share tags (subgroups of addresses)|"
                 "  abis          list and/or share abi signatures|"

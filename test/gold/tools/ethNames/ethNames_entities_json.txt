@@ -1,5 +1,5 @@
-ethNames argc: 4 [1:--collections] [2:--fmt] [3:json] 
-ethNames --collections --fmt json 
+ethNames argc: 4 [1:--entities] [2:--fmt] [3:json] 
+ethNames --entities --fmt json 
 { "data": [
   {
     "deleted": true,
@@ -88,5 +88,5 @@ ethNames --collections --fmt json
       "0xf285bde0bce33e55225c6ee156bfb64b0be9ec9e"
     ]
   }], "types": [
-{ "type": "CCollection", "fields": [{ "name": "deleted", "type": "bool" }, { "name": "cid", "type": "text" }, { "name": "tags", "type": "text" }, { "name": "name", "type": "text" }, { "name": "client", "type": "text" }, { "name": "monitored", "type": "bool" }, { "name": "sizeInBytes", "type": "unumber" }, { "name": "addresses", "type": "address|ts_array" }] }
+{ "type": "CEntity", "fields": [{ "name": "deleted", "type": "bool" }, { "name": "cid", "type": "text" }, { "name": "tags", "type": "text" }, { "name": "name", "type": "text" }, { "name": "client", "type": "text" }, { "name": "monitored", "type": "bool" }, { "name": "sizeInBytes", "type": "unumber" }, { "name": "addresses", "type": "address|ts_array" }] }
 ] }

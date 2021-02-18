@@ -25,7 +25,7 @@ namespace qblocks {
 // EXISTING_CODE
 
 //--------------------------------------------------------------------------
-class CCollection : public CBaseNode {
+class CEntity : public CBaseNode {
   public:
     string_q cid;
     string_q tags;
@@ -38,28 +38,28 @@ class CCollection : public CBaseNode {
     string_q addressList;
 
   public:
-    CCollection(void);
-    CCollection(const CCollection& co);
-    virtual ~CCollection(void);
-    CCollection& operator=(const CCollection& co);
+    CEntity(void);
+    CEntity(const CEntity& en);
+    virtual ~CEntity(void);
+    CEntity& operator=(const CEntity& en);
 
-    DECLARE_NODE(CCollection);
+    DECLARE_NODE(CEntity);
 
     const string_q getStringAt(const string_q& fieldName, size_t i) const override;
 
     // EXISTING_CODE
     // EXISTING_CODE
-    bool operator==(const CCollection& it) const;
-    bool operator!=(const CCollection& it) const {
+    bool operator==(const CEntity& it) const;
+    bool operator!=(const CEntity& it) const {
         return !operator==(it);
     }
-    friend bool operator<(const CCollection& v1, const CCollection& v2);
-    friend ostream& operator<<(ostream& os, const CCollection& it);
+    friend bool operator<(const CEntity& v1, const CEntity& v2);
+    friend ostream& operator<<(ostream& os, const CEntity& it);
 
   protected:
     void clear(void);
     void initialize(void);
-    void duplicate(const CCollection& co);
+    void duplicate(const CEntity& en);
     bool readBackLevel(CArchive& archive) override;
 
     // EXISTING_CODE
@@ -67,37 +67,37 @@ class CCollection : public CBaseNode {
 };
 
 //--------------------------------------------------------------------------
-inline CCollection::CCollection(void) {
+inline CEntity::CEntity(void) {
     initialize();
     // EXISTING_CODE
     // EXISTING_CODE
 }
 
 //--------------------------------------------------------------------------
-inline CCollection::CCollection(const CCollection& co) {
+inline CEntity::CEntity(const CEntity& en) {
     // EXISTING_CODE
     // EXISTING_CODE
-    duplicate(co);
+    duplicate(en);
 }
 
 // EXISTING_CODE
 // EXISTING_CODE
 
 //--------------------------------------------------------------------------
-inline CCollection::~CCollection(void) {
+inline CEntity::~CEntity(void) {
     clear();
     // EXISTING_CODE
     // EXISTING_CODE
 }
 
 //--------------------------------------------------------------------------
-inline void CCollection::clear(void) {
+inline void CEntity::clear(void) {
     // EXISTING_CODE
     // EXISTING_CODE
 }
 
 //--------------------------------------------------------------------------
-inline void CCollection::initialize(void) {
+inline void CEntity::initialize(void) {
     CBaseNode::initialize();
 
     cid = "";
@@ -115,34 +115,34 @@ inline void CCollection::initialize(void) {
 }
 
 //--------------------------------------------------------------------------
-inline void CCollection::duplicate(const CCollection& co) {
+inline void CEntity::duplicate(const CEntity& en) {
     clear();
-    CBaseNode::duplicate(co);
+    CBaseNode::duplicate(en);
 
-    cid = co.cid;
-    tags = co.tags;
-    name = co.name;
-    client = co.client;
-    monitored = co.monitored;
-    deleted = co.deleted;
-    sizeInBytes = co.sizeInBytes;
-    addresses = co.addresses;
-    addressList = co.addressList;
+    cid = en.cid;
+    tags = en.tags;
+    name = en.name;
+    client = en.client;
+    monitored = en.monitored;
+    deleted = en.deleted;
+    sizeInBytes = en.sizeInBytes;
+    addresses = en.addresses;
+    addressList = en.addressList;
 
     // EXISTING_CODE
     // EXISTING_CODE
 }
 
 //--------------------------------------------------------------------------
-inline CCollection& CCollection::operator=(const CCollection& co) {
-    duplicate(co);
+inline CEntity& CEntity::operator=(const CEntity& en) {
+    duplicate(en);
     // EXISTING_CODE
     // EXISTING_CODE
     return *this;
 }
 
 //-------------------------------------------------------------------------
-inline bool CCollection::operator==(const CCollection& it) const {
+inline bool CEntity::operator==(const CEntity& it) const {
     // EXISTING_CODE
     // EXISTING_CODE
     // Equality operator as defined in class definition
@@ -150,7 +150,7 @@ inline bool CCollection::operator==(const CCollection& it) const {
 }
 
 //-------------------------------------------------------------------------
-inline bool operator<(const CCollection& v1, const CCollection& v2) {
+inline bool operator<(const CEntity& v1, const CEntity& v2) {
     // EXISTING_CODE
     // EXISTING_CODE
     // Default sort as defined in class definition
@@ -158,12 +158,12 @@ inline bool operator<(const CCollection& v1, const CCollection& v2) {
 }
 
 //---------------------------------------------------------------------------
-typedef vector<CCollection> CCollectionArray;
-extern CArchive& operator>>(CArchive& archive, CCollectionArray& array);
-extern CArchive& operator<<(CArchive& archive, const CCollectionArray& array);
+typedef vector<CEntity> CEntityArray;
+extern CArchive& operator>>(CArchive& archive, CEntityArray& array);
+extern CArchive& operator<<(CArchive& archive, const CEntityArray& array);
 
 //---------------------------------------------------------------------------
-extern const char* STR_DISPLAY_COLLECTION;
+extern const char* STR_DISPLAY_ENTITY;
 
 //---------------------------------------------------------------------------
 // EXISTING_CODE

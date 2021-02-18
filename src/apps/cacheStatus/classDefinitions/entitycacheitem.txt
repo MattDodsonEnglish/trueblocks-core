@@ -1,5 +1,5 @@
 [settings]
-class = CCollectionCacheItem
+class = CEntityCacheItem
 base_class = CAccountName
 fields = string type
 includes = etherlib.h

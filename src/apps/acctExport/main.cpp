@@ -94,7 +94,7 @@ int main(int argc, const char* argv[]) {
         ostringstream oss;
         oss << "Exported " << padNum6T(options.nProcessed) << " ";
         oss << (!options.className.empty() ? (plural(options.className) + " from ") : "of ");
-        oss << padNum6T(options.nTransactions) << " transactions for address " << options.allMonitors[0].address;
+        oss << padNum6T(options.nTransactions) << " transactions for address " << (options.allMonitors.size() ? options.allMonitors[0].address : "");
         LOG_INFO(oss.str());
     }
 

@@ -35,11 +35,11 @@ static const COption params[] = {
     COption("end", "E", "<blknum>", OPT_HIDDEN | OPT_DEPRECATED, "last block to process (inclusive)"),
     COption("first_record", "c", "<blknum>", OPT_HIDDEN | OPT_FLAG, "the first record to process"),
     COption("max_records", "e", "<blknum>", OPT_HIDDEN | OPT_FLAG, "the maximum number of records to process before reporting"),  // NOLINT
-    COption("list", "L", "", OPT_HIDDEN | OPT_SWITCH, "freshen first then list the appearances of the address(es)"),
-    COption("staging", "s", "", OPT_HIDDEN | OPT_SWITCH, "enable search of staging (not yet finalized) folder"),
-    COption("unripe", "u", "", OPT_HIDDEN | OPT_SWITCH, "enable search of unripe (neither staged nor finalized) folder (assumes --staging)"),  // NOLINT
+    COption("list", "L", "", OPT_HIDDEN | OPT_SWITCH, "freshen first, then list the appearances of the address(es)"),
     COption("clean", "", "", OPT_HIDDEN | OPT_SWITCH, "clean (i.e. remove duplicate appearances) from all existing monitors"),  // NOLINT
     COption("rm", "", "", OPT_SWITCH, "process the request to delete, undelete, or remove monitors"),
+    COption("staging", "s", "", OPT_HIDDEN | OPT_SWITCH, "enable search of staging (not yet finalized) folder"),
+    COption("unripe", "u", "", OPT_HIDDEN | OPT_SWITCH, "enable search of unripe (neither staged nor finalized) folder (assumes --staging)"),  // NOLINT
     COption("", "", "", OPT_DESCRIPTION, "Export full detail of transactions for one or more Ethereum addresses."),
     // clang-format on
     // END_CODE_OPTIONS
@@ -62,9 +62,9 @@ bool COptions::parseArguments(string_q& command) {
     blknum_t start = NOPOS;
     blknum_t end = NOPOS;
     bool list = false;
+    bool rm = false;
     bool staging = false;
     bool unripe = false;
-    bool rm = false;
     // END_CODE_LOCAL_INIT
 
     blknum_t unripeBlk, ripeBlk, stagingBlk, finalizedBlk;
@@ -148,17 +148,17 @@ bool COptions::parseArguments(string_q& command) {
         } else if (arg == "-L" || arg == "--list") {
             list = true;
 
-        } else if (arg == "-s" || arg == "--staging") {
-            staging = true;
-
-        } else if (arg == "-u" || arg == "--unripe") {
-            unripe = true;
-
         } else if (arg == "--clean") {
             clean = true;
 
         } else if (arg == "--rm") {
             rm = true;
+
+        } else if (arg == "-s" || arg == "--staging") {
+            staging = true;
+
+        } else if (arg == "-u" || arg == "--unripe") {
+            unripe = true;
 
         } else if (startsWith(arg, '-')) {  // do not collapse
 
@@ -222,12 +222,13 @@ bool COptions::parseArguments(string_q& command) {
     }
 
     // Where will we start?
-    blknum_t firstBlockToVisit = NOPOS;
+//    blknum_t firstBlockToVisit = NOPOS;
 
     // We need at least one address to scrape...
     if (addrs.size() == 0)
         EXIT_USAGE("You must provide at least one Ethereum address.");
 
+#if 0
     SHOW_FIELD(CTransaction, "traces");
 
     if ((appearances + receipts + logs + traces) > 1)
@@ -284,11 +285,11 @@ bool COptions::parseArguments(string_q& command) {
 //                EXIT_USAGE(msg);
 //            firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
         }
-        if (monitor.exists()) {
+//        if (monitor.exists()) {
             allMonitors.push_back(monitor);
-        } else {
-            LOG4("Monitor not found: ", monitor.address, ". Skipping...");
-        }
+//        } else {
+//            LOG4("Monitor not found: ", monitor.address, ". Skipping...");
+//        }
     }
 
     if (allMonitors.size() == 0)
@@ -509,6 +510,8 @@ bool COptions::parseArguments(string_q& command) {
         return handle_rm(addrs);
 
     EXIT_NOMSG(true);
+#endif
+    return true;
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -645,49 +648,49 @@ string_q report_cache(int opt) {
 
 //------------------------------------------------------------------------------------------------
 bool freshen_internal(CMonitorArray& fa, const string_q& freshen_flags) {
-//    // ENTER("freshen_internal");
-//    nodeNotRequired();
-//
-//    ostringstream base;
-//    base << "acctExport " << freshen_flags << " [ADDRS] ;";
-//
-//    size_t cnt = 0, cnt2 = 0;
-//    string_q tenAddresses;
-//    for (auto f : fa) {
-//        bool needsUpdate = true;
-//        if (needsUpdate) {
-//            LOG4(cTeal, "Needs update ", f.address, string_q(80, ' '), cOff);
-//            tenAddresses += (f.address + " ");
-//            if (!(++cnt % 10)) {  // we don't want to do too many addrs at a time
-//                tenAddresses += "|";
-//                cnt = 0;
-//            }
-//        } else {
-//            LOG4(cTeal, "Updating addresses ", f.address, " ", cnt2, " of ", fa.size(), string_q(80, ' '), cOff, "\r");
-//        }
-//        cnt2++;
-//    }
-//
-//    // Process them until we're done
-//    uint64_t cur = 0;
-//    while (!tenAddresses.empty()) {
-//        string_q thisFive = nextTokenClear(tenAddresses, '|');
-//        string_q cmd = substitute(base.str(), "[ADDRS]", thisFive);
-//        // LOG_CALL(cmd);
-//        // clang-format off
-//        uint64_t n = countOf(thisFive, ' ');
-//        if (fa.size() > 1)
-//            LOG_INFO(cTeal, "Updating addresses ", cur+1, "-", (cur+n), " of ", fa.size(), string_q(80, ' '), cOff);
-//        cur += n;
-//        if (system(cmd.c_str())) {}  // Don't remove cruft. Silences compiler warnings
-//        // clang-format on
-//        if (!tenAddresses.empty())
-//            usleep(50000);  // this sleep is here so that chifra remains responsive to Cntl+C. Do not remove
-//    }
-//
-//    for (CMonitor& f : fa)
-//        f.needsRefresh = (f.cntBefore != f.getRecordCount());
-//
+    // ENTER("freshen_internal");
+    nodeNotRequired();
+
+    ostringstream base;
+    base << "acctExport " << freshen_flags << " [ADDRS] ;";
+
+    size_t cnt = 0, cnt2 = 0;
+    string_q tenAddresses;
+    for (auto f : fa) {
+        bool needsUpdate = true;
+        if (needsUpdate) {
+            LOG4(cTeal, "Needs update ", f.address, string_q(80, ' '), cOff);
+            tenAddresses += (f.address + " ");
+            if (!(++cnt % 10)) {  // we don't want to do too many addrs at a time
+                tenAddresses += "|";
+                cnt = 0;
+            }
+        } else {
+            LOG4(cTeal, "Updating addresses ", f.address, " ", cnt2, " of ", fa.size(), string_q(80, ' '), cOff, "\r");
+        }
+        cnt2++;
+    }
+
+    // Process them until we're done
+    uint64_t cur = 0;
+    while (!tenAddresses.empty()) {
+        string_q thisFive = nextTokenClear(tenAddresses, '|');
+        string_q cmd = substitute(base.str(), "[ADDRS]", thisFive);
+        // LOG_CALL(cmd);
+        // clang-format off
+        uint64_t n = countOf(thisFive, ' ');
+        if (fa.size() > 1)
+            LOG_INFO(cTeal, "Updating addresses ", cur+1, "-", (cur+n), " of ", fa.size(), string_q(80, ' '), cOff);
+        cur += n;
+        if (system(cmd.c_str())) {}  // Don't remove cruft. Silences compiler warnings
+        // clang-format on
+        if (!tenAddresses.empty())
+            usleep(50000);  // this sleep is here so that chifra remains responsive to Cntl+C. Do not remove
+    }
+
+    for (CMonitor& f : fa)
+        f.needsRefresh = (f.cntBefore != f.getRecordCount());
+
     return true;
-//    // EXIT_NOMSG(true);
+    // EXIT_NOMSG(true);
 }

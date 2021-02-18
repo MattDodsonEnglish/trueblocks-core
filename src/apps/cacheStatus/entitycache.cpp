@@ -14,26 +14,26 @@
  * This file was generated with makeClass. Edit only those parts of the code inside
  * of 'EXISTING_CODE' tags.
  */
-#include "collectioncache.h"
+#include "entitycache.h"
 
 namespace qblocks {
 
 //---------------------------------------------------------------------------
-IMPLEMENT_NODE(CCollectionCache, CCache);
+IMPLEMENT_NODE(CEntityCache, CCache);
 
 //---------------------------------------------------------------------------
-static string_q nextCollectioncacheChunk(const string_q& fieldIn, const void* dataPtr);
-static string_q nextCollectioncacheChunk_custom(const string_q& fieldIn, const void* dataPtr);
+static string_q nextEntitycacheChunk(const string_q& fieldIn, const void* dataPtr);
+static string_q nextEntitycacheChunk_custom(const string_q& fieldIn, const void* dataPtr);
 
 //---------------------------------------------------------------------------
-void CCollectionCache::Format(ostream& ctx, const string_q& fmtIn, void* dataPtr) const {
+void CEntityCache::Format(ostream& ctx, const string_q& fmtIn, void* dataPtr) const {
     if (!m_showing)
         return;
 
     // EXISTING_CODE
     // EXISTING_CODE
 
-    string_q fmt = (fmtIn.empty() ? expContext().fmtMap["collectioncache_fmt"] : fmtIn);
+    string_q fmt = (fmtIn.empty() ? expContext().fmtMap["entitycache_fmt"] : fmtIn);
     if (fmt.empty()) {
         if (expContext().exportFmt == YAML1) {
             toYaml(ctx);
@@ -47,13 +47,13 @@ void CCollectionCache::Format(ostream& ctx, const string_q& fmtIn, void* dataPtr
     // EXISTING_CODE
 
     while (!fmt.empty())
-        ctx << getNextChunk(fmt, nextCollectioncacheChunk, this);
+        ctx << getNextChunk(fmt, nextEntitycacheChunk, this);
 }
 
 //---------------------------------------------------------------------------
-string_q nextCollectioncacheChunk(const string_q& fieldIn, const void* dataPtr) {
+string_q nextEntitycacheChunk(const string_q& fieldIn, const void* dataPtr) {
     if (dataPtr)
-        return reinterpret_cast<const CCollectionCache*>(dataPtr)->getValueByName(fieldIn);
+        return reinterpret_cast<const CEntityCache*>(dataPtr)->getValueByName(fieldIn);
 
     // EXISTING_CODE
     // EXISTING_CODE
@@ -62,9 +62,9 @@ string_q nextCollectioncacheChunk(const string_q& fieldIn, const void* dataPtr) 
 }
 
 //---------------------------------------------------------------------------
-string_q CCollectionCache::getValueByName(const string_q& fieldName) const {
+string_q CEntityCache::getValueByName(const string_q& fieldName) const {
     // Give customized code a chance to override first
-    string_q ret = nextCollectioncacheChunk_custom(fieldName, this);
+    string_q ret = nextEntitycacheChunk_custom(fieldName, this);
     if (!ret.empty())
         return ret;
 
@@ -100,7 +100,7 @@ string_q CCollectionCache::getValueByName(const string_q& fieldName) const {
 }
 
 //---------------------------------------------------------------------------------------------------
-bool CCollectionCache::setValueByName(const string_q& fieldNameIn, const string_q& fieldValueIn) {
+bool CEntityCache::setValueByName(const string_q& fieldNameIn, const string_q& fieldValueIn) {
     string_q fieldName = fieldNameIn;
     string_q fieldValue = fieldValueIn;
 
@@ -113,11 +113,11 @@ bool CCollectionCache::setValueByName(const string_q& fieldNameIn, const string_
     switch (tolower(fieldName[0])) {
         case 'i':
             if (fieldName % "items") {
-                CCollectionCacheItem obj;
+                CEntityCacheItem obj;
                 string_q str = fieldValue;
                 while (obj.parseJson3(str)) {
                     items.push_back(obj);
-                    obj = CCollectionCacheItem();  // reset
+                    obj = CEntityCacheItem();  // reset
                 }
                 return true;
             }
@@ -129,13 +129,13 @@ bool CCollectionCache::setValueByName(const string_q& fieldNameIn, const string_
 }
 
 //---------------------------------------------------------------------------------------------------
-void CCollectionCache::finishParse() {
+void CEntityCache::finishParse() {
     // EXISTING_CODE
     // EXISTING_CODE
 }
 
 //---------------------------------------------------------------------------------------------------
-bool CCollectionCache::Serialize(CArchive& archive) {
+bool CEntityCache::Serialize(CArchive& archive) {
     if (archive.isWriting())
         return SerializeC(archive);
 
@@ -153,7 +153,7 @@ bool CCollectionCache::Serialize(CArchive& archive) {
 }
 
 //---------------------------------------------------------------------------------------------------
-bool CCollectionCache::SerializeC(CArchive& archive) const {
+bool CEntityCache::SerializeC(CArchive& archive) const {
     // Writing always write the latest version of the data
     CCache::SerializeC(archive);
 
@@ -165,7 +165,7 @@ bool CCollectionCache::SerializeC(CArchive& archive) const {
 }
 
 //---------------------------------------------------------------------------
-CArchive& operator>>(CArchive& archive, CCollectionCacheArray& array) {
+CArchive& operator>>(CArchive& archive, CEntityCacheArray& array) {
     uint64_t count;
     archive >> count;
     array.resize(count);
@@ -177,7 +177,7 @@ CArchive& operator>>(CArchive& archive, CCollectionCacheArray& array) {
 }
 
 //---------------------------------------------------------------------------
-CArchive& operator<<(CArchive& archive, const CCollectionCacheArray& array) {
+CArchive& operator<<(CArchive& archive, const CEntityCacheArray& array) {
     uint64_t count = array.size();
     archive << count;
     for (size_t i = 0; i < array.size(); i++)
@@ -186,43 +186,43 @@ CArchive& operator<<(CArchive& archive, const CCollectionCacheArray& array) {
 }
 
 //---------------------------------------------------------------------------
-void CCollectionCache::registerClass(void) {
+void CEntityCache::registerClass(void) {
     // only do this once
-    if (HAS_FIELD(CCollectionCache, "schema"))
+    if (HAS_FIELD(CEntityCache, "schema"))
         return;
 
     CCache::registerClass();
 
     size_t fieldNum = 1000;
-    ADD_FIELD(CCollectionCache, "schema", T_NUMBER, ++fieldNum);
-    ADD_FIELD(CCollectionCache, "deleted", T_BOOL, ++fieldNum);
-    ADD_FIELD(CCollectionCache, "showing", T_BOOL, ++fieldNum);
-    ADD_FIELD(CCollectionCache, "cname", T_TEXT, ++fieldNum);
-    ADD_FIELD(CCollectionCache, "items", T_OBJECT | TS_ARRAY | TS_OMITEMPTY, ++fieldNum);
+    ADD_FIELD(CEntityCache, "schema", T_NUMBER, ++fieldNum);
+    ADD_FIELD(CEntityCache, "deleted", T_BOOL, ++fieldNum);
+    ADD_FIELD(CEntityCache, "showing", T_BOOL, ++fieldNum);
+    ADD_FIELD(CEntityCache, "cname", T_TEXT, ++fieldNum);
+    ADD_FIELD(CEntityCache, "items", T_OBJECT | TS_ARRAY | TS_OMITEMPTY, ++fieldNum);
 
     // Hide our internal fields, user can turn them on if they like
-    HIDE_FIELD(CCollectionCache, "schema");
-    HIDE_FIELD(CCollectionCache, "deleted");
-    HIDE_FIELD(CCollectionCache, "showing");
-    HIDE_FIELD(CCollectionCache, "cname");
+    HIDE_FIELD(CEntityCache, "schema");
+    HIDE_FIELD(CEntityCache, "deleted");
+    HIDE_FIELD(CEntityCache, "showing");
+    HIDE_FIELD(CEntityCache, "cname");
 
-    builtIns.push_back(_biCCollectionCache);
+    builtIns.push_back(_biCEntityCache);
 
     // EXISTING_CODE
     // EXISTING_CODE
 }
 
 //---------------------------------------------------------------------------
-string_q nextCollectioncacheChunk_custom(const string_q& fieldIn, const void* dataPtr) {
-    const CCollectionCache* col = reinterpret_cast<const CCollectionCache*>(dataPtr);
-    if (col) {
+string_q nextEntitycacheChunk_custom(const string_q& fieldIn, const void* dataPtr) {
+    const CEntityCache* ent = reinterpret_cast<const CEntityCache*>(dataPtr);
+    if (ent) {
         switch (tolower(fieldIn[0])) {
             // EXISTING_CODE
             // EXISTING_CODE
             case 'p':
                 // Display only the fields of this node, not it's parent type
                 if (fieldIn % "parsed")
-                    return nextBasenodeChunk(fieldIn, col);
+                    return nextBasenodeChunk(fieldIn, ent);
                 // EXISTING_CODE
                 // EXISTING_CODE
                 break;
@@ -236,7 +236,7 @@ string_q nextCollectioncacheChunk_custom(const string_q& fieldIn, const void* da
 }
 
 //---------------------------------------------------------------------------
-bool CCollectionCache::readBackLevel(CArchive& archive) {
+bool CEntityCache::readBackLevel(CArchive& archive) {
     bool done = false;
     // EXISTING_CODE
     // EXISTING_CODE
@@ -244,7 +244,7 @@ bool CCollectionCache::readBackLevel(CArchive& archive) {
 }
 
 //-------------------------------------------------------------------------
-ostream& operator<<(ostream& os, const CCollectionCache& it) {
+ostream& operator<<(ostream& os, const CEntityCache& it) {
     // EXISTING_CODE
     // EXISTING_CODE
 
@@ -254,11 +254,11 @@ ostream& operator<<(ostream& os, const CCollectionCache& it) {
 }
 
 //---------------------------------------------------------------------------
-const CBaseNode* CCollectionCache::getObjectAt(const string_q& fieldName, size_t index) const {
+const CBaseNode* CEntityCache::getObjectAt(const string_q& fieldName, size_t index) const {
     if (fieldName % "items") {
         if (index == NOPOS) {
-            CCollectionCacheItem empty;
-            ((CCollectionCache*)this)->items.push_back(empty);
+            CEntityCacheItem empty;
+            ((CEntityCache*)this)->items.push_back(empty);
             index = items.size() - 1;
         }
         if (index < items.size())
@@ -269,7 +269,7 @@ const CBaseNode* CCollectionCache::getObjectAt(const string_q& fieldName, size_t
 }
 
 //---------------------------------------------------------------------------
-const char* STR_DISPLAY_COLLECTIONCACHE = "";
+const char* STR_DISPLAY_ENTITYCACHE = "";
 
 //---------------------------------------------------------------------------
 // EXISTING_CODE

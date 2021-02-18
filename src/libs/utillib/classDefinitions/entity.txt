@@ -1,5 +1,5 @@
 [settings]
-class = CCollection
+class = CEntity
 fields = \
   string cid|\
   string tags|\

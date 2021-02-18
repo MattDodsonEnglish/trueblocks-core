@@ -15,8 +15,7 @@
  * This file was generated with makeClass. Edit only those parts of the code inside
  * of 'EXISTING_CODE' tags.
  */
-#include "cache.h"
-#include "collectioncacheitem.h"
+#include "etherlib.h"
 
 namespace qblocks {
 
@@ -24,33 +23,31 @@ namespace qblocks {
 // EXISTING_CODE
 
 //--------------------------------------------------------------------------
-class CCollectionCache : public CCache {
+class CEntityCacheItem : public CAccountName {
   public:
-    CCollectionCacheItemArray items;
+    string_q type;
 
   public:
-    CCollectionCache(void);
-    CCollectionCache(const CCollectionCache& co);
-    virtual ~CCollectionCache(void);
-    CCollectionCache& operator=(const CCollectionCache& co);
+    CEntityCacheItem(void);
+    CEntityCacheItem(const CEntityCacheItem& en);
+    virtual ~CEntityCacheItem(void);
+    CEntityCacheItem& operator=(const CEntityCacheItem& en);
 
-    DECLARE_NODE(CCollectionCache);
-
-    const CBaseNode* getObjectAt(const string_q& fieldName, size_t index) const override;
+    DECLARE_NODE(CEntityCacheItem);
 
     // EXISTING_CODE
     // EXISTING_CODE
-    bool operator==(const CCollectionCache& it) const;
-    bool operator!=(const CCollectionCache& it) const {
+    bool operator==(const CEntityCacheItem& it) const;
+    bool operator!=(const CEntityCacheItem& it) const {
         return !operator==(it);
     }
-    friend bool operator<(const CCollectionCache& v1, const CCollectionCache& v2);
-    friend ostream& operator<<(ostream& os, const CCollectionCache& it);
+    friend bool operator<(const CEntityCacheItem& v1, const CEntityCacheItem& v2);
+    friend ostream& operator<<(ostream& os, const CEntityCacheItem& it);
 
   protected:
     void clear(void);
     void initialize(void);
-    void duplicate(const CCollectionCache& co);
+    void duplicate(const CEntityCacheItem& en);
     bool readBackLevel(CArchive& archive) override;
 
     // EXISTING_CODE
@@ -58,66 +55,66 @@ class CCollectionCache : public CCache {
 };
 
 //--------------------------------------------------------------------------
-inline CCollectionCache::CCollectionCache(void) {
+inline CEntityCacheItem::CEntityCacheItem(void) {
     initialize();
     // EXISTING_CODE
     // EXISTING_CODE
 }
 
 //--------------------------------------------------------------------------
-inline CCollectionCache::CCollectionCache(const CCollectionCache& co) {
+inline CEntityCacheItem::CEntityCacheItem(const CEntityCacheItem& en) {
     // EXISTING_CODE
     // EXISTING_CODE
-    duplicate(co);
+    duplicate(en);
 }
 
 // EXISTING_CODE
 // EXISTING_CODE
 
 //--------------------------------------------------------------------------
-inline CCollectionCache::~CCollectionCache(void) {
+inline CEntityCacheItem::~CEntityCacheItem(void) {
     clear();
     // EXISTING_CODE
     // EXISTING_CODE
 }
 
 //--------------------------------------------------------------------------
-inline void CCollectionCache::clear(void) {
+inline void CEntityCacheItem::clear(void) {
     // EXISTING_CODE
     // EXISTING_CODE
 }
 
 //--------------------------------------------------------------------------
-inline void CCollectionCache::initialize(void) {
-    CCache::initialize();
+inline void CEntityCacheItem::initialize(void) {
+    CAccountName::initialize();
 
-    items.clear();
+    type = "";
 
     // EXISTING_CODE
     // EXISTING_CODE
 }
 
 //--------------------------------------------------------------------------
-inline void CCollectionCache::duplicate(const CCollectionCache& co) {
+inline void CEntityCacheItem::duplicate(const CEntityCacheItem& en) {
     clear();
-    CCache::duplicate(co);
+    CAccountName::duplicate(en);
 
-    items = co.items;
+    type = en.type;
 
     // EXISTING_CODE
     // EXISTING_CODE
 }
 
 //--------------------------------------------------------------------------
-inline CCollectionCache& CCollectionCache::operator=(const CCollectionCache& co) {
-    duplicate(co);
+inline CEntityCacheItem& CEntityCacheItem::operator=(const CEntityCacheItem& en) {
+    duplicate(en);
     // EXISTING_CODE
     // EXISTING_CODE
     return *this;
 }
 
 //-------------------------------------------------------------------------
-inline bool CCollectionCache::operator==(const CCollectionCache& it) const {
+inline bool CEntityCacheItem::operator==(const CEntityCacheItem& it) const {
     // EXISTING_CODE
     // EXISTING_CODE
     // No default equal operator in class definition, assume none are equal (so find fails)
@@ -125,7 +122,7 @@ inline bool CCollectionCache::operator==(const CCollectionCache& it) const {
 }
 
 //-------------------------------------------------------------------------
-inline bool operator<(const CCollectionCache& v1, const CCollectionCache& v2) {
+inline bool operator<(const CEntityCacheItem& v1, const CEntityCacheItem& v2) {
     // EXISTING_CODE
     // EXISTING_CODE
     // No default sort defined in class definition, assume already sorted, preserve ordering
@@ -133,12 +130,12 @@ inline bool operator<(const CCollectionCache& v1, const CCollectionCache& v2) {
 }
 
 //---------------------------------------------------------------------------
-typedef vector<CCollectionCache> CCollectionCacheArray;
-extern CArchive& operator>>(CArchive& archive, CCollectionCacheArray& array);
-extern CArchive& operator<<(CArchive& archive, const CCollectionCacheArray& array);
+typedef vector<CEntityCacheItem> CEntityCacheItemArray;
+extern CArchive& operator>>(CArchive& archive, CEntityCacheItemArray& array);
+extern CArchive& operator<<(CArchive& archive, const CEntityCacheItemArray& array);
 
 //---------------------------------------------------------------------------
-extern const char* STR_DISPLAY_COLLECTIONCACHE;
+extern const char* STR_DISPLAY_ENTITYCACHEITEM;
 
 //---------------------------------------------------------------------------
 // EXISTING_CODE

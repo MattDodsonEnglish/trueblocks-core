@@ -98,7 +98,7 @@
   ],
   "types": [
     {
-      "type": "CCollection",
+      "type": "CEntity",
       "fields": [
         {
           "name": "deleted",
@@ -134,5 +134,12 @@
         }
       ]
     }
-  ]
+  ],
+  "meta": {
+    "unripe": "0xdeadbeef",
+    "ripe": "0xdeadbeef",
+    "staging": "0xdeadbeef",
+    "finalized": "0xdeadbeef",
+    "client": "0xdeadbeef"
+  }
 }

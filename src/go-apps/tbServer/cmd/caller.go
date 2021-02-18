@@ -46,6 +46,8 @@ func callOneExtra(w http.ResponseWriter, r *http.Request, tbCmd, extra string) {
 		}
 		allDogs = append(allDogs, value...)
 	}
+    log.Println("tbCmd: ", tbCmd)
+    log.Println("allDogs: ", allDogs)
 	cmd := exec.Command(tbCmd, allDogs...)
 
 	if r.Header.Get("User-Agent") == "testRunner" {
@@ -79,7 +81,7 @@ func AccountsAbis(w http.ResponseWriter, r *http.Request) {
 	callOne(w, r, "grabABI")
 }
 
-func AccountsCollections(w http.ResponseWriter, r *http.Request) {
+func AccountsEntities(w http.ResponseWriter, r *http.Request) {
 	callOne(w, r, "ethNames")
 }
 
@@ -237,10 +239,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"AccountsCollections",
+		"AccountsEntities",
 		"GET",
-		"/collections",
-		AccountsCollections,
+		"/entities",
+		AccountsEntities,
 	},
 
 	Route{
