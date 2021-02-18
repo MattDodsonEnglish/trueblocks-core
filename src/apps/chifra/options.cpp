@@ -9,7 +9,20 @@
  */
 #include "options.h"
 
+<<<<<<< HEAD
 extern string_q getSubcommands(void);
+=======
+//---------------------------------------------------------------------------------------------------
+const string_q opt_string =
+    "list<enum["
+    "list|export|slurp|"
+    "entities|names|tags|abis|"
+    "blocks|transactions|receipts|logs|traces|quotes|explore|"
+    "state|tokens|when|where|dive|"
+    "init|scrape|serve|pins|status|rm]"
+    ">";
+
+>>>>>>> develop
 //---------------------------------------------------------------------------------------------------
 static const COption params[] = {
     COption("commands", getSubcommands(), "<string>", OPT_REQUIRED | OPT_POSITIONAL, "which command to run"),
@@ -86,6 +99,7 @@ bool COptions::parseArguments(string_q& command) {
         return false;
     }
 
+<<<<<<< HEAD
     // if (mocked) {
     //     string_q which = origMode;
     //     if (origMode == "names") {
@@ -129,6 +143,52 @@ bool COptions::parseArguments(string_q& command) {
     //     }
     //     tool_flags += " --mocked ";
     // }
+=======
+    if (mocked) {
+        string_q which = origMode;
+        if (origMode == "names") {
+            if (contains(tool_flags, "tags")) {
+                origMode = "tags";
+            } else if (contains(tool_flags, "entities")) {
+                origMode = "entities";
+            }
+        } else if (origMode == "status") {
+            if (contains(tool_flags, "monitors")) {
+                origMode = "monitors";
+            }
+        }
+
+        uint64_t nMocked = getGlobalConfig("")->getConfigInt("dev", "n_mocked", 100);
+        string_q path = configPath("mocked/" + origMode + ".json");
+        if (fileExists(path)) {
+            if (origMode == "export") {
+                // simulate listing
+                for (size_t i = 0; i < nMocked; i++) {
+                    LOG_PROGRESS1("Extracting", i, nMocked, "\r");
+                    usleep(30000);
+                }
+                CStringArray lines;
+                asciiFileToLines(path, lines);
+                size_t cnt = 0;
+                size_t record = 0;
+                size_t recordSize = lines.size() / nMocked;
+                for (auto line : lines) {
+                    cout << line << endl;
+                    if (!(++cnt % recordSize)) {
+                        LOG_PROGRESS1("Displaying", record++, nMocked, "\r");
+                        usleep(10000);
+                    }
+                }
+                return false;
+            } else {
+                cout << asciiFileToString(path);
+                return false;
+            }
+        }
+        tool_flags += " --mocked ";
+        freshen_flags += " --mocked ";
+    }
+>>>>>>> develop
 
     return true;
 }

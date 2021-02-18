@@ -1,3 +1,8 @@
+<<<<<<< HEAD:test/gold/apps/chifra/chifra_help_entities.txt
+=======
+chifra argc: 3 [1:entities] [2:--help] 
+chifra entities --help 
+>>>>>>> develop:test/gold/apps/chifra/chifra_help_collections.txt
 chifra entities argc: 3 [1:--entities] [2:--help] 
 chifra entities --entities --help 
 PROG_NAME = [chifra entities]
