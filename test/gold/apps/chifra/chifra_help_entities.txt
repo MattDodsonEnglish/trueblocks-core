@@ -1,10 +1,10 @@
-chifra argc: 3 [1:collections] [2:--help] 
-chifra collections --help 
-chifra collections argc: 3 [1:--collections] [2:--help] 
-chifra collections --collections --help 
-PROG_NAME = [chifra collections]
+chifra argc: 3 [1:entities] [2:--help] 
+chifra entities --help 
+chifra entities argc: 3 [1:--entities] [2:--help] 
+chifra entities --entities --help 
+PROG_NAME = [chifra entities]
 
-  Usage:    chifra collections [-e|-m|-l|-o|-c|-p|-n|-a|-s|-g|-v|-h] <term> [term...]  
+  Usage:    chifra entities [-e|-m|-l|-o|-c|-p|-n|-a|-s|-g|-v|-h] <term> [term...]  
   Purpose:  Query addresses and/or names of well known accounts.
 
   Where:  
@@ -17,7 +17,7 @@ PROG_NAME = [chifra collections]
 	-p  (--prefund)       include prefund accounts
 	-n  (--named)         include well know token and airdrop addresses in the search
 	-a  (--addr)          display only addresses in the results (useful for scripting)
-	-s  (--collections)   display collections data
+	-s  (--entities)      display entity data
 	-g  (--tags)          export the list of tags and subtags only
 
 	#### Hidden options
