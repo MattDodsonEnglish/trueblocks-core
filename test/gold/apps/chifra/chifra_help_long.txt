@@ -1,19 +1,11 @@
+chifra argc: 2 [1:--help] 
+chifra --help 
 
-  Usage:    chifra [] commands  
+  Usage:    chifra command  
   Purpose:  Control all options of the TrueBlocks tools.
-	        - Get more detailed help with 'chifra <cmd> --help'.
+            - Get more detailed help with 'chifra <cmd> --help'.
 
   Where:  
-<<<<<<< HEAD
-=======
-	commands              which command to run, one or more of [list|export|slurp|entities|names|tags|abis|blocks|transactions|receipts|logs|traces|quotes|explore|state|tokens|when|where|dive|init|scrape|serve|pins|status|rm] (required)
-	-x  (--fmt <val>)     export format, one of [none|json*|txt|csv|api]
-	-v  (--verbose)       set verbose level. Either -v, --verbose or -v:n where 'n' is level
-	-h  (--help)          display this help screen
-
-  Notes:
-	- Get more detailed help with 'chifra <cmd> --help'.
->>>>>>> develop
 	 MONITORS
 	   monitor       add, remove, clean, and list appearances of address(es) on the chain
 	   export        export details for each appearance (as transacitons, logs, traces, balances, etc.)

@@ -12,8 +12,9 @@
 extern string_q getSubcommands(void);
 //---------------------------------------------------------------------------------------------------
 static const COption params[] = {
-    COption("commands", getSubcommands(), "<string>", OPT_REQUIRED | OPT_POSITIONAL, "which command to run"),
-    COption("", "", "", OPT_DESCRIPTION, "Control all options of the TrueBlocks tools."),
+    COption("command", getSubcommands(), "<string>", OPT_REQUIRED | OPT_POSITIONAL, "which command to run"),
+    COption("", "", "", OPT_DESCRIPTION,
+            "Control all options of the TrueBlocks tools.|Get detailed help for a command with `'chifra <cmd> --help'`."),
 };
 static const size_t nParams = sizeof(params) / sizeof(COption);
 
@@ -57,22 +58,6 @@ bool COptions::parseArguments(string_q& command) {
         return usage("You must specify a command to run.");
     }
 
-    // Handle base layer options
-    if (isNoHeader)
-        tool_flags += " --no_header";
-
-    if (expContext().asEther)
-        tool_flags += " --ether";
-
-    if (expContext().asDollars)
-        tool_flags += " --dollars";
-
-    if (expContext().asParity)
-        tool_flags += " --parity";
-
-    if (verbose && !contains(tool_flags, "-v"))
-        tool_flags += (" -v:" + uint_2_Str(verbose));
-
     if (contains(tool_flags, "help")) {
         if (cmdMap[mode].empty())
             return usage("Incorrect mode: " + mode + ".");
@@ -85,59 +70,14 @@ bool COptions::parseArguments(string_q& command) {
         // clang-format on
         return false;
     }
-
-    // if (mocked) {
-    //     string_q which = origMode;
-    //     if (origMode == "names") {
-    //         if (contains(tool_flags, "tags")) {
-    //             origMode = "tags";
-    //         } else if (contains(tool_flags, "entities")) {
-    //             origMode = "entities";
-    //         }
-    //     } else if (origMode == "status") {
-    //         if (contains(tool_flags, "monitors")) {
-    //             origMode = "monitors";
-    //         }
-    //     }
-
-    //     uint64_t nMocked = getGlobalConfig("")->getConfigInt("dev", "n_mocked", 100);
-    //     string_q path = configPath("mocked/" + origMode + ".json");
-    //     if (fileExists(path)) {
-    //         if (origMode == "export") {
-    //             // simulate listing
-    //             for (size_t i = 0; i < nMocked; i++) {
-    //                 LOG_PROGRESS1("Extracting", i, nMocked, "\r");
-    //                 usleep(30000);
-    //             }
-    //             CStringArray lines;
-    //             asciiFileToLines(path, lines);
-    //             size_t cnt = 0;
-    //             size_t record = 0;
-    //             size_t recordSize = lines.size() / nMocked;
-    //             for (auto line : lines) {
-    //                 cout << line << endl;
-    //                 if (!(++cnt % recordSize)) {
-    //                     LOG_PROGRESS1("Displaying", record++, nMocked, "\r");
-    //                     usleep(10000);
-    //                 }
-    //             }
-    //             return false;
-    //         } else {
-    //             cout << asciiFileToString(path);
-    //             return false;
-    //         }
-    //     }
-    //     tool_flags += " --mocked ";
-    // }
-
-    return true;
 }
 #endif
 
 //---------------------------------------------------------------------------------------------------
 void COptions::Init(void) {
     registerOptions(nParams, params);
-    optionOff(OPT_HELP | OPT_CRUD | OPT_OUTPUT | OPT_VERBOSE | OPT_FMT);
+    optionOff(OPT_DEFAULT);
+    optionOn(OPT_MOCKDATA);
 
     // BEG_CODE_INIT
     // END_CODE_INIT
@@ -173,6 +113,8 @@ COptions::~COptions(void) {
 extern map<string, string> cmdMap;
 //------------------------------------------------------------------------------------------------
 bool COptions::call_command(int argc, const char* argv[]) {
+    CStringArray unused;
+    prePrepareArguments(unused, argc, argv);
     /*
         } else if (arg == "-h" || arg == "--help") {
             if (mode.empty() || mode == "serve") {
@@ -317,7 +259,6 @@ string_q getSubcommands(void) {
 
 //------------------------------------------------------------------------------------------------
 const char* STR_FULL_HELP = 
-        "Get more detailed help with `'chifra <cmd> --help'`.|"
                 "MONITORS|"
                 "  monitor       add, remove, clean, and list appearances of address(es) on the chain|"
                 "  export        export details for each appearance (as transacitons, logs, traces, balances, etc.)|"
@@ -346,3 +287,45 @@ const char* STR_FULL_HELP =
                 "  slurp         export details by querying EtherScan (note: will not return as many appearances as --list)|"
                 "  quotes        return prices collected from configured remote API|"
                 "  where         determine the location of block(s), either local or remote cache, or on-chain";
+
+// if (mocked) {
+//     string_q which = origMode;
+//     if (origMode == "names") {
+//         if (contains(tool_flags, "tags")) {
+//             origMode = "tags";
+//         } else if (contains(tool_flags, "entities")) {
+//             origMode = "entities";
+//         }
+//     } else if (origMode == "status") {
+//         if (contains(tool_flags, "monitors")) {
+//             origMode = "monitors";
+//         }
+//     }
+//     uint64_t nMocked = getGlobalConfig("")->getConfigInt("dev", "n_mocked", 100);
+//     string_q path = configPath("mocked/" + origMode + ".json");
+//     if (fileExists(path)) {
+//         if (origMode == "export") {
+//             for (size_t i = 0; i < nMocked; i++) {
+//                 LOG_PROGRESS1("Extracting", i, nMocked, "\r");
+//                 usleep(30000);
+//             }
+//             CStringArray lines;
+//             asciiFileToLines(path, lines);
+//             size_t cnt = 0;
+//             size_t record = 0;
+//             size_t recordSize = lines.size() / nMocked;
+//             for (auto line : lines) {
+//                 cout << line << endl;
+//                 if (!(++cnt % recordSize)) {
+//                     LOG_PROGRESS1("Displaying", record++, nMocked, "\r");
+//                     usleep(10000);
+//                 }
+//             }
+//             return false;
+//         } else {
+//             cout << asciiFileToString(path);
+//             return false;
+//         }
+//     }
+//     tool_flags += " --mocked ";
+// }

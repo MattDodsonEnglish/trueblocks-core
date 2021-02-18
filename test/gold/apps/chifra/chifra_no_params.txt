@@ -1,5 +1,7 @@
+chifra argc: 1 
+chifra 
 
-  Please specify which command to run. 'chifra -v' for more information... Quitting...
+  You must provide a 'mode' to the chifra command. Quitting...
 
   Usage:    chifra command  
   Purpose:  Control all options of the TrueBlocks tools.
