@@ -125,10 +125,10 @@ bool COptions::parseArguments(string_q& command) {
                 if (been_here)
                     break;
                 been_here = true;
-                tests.push_back("apps/acctExport");
+//                tests.push_back("apps/acctExport");
                 tests.push_back("apps/blockScrape");
                 tests.push_back("apps/cacheStatus");
-                tests.push_back("apps/chifra");
+//                tests.push_back("apps/chifra");
                 tests.push_back("apps/pinStatus");
 
             } else {
@@ -171,10 +171,10 @@ bool COptions::parseArguments(string_q& command) {
         tests.push_back("tools/grabABI");
         tests.push_back("tools/whenBlock");
         tests.push_back("tools/whereBlock");
-        tests.push_back("apps/acctExport");
+//        tests.push_back("apps/acctExport");
         tests.push_back("apps/blockScrape");
         tests.push_back("apps/cacheStatus");
-        tests.push_back("apps/chifra");
+//        tests.push_back("apps/chifra");
         tests.push_back("apps/pinStatus");
     }
 

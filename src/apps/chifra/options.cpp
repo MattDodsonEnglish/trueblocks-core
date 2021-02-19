@@ -55,7 +55,7 @@ bool COptions::call_command(int argc, const char* argv[]) {
     if (has_help && (argc == 2 || mode == "serve"))
         EXIT_USAGE("");
 
-    LOG_INFO("mode: ", mode);
+    LOG_TEST("mode", mode);
     if (!mode.empty() && mode != "serve")
         setenv("PROG_NAME", ("chifra " + string_q(argv[1])).c_str(), true);
 
@@ -71,17 +71,23 @@ bool COptions::call_command(int argc, const char* argv[]) {
             "Use the API to pause, restart, or quit the scraper -- not to run it. Instead "
             "open a new terminal window and enter ",
             cTeal, "chifra scrape run", cOff, ".");
-        return false;
+        EXIT_NOMSG(false);
     }
+
+    CStringBoolMap removeMap;
+    removeMap["--names"] = true;
+    removeMap["--terms"] = true;
+    removeMap["--addrs"] = true;
 
     // everything past the mode gets sent to the tool...
     ostringstream os;
     os << cmdMap[mode];
     for (int i = 2; i < argc; i++)
-        os << " " << argv[i];
+        if (!removeMap[argv[i]])
+            os << " " << argv[i];
 
     LOG_CALL(os.str());
-    return system(os.str().c_str());
+    EXIT_NOMSG(system(os.str().c_str()));
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -245,12 +251,6 @@ const char* STR_FULL_HELP =
 //     tool_flags += " --mocked ";
 // }
 
-// The Javascript API (which we hope to remove) will fail without this code. The go-lang server
-// removes these strings, so it's not a problem with the go-lang server.
-// CStringArray removes = {"--names", "--terms", "--addrs"};
-// for (auto remove : removes)
-//     if (remove != "--addrs" || mode != "blocks")
-//         tool_flags = substitute(tool_flags, remove, "");
 
 // This will probably break in the real usage.
 // CStringArray scraper = {"--restart", "--pause", "--quit"};
