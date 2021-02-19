@@ -62,7 +62,6 @@ func callOneExtra(w http.ResponseWriter, r *http.Request, tbCmd, extra string) {
     }
 
 	out, err := cmd.Output()
-
 	if err != nil {
 		fmt.Printf("%s", err)
 	}

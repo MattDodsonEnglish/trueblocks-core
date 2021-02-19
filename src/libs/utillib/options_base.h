@@ -70,6 +70,7 @@ class COptionsBase {
     bool mocked;
     bool isNoHeader;
     string_q crudCommand;
+    string_q overrideStr;
     bool isCrudCommand(void) const {
         return !crudCommand.empty();
     }
@@ -134,7 +135,8 @@ class COptionsBase {
     string_q oneDescription(const string_q& sN, const string_q& lN, const string_q& d, bool isMode = false,
                             bool required = false) const;
     string_q get_notes(void) const;
-
+    string_q format_notes(const CStringArray& strs) const;
+    
     bool confirmEnum(const string_q& name, string_q& value, const string_q& arg) const;
     bool confirmBlockNum(const string_q& name, blknum_t& value, const string_q& arg, blknum_t latest) const;
     bool confirmUint(const string_q& name, uint64_t& value, const string_q& arg) const;

@@ -3,75 +3,86 @@
  * copyright (c) 2018, 2019 TrueBlocks, LLC (http://trueblocks.io)
  * All Rights Reserved
  *------------------------------------------------------------------------*/
-/*
- * Parts of this file were generated with makeClass. Edit only those parts of the code
- * outside of the BEG_CODE/END_CODE sections
- */
 #include "options.h"
 
 extern string_q getSubcommands(void);
 //---------------------------------------------------------------------------------------------------
 static const COption params[] = {
     COption("command", getSubcommands(), "<string>", OPT_REQUIRED | OPT_POSITIONAL, "which command to run"),
-    COption("", "", "", OPT_DESCRIPTION,
-            "Control all options of the TrueBlocks tools.|Get detailed help for a command with `'chifra <cmd> --help'`."),
+    COption("", "", "", OPT_DESCRIPTION, "Access to all TrueBlocks tools (`chifra <cmd> --help` for more)."),
 };
 static const size_t nParams = sizeof(params) / sizeof(COption);
 
-#if 0
-//---------------------------------------------------------------------------------------------------
-bool COptions::parseArguments(string_q& command) {
-        } else {
-            bool exists = false;
-            string_q lower = toLower(arg);
-            for (auto a : addrs) {
-                if (a == lower)
-                    exists = true;
-            }
+// TODO(tjayrush): Do not allow duplicate addresses in the command line
+// TODO(tjayrush): --known and --monitored are valid 'addresses' in one hack -- probably works anyway not that we don't parse addrs here
 
-            string subCommands = "|" + getSubcommands() + "|";
-            bool isStatus = (mode == "status");
-            if (!isStatus && contains(subCommands, "|" + arg + "|")) {
-                if (!mode.empty())
-                    return usage("Please specify one of " + getSubcommands() + ". " + mode + ":" + arg);
+//------------------------------------------------------------------------------------------------
+bool COptions::call_command(int argc, const char* argv[]) {
+    verbose = 10;  // rather be more than less verbose here
+    ENTER("call_command");
+
+    CStringArray unused;
+    prePrepareArguments(unused, argc, argv);
+
+    string_q mode;
+    bool has_help = false;
+    bool has_run = false;
+    for (int i = 1; i < argc; i++) {
+        string_q arg = argv[i];
+        if (arg == "-h" || arg == "--help") {
+            has_help = true;
+
+        } else if (arg == "run") {
+            has_run = true;
+
+        } else if (arg == "-th" || arg == "-ht") {
+            isReadme = true;
+            hiUp1 = hiUp2 = hiDown = '`';
+
+        } else if (!cmdMap[arg].empty()) {
+            if (mode.empty()) {
                 mode = arg;
-
-
-            } else if (isAddress(arg) || arg == "--known" || arg == "--monitored") {
-                if (!exists)
-                    addrs.push_back(lower);
-
-            } else if (mode == "when") {
-                if (!exists)
-                    addrs.push_back(lower);
-
             } else {
-                tool_flags += (arg + " ");
+                ostringstream os;
+                os << "Provide only a single mode. Encountered both '" << mode << "' and '" << arg << "'.";
+                return usage(os.str());
             }
         }
     }
 
-    string_q origMode = mode;
-    if (mode.empty()) {
-        optionOn(OPT_HELP);
-        verbose = true;
-        return usage("You must specify a command to run.");
-    }
+    setProgName("chifra");
+    // show chifra's help in limited cases, the tool's help otherwise
+    if (has_help && (argc == 2 || mode == "serve"))
+        EXIT_USAGE("");
 
-    if (contains(tool_flags, "help")) {
-        if (cmdMap[mode].empty())
-            return usage("Incorrect mode: " + mode + ".");
-        ostringstream cmd;
-        cmd << cmdMap[mode] << " --help";
-        if (verbose)
-            cmd << " --verbose " << verbose << endl;
-        // clang-format off
-        if (system(cmd.str().c_str())) {}  // Don't remove cruft. Silences compiler warnings
-        // clang-format on
+    LOG_INFO("mode: ", mode);
+    if (!mode.empty() && mode != "serve")
+        setenv("PROG_NAME", ("chifra " + string_q(argv[1])).c_str(), true);
+
+    if (argc > 1 && cmdMap[argv[1]].empty())
+        EXIT_USAGE("Unknown subcommand '" + string_q(argv[1]) + "'.");
+
+    if (mode.empty())
+        EXIT_USAGE("The first argument you provide must be a chifra subcommand.");
+
+    if (isApiMode() && mode == "scrape" && has_run) {
+        cout << "{ \"status\": \"cannot run\" }";
+        LOG_ERR(
+            "Use the API to pause, restart, or quit the scraper -- not to run it. Instead "
+            "open a new terminal window and enter ",
+            cTeal, "chifra scrape run", cOff, ".");
         return false;
     }
+
+    // everything past the mode gets sent to the tool...
+    ostringstream os;
+    os << cmdMap[mode];
+    for (int i = 2; i < argc; i++)
+        os << " " << argv[i];
+
+    LOG_CALL(os.str());
+    return system(os.str().c_str());
 }
-#endif
 
 //---------------------------------------------------------------------------------------------------
 void COptions::Init(void) {
@@ -91,109 +102,13 @@ void COptions::Init(void) {
 extern const char* STR_FULL_HELP;
 //---------------------------------------------------------------------------------------------------
 COptions::COptions(void) {
-    setSorts(GETRUNTIME_CLASS(CBlock), GETRUNTIME_CLASS(CTransaction), GETRUNTIME_CLASS(CReceipt));
     Init();
-    // BEG_CODE_NOTES
-    // clang-format off
-    // clang-format on
-    // END_CODE_NOTES
-
-    // clang-format off
-    notes.push_back(STR_FULL_HELP);
-    // clang-format on
-
-    // BEG_ERROR_MSG
-    // END_ERROR_MSG
+    overrideStr = STR_FULL_HELP;
 }
 
 //--------------------------------------------------------------------------------
 COptions::~COptions(void) {
 }
-
-extern map<string, string> cmdMap;
-//------------------------------------------------------------------------------------------------
-bool COptions::call_command(int argc, const char* argv[]) {
-    CStringArray unused;
-    prePrepareArguments(unused, argc, argv);
-    /*
-        } else if (arg == "-h" || arg == "--help") {
-            if (mode.empty() || mode == "serve") {
-                optionOn(OPT_HELP);
-                verbose = true;
-                return usage();
-            }
-            setenv("PROG_NAME", ("chifra " + mode).c_str(), true);
-            tool_help = true;
-    if (tool_help)
-        tool_flags += " --help";
-    */
-    ENTER("call_command");
-    if (argc < 2) {
-        verbose = true;
-        return usage("You must provide a 'mode' to the chifra command.");
-    }
-
-    string_q mode = argv[1];
-    setProgName("chifra");
-    if (argc == 2 && (mode == "-h" || mode == "--help")) {
-        verbose = true;
-        return usage("");
-    }
-
-    if (cmdMap[argv[1]].empty()) {
-        verbose = true;
-        return usage("Invalid mode '" + string_q(argv[1]) + "'.");
-    }
-
-    ostringstream os;
-    os << cmdMap[mode];
-    for (int i = 2; i < argc; i++)
-        os << " " << argv[i];
-
-    setenv("PROG_NAME", ("chifra " + mode).c_str(), true);
-
-    LOG_CALL(os.str());
-    return system(os.str().c_str());
-}
-
-#if 0
-//------------------------------------------------------------------------------------------------
-bool COptions::handle_commands(void) {
-    ENTER("handle_" + mode);
-    nodeRequired();
-
-    if (mode == "scrape") {
-        if (isApiMode() && contains(tool_flags, "run")) {
-            cout << "{ \"status\": \"cannot run\" }";
-            LOG_ERR(
-                "Use the API only to pause, restart, or quit the scraper -- to run, start in a new window with chifra "
-                "scrape run.");
-            return EXIT_FAILURE;
-        }
-        // setenv("FRESHEN_FLAG S", freshen_flags.c_str(), true);
-    }
-
-    // URLs require key/value pairs, command lines don't so we remove unneeded keys
-    CStringArray removes = {"--names", "--terms", "--addrs"};
-    for (auto remove : removes)
-        if (remove != "--addrs" || mode != "blocks")
-            tool_flags = substitute(tool_flags, remove, "");
-
-    CStringArray scraper = {"--restart", "--pause", "--quit"};
-    for (auto cmd : scraper)
-        replace(tool_flags, cmd, substitute(cmd, "--", ""));
-
-    ostringstream os;
-    os << cmdMap[mode] << " " << tool_flags;
-    for (auto addr : addrs)
-        os << " " << addr;
-
-    // clang-format off
-    LOG_CALL(os.str());
-    return system(os.str().c_str());
-    // clang-format on
-}
-#endif
 
 //------------------------------------------------------------------------------------------------
 map<string, string> cmdMap = {{"slurp", "ethslurp"},
@@ -329,3 +244,15 @@ const char* STR_FULL_HELP =
 //     }
 //     tool_flags += " --mocked ";
 // }
+
+// The Javascript API (which we hope to remove) will fail without this code. The go-lang server
+// removes these strings, so it's not a problem with the go-lang server.
+// CStringArray removes = {"--names", "--terms", "--addrs"};
+// for (auto remove : removes)
+//     if (remove != "--addrs" || mode != "blocks")
+//         tool_flags = substitute(tool_flags, remove, "");
+
+// This will probably break in the real usage.
+// CStringArray scraper = {"--restart", "--pause", "--quit"};
+// for (auto cmd : scraper)
+//     replace(tool_flags, cmd, substitute(cmd, "--", ""));

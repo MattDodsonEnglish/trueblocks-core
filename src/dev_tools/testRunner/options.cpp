@@ -266,6 +266,8 @@ void establishMonitor(const address_t& addr) {
 
 //---------------------------------------------------------------------------------------------------
 void establishTestData(void) {
+    ::remove(getCachePath("tmp/scraper-state.txt").c_str());
+
     // TODO(tjayrush): This is a hack, really. We should fix the reason these tests fail
     // when one removes the data in the cache. This code puts the data into the cache
     // before running the tests. The tests fail if one removes this. The tests should not fail.

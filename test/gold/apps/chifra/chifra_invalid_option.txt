@@ -1,13 +1,14 @@
 chifra argc: 2 [1:not_a_mode] 
 chifra not_a_mode 
+TIME ~ CLOCK - <INFO>  : mode: 
+TIME ~ CLOCK - <ERROR> : Exit(chifra,call_command): 
 
-  Invalid mode 'not_a_mode'. Quitting...
+  Unknown subcommand 'not_a_mode'. Quitting...
 
   Usage:    chifra command  
-  Purpose:  Control all options of the TrueBlocks tools.
-	        - Get more detailed help with 'chifra <cmd> --help'.
+  Purpose:  Access to all TrueBlocks tools (chifra <cmd> --help for more).
 
-  Where:
+  Where:  
 	 MONITORS
 	   monitor       add, remove, clean, and list appearances of address(es) on the chain
 	   export        export details for each appearance (as transacitons, logs, traces, balances, etc.)
