@@ -48,7 +48,7 @@ int main(int argc, const char* argv[]) {
                 }
 
             } else if (options.appearances) {
-                options.hanlde_appearances();
+                options.handle_appearances();
 
             } else if (options.receipts) {
                 options.handle_receipts();

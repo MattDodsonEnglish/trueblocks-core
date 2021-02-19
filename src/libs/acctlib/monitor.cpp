@@ -485,30 +485,21 @@ void CMonitor::moveToProduction(void) {
 
 //---------------------------------------------------------------------------
 string_q CMonitor::getMonitorPath(const address_t& addr, freshen_e mode) const {
-    string_q base = ((mode == FM_STAGING) ? "monitors/staging/" : "monitors/");
-    if (!isAddress(addr))  // empty for example
-        return getCachePath(base + addr);
-    return getCachePath(base + addr + ".acct.bin");
+    string_q fn = isAddress(addr) ? addr + ".acct.bin" : addr;
+    string_q base = getCachePath("monitors/") + (mode == FM_STAGING ? "staging/" : "");
+    if (isTestMode())
+        base = configPath("mocked/monitors/") + (mode == FM_STAGING ? "staging/" : "");
+    return base + fn;
 }
 
 //---------------------------------------------------------------------------
 string_q CMonitor::getMonitorLast(const address_t& addr, freshen_e mode) const {
-    string_q base = ((mode == FM_STAGING) ? "monitors/staging/" : "monitors/");
-    if (!isTestMode() && !isAddress(addr)) {
-        cerr << "Not an address: " << addr << endl;
-        quickQuitHandler(0);
-    }
-    return getCachePath(base + addr + ".last.txt");
+    return substitute(getMonitorPath(addr, mode), ".acct.bin", ".last.txt");
 }
 
 //---------------------------------------------------------------------------
 string_q CMonitor::getMonitorExpt(const address_t& addr, freshen_e mode) const {
-    string_q base = ((mode == FM_STAGING) ? "monitors/staging/" : "monitors/");
-    if (!isTestMode() && !isAddress(addr)) {
-        cerr << "Not an address: " << addr << endl;
-        quickQuitHandler(0);
-    }
-    return getCachePath(base + addr + ".expt.txt");
+    return substitute(getMonitorPath(addr, mode), ".acct.bin", ".expt.txt");
 }
 
 //---------------------------------------------------------------------------
@@ -519,51 +510,6 @@ string_q CMonitor::getMonitorDels(const address_t& addr, freshen_e mode) const {
 //---------------------------------------------------------------------------
 string_q CMonitor::getMonitorCach(const address_t& addr, freshen_e mode) const {
     return getMonitorPath(addr + ".txs.bin");
-}
-
-//---------------------------------------------------------------------------
-void removeFile(const string_q& fn) {
-    ::remove(fn.c_str());
-    ::remove((fn + ".lck").c_str());
-}
-
-//---------------------------------------------------------------------------
-void CMonitor::cleanMonitor(const address_t& addr) const {
-    removeFile(getMonitorPath(addr));
-    removeFile(getMonitorLast(addr));
-    removeFile(getMonitorExpt(addr));
-    removeFile(getMonitorDels(addr));
-    removeFile(getMonitorCach(addr));
-}
-
-//---------------------------------------------------------------------------
-void cleanMonitors(const CAddressArray& addrs) {
-    for (auto addr : addrs) {
-        CMonitor m;
-        m.address = addr;
-        m.cleanMonitor(addr);
-    }
-}
-
-//----------------------------------------------------------------
-void establishTestMonitors(void) {
-    string_q loc = getCWD() + "./app_tests/";
-    if (!folderExists(loc)) {
-        cerr << "apps test files not found at: " << loc << endl;
-        exit(0);
-    }
-
-    CMonitor m;
-    ostringstream os;
-    os << "cp -p " << loc << "app_tests.tar.gz " << m.getMonitorPath("") << " && ";
-    os << "cd " << m.getMonitorPath("") << " && ";
-    os << "gunzip *.gz 2>/dev/null && ";
-    os << "tar -xvf *.tar 2>/dev/null && ";
-    os << "rm -f *.tar && ";
-    os << "cd - 2>&1 1>/dev/null";
-    // clang-format off
-    if (system(os.str().c_str())) {}  // Don't remove cruft. Silences compiler warnings
-    // clang-format on
 }
 
 //----------------------------------------------------------------
@@ -662,9 +608,19 @@ void CMonitor::deleteMonitor(void) {
     stringToAsciiFile(getMonitorDels(address), Now().Format(FMT_EXPORT));
 }
 
+//---------------------------------------------------------------------------
+void removeFile(const string_q& fn) {
+    ::remove(fn.c_str());
+    ::remove((fn + ".lck").c_str());
+}
+
 //-----------------------------------------------------------------------
 void CMonitor::removeMonitor(void) {
-    cleanMonitor(address);
+    removeFile(getMonitorPath(address));
+    removeFile(getMonitorLast(address));
+    removeFile(getMonitorExpt(address));
+    removeFile(getMonitorDels(address));
+    removeFile(getMonitorCach(address));
 }
 
 //-----------------------------------------------------------------------

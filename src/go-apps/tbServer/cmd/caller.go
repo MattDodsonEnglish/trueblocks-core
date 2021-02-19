@@ -91,16 +91,12 @@ func AccountsExport(w http.ResponseWriter, r *http.Request) {
 	callOneExtra(w, r, "chifra", "export")
 }
 
-func AccountsList(w http.ResponseWriter, r *http.Request) {
-	callOneExtra(w, r, "chifra", "list")
+func AccountsMonitor(w http.ResponseWriter, r *http.Request) {
+	callOneExtra(w, r, "chifra", "monitor")
 }
 
 func AccountsNames(w http.ResponseWriter, r *http.Request) {
 	callOne(w, r, "ethNames")
-}
-
-func AccountsRm(w http.ResponseWriter, r *http.Request) {
-	callOneExtra(w, r, "chifra", "rm")
 }
 
 func AccountsTags(w http.ResponseWriter, r *http.Request) {
@@ -256,10 +252,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"AccountsList",
+		"AccountsMonitor",
 		"GET",
-		"/list",
-		AccountsList,
+		"/monitor",
+		AccountsMonitor,
 	},
 
 	Route{
@@ -267,13 +263,6 @@ var routes = Routes{
 		"GET",
 		"/names",
 		AccountsNames,
-	},
-
-	Route{
-		"AccountsRm",
-		"GET",
-		"/rm",
-		AccountsRm,
 	},
 
 	Route{

@@ -11,7 +11,7 @@ TIME ~ CLOCK - <ERROR> : Exit(chifra,call_command):
 ```
  MONITORS
    monitor       add, remove, clean, and list appearances of address(es) on the chain
-   export        export details for each appearance (as transacitons, logs, traces, balances, etc.)
+   export        export details for each appearance (as txs, logs, traces, balances, reconciliations, etc.)
  SHARED DATA
    entities      list and/or share entities (groups of addresses)
    names         list and/or share named addresses

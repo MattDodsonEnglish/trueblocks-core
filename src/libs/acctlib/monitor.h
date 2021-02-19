@@ -77,7 +77,6 @@ class CMonitor : public CAccountName {
     string_q getMonitorExpt(const address_t& addr, freshen_e mode = FM_PRODUCTION) const;
     string_q getMonitorDels(const address_t& addr, freshen_e mode = FM_PRODUCTION) const;
     string_q getMonitorCach(const address_t& addr, freshen_e mode = FM_PRODUCTION) const;
-    void cleanMonitor(const address_t& addr) const;
     // EXISTING_CODE
     bool operator==(const CMonitor& it) const;
     bool operator!=(const CMonitor& it) const {
@@ -230,8 +229,6 @@ extern const char* STR_DISPLAY_MONITOR;
 
 //---------------------------------------------------------------------------
 // EXISTING_CODE
-extern void cleanMonitors(const CAddressArray& addrs);
-extern void establishTestMonitors(void);
 typedef map<address_t, CMonitor> CMonitorMap;  // NOLINT
 extern void establishMonitorFolders(void);
 extern void cleanMonitorStage(void);

@@ -145,8 +145,6 @@ int main(int argc, const char* argv[]) {
         cerr << fail;
     cerr << endl;
 
-    cleanMonitors(testAddrs);
-
     return 0;
 }
 

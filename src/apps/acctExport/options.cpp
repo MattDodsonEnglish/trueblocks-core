@@ -37,7 +37,6 @@ static const COption params[] = {
     COption("max_records", "e", "<blknum>", OPT_HIDDEN | OPT_FLAG, "the maximum number of records to process before reporting"),  // NOLINT
     COption("list", "L", "", OPT_HIDDEN | OPT_SWITCH, "freshen first, then list the appearances of the address(es)"),
     COption("clean", "", "", OPT_HIDDEN | OPT_SWITCH, "clean (i.e. remove duplicate appearances) from all existing monitors"),  // NOLINT
-    COption("rm", "", "", OPT_SWITCH, "process the request to delete, undelete, or remove monitors"),
     COption("staging", "s", "", OPT_HIDDEN | OPT_SWITCH, "enable search of staging (not yet finalized) folder"),
     COption("unripe", "u", "", OPT_HIDDEN | OPT_SWITCH, "enable search of unripe (neither staged nor finalized) folder (assumes --staging)"),  // NOLINT
     COption("", "", "", OPT_DESCRIPTION, "Export full detail of transactions for one or more Ethereum addresses."),
@@ -62,7 +61,6 @@ bool COptions::parseArguments(string_q& command) {
     blknum_t start = NOPOS;
     blknum_t end = NOPOS;
     bool list = false;
-    bool rm = false;
     bool staging = false;
     bool unripe = false;
     // END_CODE_LOCAL_INIT
@@ -151,9 +149,6 @@ bool COptions::parseArguments(string_q& command) {
         } else if (arg == "--clean") {
             clean = true;
 
-        } else if (arg == "--rm") {
-            rm = true;
-
         } else if (arg == "-s" || arg == "--staging") {
             staging = true;
 
@@ -184,16 +179,6 @@ bool COptions::parseArguments(string_q& command) {
         return false;
     }
 
-    // Establish folders. This may be redundant, but it's cheap.
-    establishMonitorFolders();
-    establishFolder(indexFolder);
-    establishFolder(indexFolder_finalized);
-    establishFolder(indexFolder_blooms);
-    establishFolder(indexFolder_staging);
-    establishFolder(indexFolder_unripe);
-    establishFolder(indexFolder_ripe);
-    establishFolder(configPath("cache/tmp/"));
-
     // Are we visiting unripe and/or staging in our search?
     if (staging)
         visitTypes |= VIS_STAGING;
@@ -222,13 +207,12 @@ bool COptions::parseArguments(string_q& command) {
     }
 
     // Where will we start?
-//    blknum_t firstBlockToVisit = NOPOS;
+    blknum_t firstBlockToVisit = NOPOS;
 
     // We need at least one address to scrape...
     if (addrs.size() == 0)
         EXIT_USAGE("You must provide at least one Ethereum address.");
 
-#if 0
     SHOW_FIELD(CTransaction, "traces");
 
     if ((appearances + receipts + logs + traces) > 1)
@@ -295,8 +279,8 @@ bool COptions::parseArguments(string_q& command) {
     if (allMonitors.size() == 0)
         EXIT_USAGE("You must provide at least one Ethereum address.");
 
-    if (!freshen_internal(allMonitors, "")) //getEnvStr("FRESHEN_FLAG S")))
-        return usage("'freshen_internal' returned false.");
+//    if (!freshen_internal(allMonitors, "")) //getEnvStr("FRESHEN_FLAG S")))
+//        return usage("'freshen_internal' returned false.");
 
     if (count) {
         if (receipts || logs || traces || emitter || factory)
@@ -428,15 +412,22 @@ bool COptions::parseArguments(string_q& command) {
         }
     }
 
+    // Handle the easy cases first...
+    if (isCrudCommand()) {
+        if (crudCommand == "delete" || crudCommand == "undelete" || crudCommand == "remove")
+            return handle_rm(addrs);
+        return usage("You may only use --delete, --undelete, or --remove on monitors.");
+    }
+
     // Last block depends on scrape type or user input `end` option (with appropriate check)
     // clang-format off
     blknum_t lastBlockToVisit = max((blknum_t)1, (visitTypes & VIS_UNRIPE)    ? unripeBlk
-                                                 : (visitTypes & VIS_STAGING) ? stagingBlk
-                                                                              : finalizedBlk);
+                                    : (visitTypes & VIS_STAGING) ? stagingBlk
+                                    : finalizedBlk);
     // clang-format on
 
     // Mark the range...
-    scanRange = make_pair(firstBlockToVisit, lastBlockToVisit);
+    scanRange = make_pair((firstBlockToVisit == NOPOS ? 0 : firstBlockToVisit), lastBlockToVisit);
 
     // If the chain is behind the monitor (for example, the user is re-syncing), quit silently...
     if (latest < scanRange.first) {
@@ -505,13 +496,25 @@ bool COptions::parseArguments(string_q& command) {
 //        }
 //    }
 
-    // Handle the easy cases first...
-    if (rm)
-        return handle_rm(addrs);
+    LOG_TEST("nMonitors", allMonitors.size());
+    LOG_TEST("scanRange.first", scanRange.first);
+    LOG_TEST("scanRange.second", scanRange.second);
+    LOG_TEST("first_record", first_record);
+    LOG_TEST("max_records", max_records);
+    LOG_TEST("appearances", appearances);
+    LOG_TEST("receipts", receipts);
+    LOG_TEST("logs", logs);
+    LOG_TEST("traces", traces);
+    LOG_TEST("statements", statements);
+    LOG_TEST("articulate", articulate);
+    LOG_TEST("freshen", freshen);
+    LOG_TEST("factory", factory);
+    LOG_TEST("emitter", emitter);
+    LOG_TEST("count", count);
+    LOG_TEST("clean", clean);
+    // LOG_TEST("counts", counts);
 
     EXIT_NOMSG(true);
-#endif
-    return true;
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -571,6 +574,16 @@ void COptions::Init(void) {
     visitTypes = VIS_FINAL;
     allMonitors.clear();
     possibles.clear();
+
+    // Establish folders. This may be redundant, but it's cheap.
+    establishMonitorFolders();
+    establishFolder(indexFolder);
+    establishFolder(indexFolder_finalized);
+    establishFolder(indexFolder_blooms);
+    establishFolder(indexFolder_staging);
+    establishFolder(indexFolder_unripe);
+    establishFolder(indexFolder_ripe);
+    establishFolder(configPath("cache/tmp/"));
 }
 
 //---------------------------------------------------------------------------------------------------

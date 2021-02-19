@@ -7,29 +7,14 @@
 #include "options.h"
 
 //---------------------------------------------------------------
-bool visitFile(const string_q& path, void* data) {
+bool cleanMonitorFile(const string_q& path, void* data) {
     ENTER("visitFile");
 
     if (endsWith(path, '/')) {
-        forEveryFileInFolder(path + "*", visitFile, data);
+        forEveryFileInFolder(path + "*", cleanMonitorFile, data);
 
     } else {
         if (endsWith(path, "acct.bin")) {
-            if (isTestMode()) {
-                static CStringArray testAddrs = {
-                    "0x001d14804b399c6ef80e64576f657660804fec0b", "0x1111111111111111111111111111111111111111",
-                    "0x1111122222111112222211111222221111122222", "0x1234567812345678123456781234567812345678",
-                    "0x1234567890123456789012345678901234567890", "0x5555533333555553333355555333335555533333",
-                    "0x9876543210987654321098765432109876543210", "0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359",
-                    "0xfb744b951d094b310262c8f986c860df9ab1de65"};
-                bool found = false;
-                for (auto t : testAddrs)
-                    if (contains(path, t))
-                        found = true;
-                if (!found)
-                    return true;
-            }
-
             size_t sizeThen = fileSize(path);
             size_t nRecords = (fileSize(path) / sizeof(CAppearance_base));
             if (!nRecords)
@@ -37,7 +22,7 @@ bool visitFile(const string_q& path, void* data) {
 
             CAppearance_base* buffer = new CAppearance_base[nRecords];
             if (!buffer)
-                EXIT_NOMSG(!shouldQuit()); // continue anyway
+                EXIT_NOMSG(!shouldQuit());  // continue anyway
 
             bzero((void*)buffer, nRecords * sizeof(CAppearance_base));
             CArchive archiveIn(READING_ARCHIVE);
@@ -51,7 +36,7 @@ bool visitFile(const string_q& path, void* data) {
 
             CAppearanceArray_base apps;
             apps.reserve(nRecords);
-            for (size_t i = 0; i < nRecords ; i++) {
+            for (size_t i = 0; i < nRecords; i++) {
                 apps.push_back(buffer[i]);
             }
             sort(apps.begin(), apps.end());
@@ -77,7 +62,8 @@ bool visitFile(const string_q& path, void* data) {
                 cout << ",";
             first = false;
             CMonitor m;
-            cout << "{ \"path\": \"" << substitute(path, m.getMonitorPath(""), "$CACHE/") << "\", \"sizeThen\": " << sizeThen << ", \"sizeNow\": " << fileSize(path) << "}" << endl;
+            cout << "{ \"path\": \"" << substitute(path, m.getMonitorPath(""), "$CACHE/")
+                 << "\", \"sizeThen\": " << sizeThen << ", \"sizeNow\": " << fileSize(path) << "}" << endl;
         }
     }
 
@@ -88,7 +74,7 @@ bool visitFile(const string_q& path, void* data) {
 bool COptions::handle_clean(void) {
     CMonitor m;
     cout << (isTestMode() ? "[" : "");
-    bool ret = forEveryFileInFolder(m.getMonitorPath(""), visitFile, NULL);
+    bool ret = forEveryFileInFolder(m.getMonitorPath(""), cleanMonitorFile, NULL);
     cout << (isTestMode() ? "]" : "");
     return ret;
 }

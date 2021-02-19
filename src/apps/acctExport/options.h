@@ -91,7 +91,7 @@ class COptions : public CAbiOptions {
     bool loadAllAppearances(void);
 
     bool handle_accounting(void);
-    bool hanlde_appearances(void);
+    bool handle_appearances(void);
     bool handle_logs(void);
     bool handle_receipts(void);
     bool handle_statements(void);

@@ -125,10 +125,10 @@ bool COptions::parseArguments(string_q& command) {
                 if (been_here)
                     break;
                 been_here = true;
-//                tests.push_back("apps/acctExport");
+                tests.push_back("apps/acctExport");
                 tests.push_back("apps/blockScrape");
                 tests.push_back("apps/cacheStatus");
-//                tests.push_back("apps/chifra");
+                tests.push_back("apps/chifra");
                 tests.push_back("apps/pinStatus");
 
             } else {
@@ -171,10 +171,10 @@ bool COptions::parseArguments(string_q& command) {
         tests.push_back("tools/grabABI");
         tests.push_back("tools/whenBlock");
         tests.push_back("tools/whereBlock");
-//        tests.push_back("apps/acctExport");
+        tests.push_back("apps/acctExport");
         tests.push_back("apps/blockScrape");
         tests.push_back("apps/cacheStatus");
-//        tests.push_back("apps/chifra");
+        tests.push_back("apps/chifra");
         tests.push_back("apps/pinStatus");
     }
 
@@ -256,24 +256,23 @@ bool COptions::cleanTest(const string_q& path, const string_q& testName) {
 
 //---------------------------------------------------------------------------------------------------
 void establishMonitor(const address_t& addr) {
-    cerr << "Loading monitor for testing " << addr;
-    if (!fileExists(getCachePath("monitors/" + toLower(addr) + ".acct.bin"))) {
-        doCommand("chifra list " + addr + " 2>&1 | tr '\n' '\r'");
-    }
-    cerr << "...done.\n";
-    cerr.flush();
+    LOG_TEST("Loading monitor", addr + "...");
+    CMonitor m;
+    if (!fileExists(m.getMonitorPath(addr)))
+        LOG_WARN("File not found ", m.getMonitorPath(addr));
 }
 
 //---------------------------------------------------------------------------------------------------
 void establishTestData(void) {
-    ::remove(getCachePath("tmp/scraper-state.txt").c_str());
+    cleanFolder(getCachePath("tmp/"));
 
-    // TODO(tjayrush): This is a hack, really. We should fix the reason these tests fail
-    // when one removes the data in the cache. This code puts the data into the cache
-    // before running the tests. The tests fail if one removes this. The tests should not fail.
-    doCommand(" getBlock --uniq_tx 0");
+    // TODO(tjayrush): This whole thing is a hack. We should fix the reason these tests fail
+    // TODO(tjayrush): when one removes the data in the cache. This code puts the data into the cache
+    // TODO(tjayrush): before running the tests. The tests fail if one removes this. The tests should not fail.
+    doCommand("getBlock --uniq_tx 0");
     doCommand("getBlock --force 4369999");
 
+    establishTestMonitors();
     establishMonitor("0xfdecc82ddfc56192e26f563c3d68cb544a96bfed");
     establishMonitor("0xd2f5852eb4b0c12c23a97914b2a9d954cf621781");
     establishMonitor("0x001d14804b399c6ef80e64576f657660804fec0b");

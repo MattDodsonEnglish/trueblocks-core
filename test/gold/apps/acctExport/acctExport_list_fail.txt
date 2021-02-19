@@ -1,5 +1,7 @@
-acctExport argc: 2 [1:--help] 
-acctExport --help 
+acctExport argc: 2 [1:monitor] 
+acctExport monitor 
+
+  Should report missing address as 'monitor' is okay
 
   Usage:    acctExport [-p|-r|-l|-t|-T|-C|-a|-i|-R|-U|-v|-h] <address> [address...] topics  
   Purpose:  Export full detail of transactions for one or more Ethereum addresses.

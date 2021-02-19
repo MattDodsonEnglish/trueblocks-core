@@ -14,7 +14,6 @@ static const COption params[] = {
 static const size_t nParams = sizeof(params) / sizeof(COption);
 
 // TODO(tjayrush): Do not allow duplicate addresses in the command line
-// TODO(tjayrush): --known and --monitored are valid 'addresses' in one hack -- probably works anyway not that we don't parse addrs here
 
 //------------------------------------------------------------------------------------------------
 bool COptions::call_command(int argc, const char* argv[]) {
@@ -182,7 +181,7 @@ string_q getSubcommands(void) {
 const char* STR_FULL_HELP = 
                 "MONITORS|"
                 "  monitor       add, remove, clean, and list appearances of address(es) on the chain|"
-                "  export        export details for each appearance (as transacitons, logs, traces, balances, etc.)|"
+                "  export        export details for each appearance (as txs, logs, traces, balances, reconciliations, etc.)|"
                 "SHARED DATA|"
                 "  entities      list and/or share entities (groups of addresses)|"
                 "  names         list and/or share named addresses|"

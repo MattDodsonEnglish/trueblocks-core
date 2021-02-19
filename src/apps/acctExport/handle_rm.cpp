@@ -9,11 +9,13 @@
  */
 #include "options.h"
 
-const char* STR_NOTFOUND = "Monitor [{ADDRESS}] not found";
 const char* STR_DELETED = "Monitor [{ADDRESS}] was deleted but not removed";
 const char* STR_UNDELETED = "Monitor [{ADDRESS}] was undeleted";
 const char* STR_REMOVED = "Monitor [{ADDRESS}] was permentantly removed";
-const char* STR_DELETEFIRST = "Monitor [{ADDRESS}] must be deleted before it can be removed";
+
+const char* STR_NOTFOUND = "Monitor [{ADDRESS}] not found";
+const char* STR_DELETEFIRST = "Monitor [{ADDRESS}] must be deleted first";
+const char* STR_ALREADYDELETED = "Monitor [{ADDRESS}] is already deleted";
 
 //------------------------------------------------------------------------------------------------
 bool COptions::handle_rm(const CAddressArray& addrs) {
@@ -25,14 +27,31 @@ bool COptions::handle_rm(const CAddressArray& addrs) {
         } else {
             if (crudCommand == "remove") {
                 if (monitor.isDeleted()) {
-                    monitor.removeMonitor();
-                    results.push_back(monitor.Format(STR_REMOVED));
+                    if (isTestMode()) {
+                        results.push_back(monitor.Format(STR_REMOVED) + " NOT REMOVED BECAUSE TESTING.");
+                    } else {
+                        monitor.removeMonitor();
+                        results.push_back(monitor.Format(STR_REMOVED));
+                    }
                 } else {
                     results.push_back(monitor.Format(STR_DELETEFIRST));
                 }
             } else {
-                monitor.isDeleted() ? monitor.undeleteMonitor() : monitor.deleteMonitor();
-                results.push_back(monitor.Format(monitor.isDeleted() ? STR_DELETED : STR_UNDELETED));
+                if (crudCommand == "delete") {
+                    if (monitor.isDeleted()) {
+                        results.push_back(monitor.Format(STR_ALREADYDELETED));
+                    } else {
+                        monitor.deleteMonitor();
+                        results.push_back(monitor.Format(STR_DELETED));
+                    }
+                } else {
+                    if (monitor.isDeleted()) {
+                        monitor.undeleteMonitor();
+                        results.push_back(monitor.Format(STR_UNDELETED));
+                    } else {
+                        results.push_back(monitor.Format(STR_DELETEFIRST));
+                    }
+                }
             }
             LOG_INFO(results[results.size() - 1]);
         }
@@ -43,10 +62,10 @@ bool COptions::handle_rm(const CAddressArray& addrs) {
         cout << exportPreamble("", "");
         string_q msg;
         bool first = true;
-        for (auto remove : results) {
+        for (auto result : results) {
             if (!first)
                 msg += ",";
-            msg += ("\"" + remove + "\"");
+            msg += ("\"" + result + "\"");
             first = false;
         }
         if (msg.empty())

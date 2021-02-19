@@ -77,16 +77,17 @@ bool COptions::handle_status(ostream& os) {
             expContext().types[monitors.type] = monitors.getRuntimeClass();
             monitors.path = pathName("monitors");
             LOG4("counting monitors");
-            forEveryFileInFolder(getCachePath("monitors/"), countFiles, &monitors);
+            CMonitor m;
+            forEveryFileInFolder(m.getMonitorPath(""), countFiles, &monitors);
             LOG4("done counting monitors");
             CItemCounter counter(this, start, end);
             counter.cachePtr = &monitors;
             counter.monitorArray = &monitors.items;
             LOG4("forEvery monitors");
             if (details) {
-                forEveryFileInFolder(getCachePath("monitors/"), noteMonitor, &counter);
+                forEveryFileInFolder(m.getMonitorPath(""), noteMonitor, &counter);
             } else {
-                forEveryFileInFolder(getCachePath("monitors/"), noteMonitor_light, &counter);
+                forEveryFileInFolder(m.getMonitorPath(""), noteMonitor_light, &counter);
                 if (monitors.addrs.size() == 0)
                     monitors.is_valid = true;
             }

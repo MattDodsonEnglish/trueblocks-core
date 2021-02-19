@@ -8,19 +8,26 @@
 #define FREQ 5
 
 //-----------------------------------------------------------------------
-bool COptions::hanlde_appearances(void) {
-    ENTER("hanlde_appearances");
+bool COptions::handle_appearances(void) {
+    ENTER("handle_appearances");
 
     ASSERT(appearances);
     ASSERT(nodeHasBalances(false));
 
     bool shouldDisplay = !freshen;
 
+    LOG_TEST("apps.size", apps.size());
+
     bool first = true;
     for (size_t i = 0; i < apps.size(); i++) {
         const CAppearance_base* app = &apps[i];
         if (shouldQuit() || app->blk >= ts_cnt)
             break;
+
+        LOG_TEST("scanRange.first", scanRange.first);
+        LOG_TEST("scanRange.second", scanRange.second);
+        LOG_TEST("app->blk", app->blk);
+
         if (inRange((blknum_t)app->blk, scanRange.first, scanRange.second)) {
             nProcessed++;
             if (shouldDisplay) {
