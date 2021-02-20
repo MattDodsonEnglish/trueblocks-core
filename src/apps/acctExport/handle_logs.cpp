@@ -27,7 +27,9 @@ bool COptions::handle_logs(void) {
             lastExported = app->blk - 1;
             break;
         }
-        LOG_TEST("passes", inRange((blknum_t)app->blk, exportRange.first, exportRange.second) ? "true" : "false");
+
+        if (app->blk > exportRange.first)
+            LOG_TEST("passes", inRange((blknum_t)app->blk, exportRange.first, exportRange.second) ? "true" : "false");
         if (inRange((blknum_t)app->blk, exportRange.first, exportRange.second)) {
             CBlock block;  // do not move this from this scope
             block.blockNumber = app->blk;
@@ -140,6 +142,8 @@ bool COptions::handle_logs(void) {
                     }
                 }
             }
+        } else if (app->blk > exportRange.second) {
+            break;
         }
     }
 

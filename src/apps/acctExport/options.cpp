@@ -237,9 +237,6 @@ bool COptions::parseArguments(string_q& command) {
         allMonitors.push_back(monitor);
     }
 
-    if (!setDisplayFormatting())
-        return false;
-
     if (appearances || count)
         articulate = false;
     if (articulate) {
@@ -249,6 +246,9 @@ bool COptions::parseArguments(string_q& command) {
                 abi_spec.loadAbiFromEtherscan(monitor.address);
         }
     }
+
+    if (!setDisplayFormatting())
+        return false;
 
     // Are we visiting unripe and/or staging in our search?
     if (staging)
@@ -286,11 +286,11 @@ bool COptions::parseArguments(string_q& command) {
         EXIT_NOMSG(false);
     }
 
-    // If there's nothing to scrape, quit silently...
-    if (listRange.first >= listRange.second) {
-        LOG8("Account scraper is up to date.");
-        EXIT_NOMSG(false);
-    }
+    //    // If there's nothing to scrape, quit silently...
+    //    if (listRange.first >= listRange.second) {
+    //        LOG8("Account scraper is up to date.");
+    //        EXIT_NOMSG(false);
+    //    }
 
     if (start != NOPOS)
         exportRange.first = start;
@@ -567,6 +567,11 @@ bool COptions::setDisplayFormatting(void) {
             }
         }
     }
+
+    // TODO(tjayrush): This doesn't work for some reason (see test case acctExport_export_logs.txt)
+    if (!articulate)
+        HIDE_FIELD(CLogEntry, "compressedTx");
+
     return true;
 }
 
