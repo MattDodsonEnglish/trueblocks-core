@@ -1,20 +1,12 @@
 acctExport argc: 3 [1:0x001d14804b399c6ef80e64576f657660804fec0b] [2:--count] 
 acctExport 0x001d14804b399c6ef80e64576f657660804fec0b --count 
 TIME ~ CLOCK - <INFO>  : nMonitors: 1
-TIME ~ CLOCK - <INFO>  : scanRange.first: 11854827
-TIME ~ CLOCK - <INFO>  : scanRange.second: 11863676
+TIME ~ CLOCK - <INFO>  : exportRange.first: 0
+TIME ~ CLOCK - <INFO>  : exportRange.second: 18446744073709551615
+TIME ~ CLOCK - <INFO>  : listRange.first: 0
+TIME ~ CLOCK - <INFO>  : listRange.second: 18446744073709551615
 TIME ~ CLOCK - <INFO>  : first_record: 0
 TIME ~ CLOCK - <INFO>  : max_records: 18446744073709551615
-TIME ~ CLOCK - <INFO>  : appearances: 0
-TIME ~ CLOCK - <INFO>  : receipts: 0
-TIME ~ CLOCK - <INFO>  : logs: 0
-TIME ~ CLOCK - <INFO>  : traces: 0
-TIME ~ CLOCK - <INFO>  : statements: 0
-TIME ~ CLOCK - <INFO>  : articulate: 0
-TIME ~ CLOCK - <INFO>  : freshen: 0
-TIME ~ CLOCK - <INFO>  : factory: 0
-TIME ~ CLOCK - <INFO>  : emitter: 0
-TIME ~ CLOCK - <INFO>  : count: 1
-TIME ~ CLOCK - <INFO>  : clean: 0
+TIME ~ CLOCK - <INFO>  : count: true
 address	nrecords	filesize
 0x001d14804b399c6ef80e64576f657660804fec0b	3	24

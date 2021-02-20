@@ -30,7 +30,7 @@ bool visitFinalIndexFiles(const string_q& path, void* data) {
         ASSERT(unused != NOPOS && options->fileRange.first != NOPOS && options->fileRange.second != NOPOS);
 
         // Note that `start` and `end` options are ignored when scanning
-        if (!rangesIntersect(options->scanRange, options->fileRange)) {
+        if (!rangesIntersect(options->listRange, options->fileRange)) {
             options->stats.nSkipped++;
             return true;  //! shouldQuit();
         }
@@ -84,7 +84,7 @@ bool COptions::visitBinaryFile(const string_q& path, void* data) {
                 monitor.writeLastBlock(fileRange.second + 1);
             }
             options->stats.nBloomMisses++;
-            LOG_PROGRESS1("Skipping", options->fileRange.first, options->scanRange.second, " bloom miss\r");
+            LOG_PROGRESS1("Skipping", options->fileRange.first, options->listRange.second, " bloom miss\r");
             return true;
         }
     }
@@ -93,7 +93,7 @@ bool COptions::visitBinaryFile(const string_q& path, void* data) {
         EXIT_FAIL("Could not download index chunk " + indexPath + ".");
 
     options->stats.nBloomHits++;
-    LOG_PROGRESS1("Scanning", options->fileRange.first, options->scanRange.second, " bloom hit \r");
+    LOG_PROGRESS1("Scanning", options->fileRange.first, options->listRange.second, " bloom hit \r");
 
     CArchive* chunk = NULL;
     char* rawData = NULL;
@@ -185,7 +185,7 @@ bool COptions::visitBinaryFile(const string_q& path, void* data) {
     }
 
     string_q result = indexHit ? " index hit " + hits : " false positive";
-    LOG_PROGRESS1("Scanning", options->fileRange.first, options->scanRange.second, " bloom hit" + result);
+    LOG_PROGRESS1("Scanning", options->fileRange.first, options->listRange.second, " bloom hit" + result);
 
     return !shouldQuit();
 }

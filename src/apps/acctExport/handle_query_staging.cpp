@@ -33,13 +33,13 @@ bool visitStagingIndexFiles(const string_q& path, void* data) {
         // TODO - Not right: ASSERT(unused != NOPOS && options->fileRange.first != NOPOS && options->fileRange.second != NOPOS);
 
         // Note that `start` and `end` options are ignored when scanning
-        if (!rangesIntersect(options->scanRange, options->fileRange)) {
+        if (!rangesIntersect(options->listRange, options->fileRange)) {
             options->stats.nSkipped++;
             return !shouldQuit();
         }
 
         LOG4("Scanning ", path);
-        LOG_PROGRESS("Scanning staging", options->fileRange.first, options->scanRange.second);
+        LOG_PROGRESS("Scanning staging", options->fileRange.first, options->listRange.second);
         options->stats.nChecked++;
 
         // if (!establishIndexChunk(indexPath))
@@ -84,7 +84,7 @@ bool visitStagingIndexFiles(const string_q& path, void* data) {
             }
         }
         //string_q result = indexHit ? " index hit " + hits : " false positive";
-        //LOG_PROGRESS("Scanning", options->fileRange.first, options->scanRange.second);
+        //LOG_PROGRESS("Scanning", options->fileRange.first, options->listRange.second);
         return !shouldQuit();
     }
     ASSERT(0); // should not happen

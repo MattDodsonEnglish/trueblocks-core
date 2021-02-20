@@ -32,6 +32,8 @@ class COptions : public CAbiOptions {
     bool statements;
     bool accounting;
     bool articulate;
+    bool cache_txs;
+    bool cache_traces;
     bool skip_ddos;
     uint64_t max_traces;
     bool freshen;
@@ -81,6 +83,8 @@ class COptions : public CAbiOptions {
     uint64_t nCacheItemsRead;
     uint64_t nCacheItemsWritten;
 
+    blkrange_t listRange;
+
     COptions(void);
     ~COptions(void);
 
@@ -125,3 +129,5 @@ inline bool isJson(void) {
 #define VIS_FINAL (1 << 1)
 #define VIS_STAGING (1 << 2)
 #define VIS_UNRIPE (1 << 3)
+
+#define exportRange scanRange

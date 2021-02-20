@@ -1,9 +1,4 @@
 {
-  "errors": [
-    "acctScrape - Invalid option: --staging"
-  ]
-}
-{
   "data": [
     {
       "hash": "0x6e443af86a84920cace198340020e4ca54321a2c515cd3ad1f274d3506b4aff8",

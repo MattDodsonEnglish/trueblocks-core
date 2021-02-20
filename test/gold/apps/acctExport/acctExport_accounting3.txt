@@ -1,5 +1,13 @@
 acctExport argc: 10 [1:0xf503017d7baf7fbc0fff7492b751025c6a78179b] [2:--accounting] [3:--ether] [4:--start] [5:10277780] [6:--end] [7:10296792] [8:--fmt] [9:api] 
 acctExport 0xf503017d7baf7fbc0fff7492b751025c6a78179b --accounting --ether --start 10277780 --end 10296792 --fmt api 
+TIME ~ CLOCK - <INFO>  : nMonitors: 1
+TIME ~ CLOCK - <INFO>  : exportRange.first: 10277780
+TIME ~ CLOCK - <INFO>  : exportRange.second: 10296792
+TIME ~ CLOCK - <INFO>  : listRange.first: 0
+TIME ~ CLOCK - <INFO>  : listRange.second: 18446744073709551615
+TIME ~ CLOCK - <INFO>  : first_record: 0
+TIME ~ CLOCK - <INFO>  : max_records: 18446744073709551615
+TIME ~ CLOCK - <INFO>  : articulate: true
 {"data": [
 --1 : 8 : 0
 --  0: _donations (tuple[])

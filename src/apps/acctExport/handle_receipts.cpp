@@ -21,14 +21,14 @@ bool COptions::handle_receipts(void) {
     SHOW_FIELD(CReceipt, "isError");
 
     bool first = true;
-    blknum_t lastExported = scanRange.second;
+    blknum_t lastExported = exportRange.second;
     for (size_t i = 0; i < apps.size() && (!freshen || (nProcessed < freshen_max)); i++) {
         const CAppearance_base* app = &apps[i];
         if (shouldQuit() || app->blk >= ts_cnt) {
             lastExported = app->blk - 1;
             break;
         }
-        if (inRange((blknum_t)app->blk, scanRange.first, scanRange.second)) {
+        if (inRange((blknum_t)app->blk, exportRange.first, exportRange.second)) {
             CBlock block;  // do not move this from this scope
             block.blockNumber = app->blk;
             CTransaction trans;

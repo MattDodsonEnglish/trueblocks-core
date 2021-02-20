@@ -24,11 +24,11 @@ bool COptions::handle_appearances(void) {
         if (shouldQuit() || app->blk >= ts_cnt)
             break;
 
-        LOG_TEST("scanRange.first", scanRange.first);
-        LOG_TEST("scanRange.second", scanRange.second);
+        LOG_TEST("exportRange.first", exportRange.first);
+        LOG_TEST("exportRange.second", exportRange.second);
         LOG_TEST("app->blk", app->blk);
 
-        if (inRange((blknum_t)app->blk, scanRange.first, scanRange.second)) {
+        if (inRange((blknum_t)app->blk, exportRange.first, exportRange.second)) {
             nProcessed++;
             if (shouldDisplay) {
                 CAppearanceDisplay dapp(hackAppAddr, app->blk, app->txid);

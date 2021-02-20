@@ -9,8 +9,8 @@ num,group,tags,api_route,tool,command,hotkey,def_val,is_required,customizeable,c
 10250,apps,Accounts,export,acctExport,statements,T,,false,false,true,true,header,switch,<boolean>,export reconcilations instead of transaction list
 10280,apps,Accounts,export,acctExport,accounting,C,,false,false,true,true,header,switch,<boolean>,export accounting records instead of transaction list
 10310,apps,Accounts,export,acctExport,articulate,a,,false,false,true,true,header,switch,<boolean>,articulate transactions&#44; traces&#44; logs&#44; and outputs
-10320,apps,Accounts,export,acctExport,write_txs,i,false,false,true,true,false,local,switch,<boolean>,write transactions to the cache (see notes)
-10330,apps,Accounts,export,acctExport,write_traces,R,false,false,true,true,false,local,switch,<boolean>,write traces to the cache (see notes)
+10320,apps,Accounts,export,acctExport,cache_txs,i,false,false,true,true,false,header,switch,<boolean>,write transactions to the cache (see notes)
+10330,apps,Accounts,export,acctExport,cache_traces,R,false,false,true,true,false,header,switch,<boolean>,write traces to the cache (see notes)
 10340,apps,Accounts,export,acctExport,skip_ddos,d,true,false,true,false,false,header,toggle,<boolean>,toggle skipping over 2016 dDos transactions ([{DEF}] by default)
 10350,apps,Accounts,export,acctExport,max_traces,m,250,false,true,false,false,header,flag,<uint64>,if --skip_ddos is on&#44; this many traces defines what a ddos transaction|is (default = [{DEF}])
 10380,apps,Accounts,export,acctExport,freshen,f,,false,false,false,false,header,switch,<boolean>,freshen but do not print the exported data

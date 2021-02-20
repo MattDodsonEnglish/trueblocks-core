@@ -18,8 +18,8 @@ acctExport -th
 | -T | --statements | export reconcilations instead of transaction list |
 | -C | --accounting | export accounting records instead of transaction list |
 | -a | --articulate | articulate transactions, traces, logs, and outputs |
-| -i | --write_txs | write transactions to the cache (see notes) |
-| -R | --write_traces | write traces to the cache (see notes) |
+| -i | --cache_txs | write transactions to the cache (see notes) |
+| -R | --cache_traces | write traces to the cache (see notes) |
 | -U | --count | only available for --appearances mode, if present return only the number of records |
 |####|Hidden options||
 | -d | --skip_ddos | toggle skipping over 2016 dDos transactions ('on' by default) |

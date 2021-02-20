@@ -1,6 +1,18 @@
 acctExport argc: 7 [1:0x001d14804b399c6ef80e64576f657660804fec0b] [2:--appearances] [3:--fmt] [4:json] [5:--max_records] [6:1] 
 acctExport 0x001d14804b399c6ef80e64576f657660804fec0b --appearances --fmt json --max_records 1 
+TIME ~ CLOCK - <INFO>  : nMonitors: 1
+TIME ~ CLOCK - <INFO>  : exportRange.first: 0
+TIME ~ CLOCK - <INFO>  : exportRange.second: 18446744073709551615
+TIME ~ CLOCK - <INFO>  : listRange.first: 0
+TIME ~ CLOCK - <INFO>  : listRange.second: 18446744073709551615
+TIME ~ CLOCK - <INFO>  : first_record: 0
+TIME ~ CLOCK - <INFO>  : max_records: 1
+TIME ~ CLOCK - <INFO>  : appearances: true
 { "data": [
+TIME ~ CLOCK - <INFO>  : apps.size: 1
+TIME ~ CLOCK - <INFO>  : exportRange.first: 0
+TIME ~ CLOCK - <INFO>  : exportRange.second: 18446744073709551615
+TIME ~ CLOCK - <INFO>  : app->blk: 0
 {
   "address": "0x001d14804b399c6ef80e64576f657660804fec0b",
   "blockNumber": 0,

@@ -22,8 +22,8 @@ static const COption params[] = {
     COption("statements", "T", "", OPT_SWITCH, "export reconcilations instead of transaction list"),
     COption("accounting", "C", "", OPT_SWITCH, "export accounting records instead of transaction list"),
     COption("articulate", "a", "", OPT_SWITCH, "articulate transactions, traces, logs, and outputs"),
-    COption("write_txs", "i", "", OPT_SWITCH, "write transactions to the cache (see notes)"),
-    COption("write_traces", "R", "", OPT_SWITCH, "write traces to the cache (see notes)"),
+    COption("cache_txs", "i", "", OPT_SWITCH, "write transactions to the cache (see notes)"),
+    COption("cache_traces", "R", "", OPT_SWITCH, "write traces to the cache (see notes)"),
     COption("skip_ddos", "d", "", OPT_HIDDEN | OPT_TOGGLE, "toggle skipping over 2016 dDos transactions ('on' by default)"),  // NOLINT
     COption("max_traces", "m", "<uint64>", OPT_HIDDEN | OPT_FLAG, "if --skip_ddos is on, this many traces defines what a ddos transaction is (default = 250)"),  // NOLINT
     COption("freshen", "f", "", OPT_HIDDEN | OPT_SWITCH, "freshen but do not print the exported data"),
@@ -55,8 +55,6 @@ bool COptions::parseArguments(string_q& command) {
     // BEG_CODE_LOCAL_INIT
     CAddressArray addrs;
     CTopicArray topics;
-    bool write_txs = false;
-    bool write_traces = false;
     blknum_t start = NOPOS;
     blknum_t end = NOPOS;
     bool staging = false;
@@ -96,11 +94,11 @@ bool COptions::parseArguments(string_q& command) {
         } else if (arg == "-a" || arg == "--articulate") {
             articulate = true;
 
-        } else if (arg == "-i" || arg == "--write_txs") {
-            write_txs = true;
+        } else if (arg == "-i" || arg == "--cache_txs") {
+            cache_txs = true;
 
-        } else if (arg == "-R" || arg == "--write_traces") {
-            write_traces = true;
+        } else if (arg == "-R" || arg == "--cache_traces") {
+            cache_traces = true;
 
         } else if (arg == "-d" || arg == "--skip_ddos") {
             skip_ddos = !skip_ddos;
@@ -190,14 +188,14 @@ bool COptions::parseArguments(string_q& command) {
     const CToml* conf = getGlobalConfig("acctExport");
 
     // Caching options (i.e. write_opt) are as per config file...
-    write_opt = xor_options(conf->getConfigBool("settings", "write_txs", false),
-                            conf->getConfigBool("settings", "write_traces", false));
+    write_opt = xor_options(conf->getConfigBool("settings", "cache_txs", false),
+                            conf->getConfigBool("settings", "cache_traces", false));
     if (write_opt)
         write_opt |= CACHE_BYCONFIG;
 
     // ...unless user has explicitly told us what to do on the command line...
     if (contains(origCmd, "write")) {
-        write_opt = xor_options(write_txs, write_traces);
+        write_opt = xor_options(cache_txs, cache_traces);
         write_opt |= (CACHE_BYUSER);
     }
 
@@ -421,91 +419,98 @@ bool COptions::parseArguments(string_q& command) {
     // clang-format on
 
     // Mark the range...
-    scanRange = make_pair((firstBlockToVisit == NOPOS ? 0 : firstBlockToVisit), lastBlockToVisit);
+    listRange = make_pair((firstBlockToVisit == NOPOS ? 0 : firstBlockToVisit), lastBlockToVisit);
+    listRange = make_pair(0, NOPOS);
 
     // If the chain is behind the monitor (for example, the user is re-syncing), quit silently...
-    if (latest < scanRange.first) {
+    if (latest < listRange.first) {
         LOG4("Chain is behind the monitor.");
         EXIT_NOMSG(false);
     }
 
     // If there's nothing to scrape, quit silently...
-    if (scanRange.first >= scanRange.second) {
+    if (listRange.first >= listRange.second) {
         LOG8("Account scraper is up to date.");
         EXIT_NOMSG(false);
     }
 
     if (start != NOPOS)
-        scanRange.first = start;
+        exportRange.first = start;
     if (end != NOPOS)
-        scanRange.second = end;
+        exportRange.second = end;
 
-    //    // Accumulate the addresses into the allMonitors list and decide where we should start
-    //    for (auto addr : addrs) {
-    //        CMonitor monitor;
-    //
-    //        monitor.setValueByName("address", toLower(addr));
-    //        monitor.setValueByName("name", toLower(addr));
-    //
-    //        if (monitor.exists()) {
-    //            string_q unused;
-    //            if (monitor.isLocked(unused))
-    //                LOG_ERR(
-    //                        "The cache file is locked. The program is either already "
-    //                        "running or it did not end cleanly the\n\tlast time it ran. "
-    //                        "Quit the already running program or, if it is not running, "
-    //                        "remove the lock\n\tfile: " +
-    //                        monitor.getMonitorPath(addr) + +".lck'. Proceeding anyway...");
-    //            monitor.clearLocks();
-    //            monitor.finishParse();
-    //            monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION : FM_STAGING);
-    //            string_q msg;
-    //            if (monitor.isLocked(msg))  // If locked, we fail
-    //                EXIT_USAGE(msg);
-    //            firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
-    //        } else {
-    //            monitor.clearLocks();
-    //            monitor.finishParse();
-    //            monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION : FM_STAGING);
-    //            cleanMonitorStage();
-    //            if (visitTypes & VIS_FINAL)
-    //                forEveryFileInFolder(indexFolder_blooms, visitFinalIndexFiles, this);
-    //            if (visitTypes & VIS_STAGING)
-    //                forEveryFileInFolder(indexFolder_staging, visitStagingIndexFiles, this);
-    //            if (visitTypes & VIS_UNRIPE)
-    //                forEveryFileInFolder(indexFolder_unripe, visitUnripeIndexFiles, this);
-    //            //            for (auto monitor : allMonitors) {
-    //            monitor.moveToProduction();
-    //            LOG4(monitor.address, " freshened to ", monitor.getLastVisited(true /* fresh */));
-    //            //            }
-    //            string_q msg;
-    //            if (monitor.isLocked(msg))  // If locked, we fail
-    //                EXIT_USAGE(msg);
-    //            firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
-    //        }
-    //        if (monitor.exists()) {
-    //            allMonitors.push_back(monitor);
-    //        } else {
-    //            LOG4("Monitor not found: ", monitor.address, ". Skipping...");
-    //        }
-    //    }
+        //    // Accumulate the addresses into the allMonitors list and decide where we should start
+        //    for (auto addr : addrs) {
+        //        CMonitor monitor;
+        //
+        //        monitor.setValueByName("address", toLower(addr));
+        //        monitor.setValueByName("name", toLower(addr));
+        //
+        //        if (monitor.exists()) {
+        //            string_q unused;
+        //            if (monitor.isLocked(unused))
+        //                LOG_ERR(
+        //                        "The cache file is locked. The program is either already "
+        //                        "running or it did not end cleanly the\n\tlast time it ran. "
+        //                        "Quit the already running program or, if it is not running, "
+        //                        "remove the lock\n\tfile: " +
+        //                        monitor.getMonitorPath(addr) + +".lck'. Proceeding anyway...");
+        //            monitor.clearLocks();
+        //            monitor.finishParse();
+        //            monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION :
+        //            FM_STAGING); string_q msg; if (monitor.isLocked(msg))  // If locked, we fail
+        //                EXIT_USAGE(msg);
+        //            firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
+        //        } else {
+        //            monitor.clearLocks();
+        //            monitor.finishParse();
+        //            monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION :
+        //            FM_STAGING); cleanMonitorStage(); if (visitTypes & VIS_FINAL)
+        //                forEveryFileInFolder(indexFolder_blooms, visitFinalIndexFiles, this);
+        //            if (visitTypes & VIS_STAGING)
+        //                forEveryFileInFolder(indexFolder_staging, visitStagingIndexFiles, this);
+        //            if (visitTypes & VIS_UNRIPE)
+        //                forEveryFileInFolder(indexFolder_unripe, visitUnripeIndexFiles, this);
+        //            //            for (auto monitor : allMonitors) {
+        //            monitor.moveToProduction();
+        //            LOG4(monitor.address, " freshened to ", monitor.getLastVisited(true /* fresh */));
+        //            //            }
+        //            string_q msg;
+        //            if (monitor.isLocked(msg))  // If locked, we fail
+        //                EXIT_USAGE(msg);
+        //            firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
+        //        }
+        //        if (monitor.exists()) {
+        //            allMonitors.push_back(monitor);
+        //        } else {
+        //            LOG4("Monitor not found: ", monitor.address, ". Skipping...");
+        //        }
+        //    }
+
+#define LOG_TEST_BOOL(a, b)                                                                                            \
+    {                                                                                                                  \
+        if (b)                                                                                                         \
+            LOG_TEST(a, "true")                                                                                        \
+    }
 
     LOG_TEST("nMonitors", allMonitors.size());
-    LOG_TEST("scanRange.first", scanRange.first);
-    LOG_TEST("scanRange.second", scanRange.second);
+    LOG_TEST("exportRange.first", exportRange.first);
+    LOG_TEST("exportRange.second", exportRange.second);
+    LOG_TEST("listRange.first", listRange.first);
+    LOG_TEST("listRange.second", listRange.second);
     LOG_TEST("first_record", first_record);
     LOG_TEST("max_records", max_records);
-    LOG_TEST("appearances", appearances);
-    LOG_TEST("receipts", receipts);
-    LOG_TEST("logs", logs);
-    LOG_TEST("traces", traces);
-    LOG_TEST("statements", statements);
-    LOG_TEST("articulate", articulate);
-    LOG_TEST("freshen", freshen);
-    LOG_TEST("factory", factory);
-    LOG_TEST("emitter", emitter);
-    LOG_TEST("count", count);
-    LOG_TEST("clean", clean);
+    LOG_TEST_BOOL("appearances", appearances);
+    LOG_TEST_BOOL("receipts", receipts);
+    LOG_TEST_BOOL("logs", logs);
+    LOG_TEST_BOOL("traces", traces);
+    LOG_TEST_BOOL("statements", statements);
+    LOG_TEST_BOOL("articulate", articulate);
+    LOG_TEST_BOOL("freshen", freshen);
+    LOG_TEST_BOOL("factory", factory);
+    LOG_TEST_BOOL("emitter", emitter);
+    LOG_TEST_BOOL("count", count);
+    LOG_TEST_BOOL("clean", clean);
     // LOG_TEST("counts", counts);
 
     EXIT_NOMSG(true);
@@ -528,6 +533,8 @@ void COptions::Init(void) {
     statements = false;
     accounting = false;
     articulate = false;
+    cache_txs = getGlobalConfig("acctExport")->getConfigBool("settings", "cache_txs", false);
+    cache_traces = getGlobalConfig("acctExport")->getConfigBool("settings", "cache_traces", false);
     skip_ddos = getGlobalConfig("acctExport")->getConfigBool("settings", "skip_ddos", true);
     max_traces = getGlobalConfig("acctExport")->getConfigInt("settings", "max_traces", 250);
     freshen = false;
@@ -545,7 +552,7 @@ void COptions::Init(void) {
     nTransactions = 0;
     nCacheItemsRead = 0;
     nCacheItemsWritten = 0;
-    scanRange.second = getLatestBlock_cache_ripe();
+    listRange.second = getLatestBlock_cache_ripe();
 
     allMonitors.clear();
     counts.clear();

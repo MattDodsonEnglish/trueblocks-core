@@ -20,9 +20,9 @@ bool COptions::handle_accounting(void) {
         lastStatement.endBal = getBalanceAt(expContext().accountedFor, apps[0].blk - 1);
 
     bool first = true;
-    blknum_t lastExported = scanRange.second;
-    //    LOG_INFO(cRed, "lastExported: ", lastExported, " scan.start: ", scanRange.first, " scan.end: ",
-    //    scanRange.second,
+    blknum_t lastExported = exportRange.second;
+    //    LOG_INFO(cRed, "lastExported: ", lastExported, " scan.start: ", exportRange.first, " scan.end: ",
+    //    exportRange.second,
     //             " nApps: ", nApps, string_q(20, ' '), cOff);
     for (size_t i = 0; i < apps.size() && (!freshen || (nProcessed < freshen_max)); i++) {
         const CAppearance_base* app = &apps[i];
@@ -30,7 +30,7 @@ bool COptions::handle_accounting(void) {
             lastExported = app->blk - 1;
             break;
         }
-        if (inRange((blknum_t)app->blk, scanRange.first, scanRange.second)) {
+        if (inRange((blknum_t)app->blk, exportRange.first, exportRange.second)) {
             CBlock block;  // do not move this from this scope
             block.blockNumber = app->blk;
             CTransaction trans;
