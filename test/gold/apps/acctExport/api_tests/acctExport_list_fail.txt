@@ -1,5 +1,0 @@
-{
-  "errors": [
-    "chifra - Provide only a single mode. Encountered both 'export' and 'monitor'."
-  ]
-}

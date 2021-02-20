@@ -1,5 +1,0 @@
-{
-  "errors": [
-    "chifra monitor - You must provide at least one Ethereum address."
-  ]
-}

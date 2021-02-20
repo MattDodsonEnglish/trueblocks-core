@@ -1,3 +1,10 @@
-acctScrape argc: 5 [1:0x807640a13483f8ac783c557fcdf27be11ea4ac7a] [2:0xf503017d7baf7fbc0fff7492b751025c6a78179b] [3:--end] [4:10296792] 
-acctScrape 0x807640a13483f8ac783c557fcdf27be11ea4ac7a 0xf503017d7baf7fbc0fff7492b751025c6a78179b --end 10296792 
-NO_NAMES = [true]
+acctExport argc: 5 [1:0x807640a13483f8ac783c557fcdf27be11ea4ac7a] [2:0xf503017d7baf7fbc0fff7492b751025c6a78179b] [3:--end] [4:10296792] 
+acctExport --appearances 0x807640a13483f8ac783c557fcdf27be11ea4ac7a 0xf503017d7baf7fbc0fff7492b751025c6a78179b --end 10296792 
+TIME ~ CLOCK - <INFO>  : nMonitors: 2
+TIME ~ CLOCK - <INFO>  : exportRange.first: 0
+TIME ~ CLOCK - <INFO>  : exportRange.second: 10296792
+TIME ~ CLOCK - <INFO>  : listRange.first: 0
+TIME ~ CLOCK - <INFO>  : listRange.second: 18446744073709551615
+TIME ~ CLOCK - <INFO>  : first_record: 0
+TIME ~ CLOCK - <INFO>  : max_records: 18446744073709551615
+

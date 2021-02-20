@@ -16,7 +16,7 @@ bool COptions::handle_appearances(void) {
 
     bool shouldDisplay = !freshen;
 
-    LOG_TEST("apps.size", apps.size());
+    // LOG_TEST("apps.size", apps.size());
 
     bool first = true;
     for (size_t i = 0; i < apps.size(); i++) {
@@ -24,10 +24,7 @@ bool COptions::handle_appearances(void) {
         if (shouldQuit() || app->blk >= ts_cnt)
             break;
 
-        LOG_TEST("exportRange.first", exportRange.first);
-        LOG_TEST("exportRange.second", exportRange.second);
-        LOG_TEST("app->blk", app->blk);
-
+        LOG_TEST("passes", inRange((blknum_t)app->blk, exportRange.first, exportRange.second) ? "true" : "false");
         if (inRange((blknum_t)app->blk, exportRange.first, exportRange.second)) {
             nProcessed++;
             if (shouldDisplay) {
@@ -36,6 +33,8 @@ bool COptions::handle_appearances(void) {
                 cout << dapp.Format() << endl;
                 first = false;
             }
+        } else if (app->blk > exportRange.second) {
+            break;
         }
     }
 
