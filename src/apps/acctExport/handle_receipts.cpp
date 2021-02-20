@@ -70,7 +70,7 @@ bool COptions::handle_receipts(void) {
                 trans.timestamp = block.timestamp = (timestamp_t)ts_array[(app->blk * 2) + 1];
 
                 // ... we don't write the data here since it will not be complete.
-                // if (false) // (write_opt & CACHE_TXS) && !fileExists(txFilename))
+                // if (false) // (cache_txs && !fileExists(txFilename))
                 //    writeTransToBinary(trans, txFilename);
             }
 

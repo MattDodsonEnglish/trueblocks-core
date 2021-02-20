@@ -119,7 +119,7 @@ bool COptions::handle_accounting(void) {
                 markNeighbors(trans);
                 articulateAll(trans);
 
-                if ((write_opt & CACHE_TXS))
+                if (cache_txs)
                     writeTransToBinary(trans, txFilename);
 
                 HIDE_FIELD(CFunction, "message");

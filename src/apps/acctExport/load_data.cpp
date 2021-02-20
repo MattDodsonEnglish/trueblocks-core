@@ -109,11 +109,6 @@ bool COptions::loadAllAppearances(void) {
         freshenTimestamps(apps[apps.size() - 1].blk);
         if (!loadTimestampFile(&ts_array, ts_cnt))
             EXIT_FAIL("Could not open timestamp file.");
-
-        // If the user has not told us what to cache via the config file or the command line, we
-        // cache transactions and traces if there are less than 1,000 of them...
-        if (!write_opt && apps.size() <= 1000)
-            write_opt = (CACHE_TXS | CACHE_TRACES | CACHE_BYDEFAULT);
     }
 
     EXIT_NOMSG(true);

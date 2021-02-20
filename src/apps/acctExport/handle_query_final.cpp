@@ -21,8 +21,7 @@ bool visitFinalIndexFiles(const string_q& path, void* data) {
         // are inclusive. This silently skips unknown files in the folder (such as shell scripts).
         if (!contains(path, "-") || !endsWith(path, ".bloom")) {
             options->stats.nSkipped++;
-            // TODO(tjayrush): should we do this? (see below too.)
-            return true;  //! shouldQuit();
+            return !shouldQuit();
         }
 
         timestamp_t unused;
@@ -32,7 +31,7 @@ bool visitFinalIndexFiles(const string_q& path, void* data) {
         // Note that `start` and `end` options are ignored when scanning
         if (!rangesIntersect(options->listRange, options->fileRange)) {
             options->stats.nSkipped++;
-            return true;  //! shouldQuit();
+            return !shouldQuit();
         }
 
         options->possibles.clear();
@@ -47,11 +46,11 @@ bool visitFinalIndexFiles(const string_q& path, void* data) {
         }
 
         // LOG4("Scanning ", path);
-        return options->visitBinaryFile(path, data);  // && !shouldQuit();
+        return options->visitBinaryFile(path, data) && !shouldQuit();
     }
 
-    ASSERT(0);    // should not happen
-    return true;  //! shouldQuit();
+    ASSERT(0);  // should not happen
+    return !shouldQuit();
 }
 
 //---------------------------------------------------------------

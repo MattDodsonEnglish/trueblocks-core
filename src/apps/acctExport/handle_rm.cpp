@@ -20,7 +20,9 @@ const char* STR_ALREADYDELETED = "Monitor [{ADDRESS}] is already deleted";
 //------------------------------------------------------------------------------------------------
 bool COptions::handle_rm(const CAddressArray& addrs) {
     CStringArray results;
-    for (auto monitor : allMonitors) {
+    for (auto addr : addrs) {
+        CMonitor monitor;
+        monitor.address = addr;
         if (!monitor.exists()) {
             results.push_back(monitor.Format(STR_NOTFOUND));
             LOG_WARN(monitor.Format(STR_NOTFOUND));

@@ -14,13 +14,6 @@
 // BEG_ERROR_DEFINES
 // END_ERROR_DEFINES
 
-#define CACHE_NONE (0)
-#define CACHE_TXS (1 << 2)
-#define CACHE_TRACES (1 << 3)
-#define CACHE_BYCONFIG (1 << 4)
-#define CACHE_BYUSER (1 << 5)
-#define CACHE_BYDEFAULT (1 << 6)
-
 //-----------------------------------------------------------------------
 class COptions : public CAbiOptions {
   public:
@@ -45,8 +38,6 @@ class COptions : public CAbiOptions {
     blknum_t max_records;
     bool clean;
     // END_CODE_DECLARE
-
-    int write_opt;  // cache options as resolved (see options.cpp for notes)
 
     CAcctScrapeStats stats;
     CMonitorArray allMonitors;
@@ -91,6 +82,7 @@ class COptions : public CAbiOptions {
     bool parseArguments(string_q& command);
     void Init(void);
 
+    bool setDisplayFormatting(void);
     bool loadOneAddress(CAppearanceArray_base& apps, const address_t& addr);
     bool loadAllAppearances(void);
     bool freshen_internal(void);

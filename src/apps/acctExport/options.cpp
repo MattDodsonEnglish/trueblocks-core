@@ -44,8 +44,6 @@ static const COption params[] = {
 };
 static const size_t nParams = sizeof(params) / sizeof(COption);
 
-extern int xor_options(bool, bool);
-extern string_q report_cache(int);
 //---------------------------------------------------------------------------------------------------
 bool COptions::parseArguments(string_q& command) {
     ENTER("parseArguments");
@@ -172,41 +170,16 @@ bool COptions::parseArguments(string_q& command) {
         return false;
     }
 
-    // Are we visiting unripe and/or staging in our search?
-    if (staging)
-        visitTypes |= VIS_STAGING;
-    if (unripe) {
-        if (!(visitTypes & VIS_STAGING))
-            EXIT_USAGE("You must also specify --staging when using --unripe.");
-        visitTypes |= VIS_UNRIPE;
+    // Handle the easy cases first...
+    if (isCrudCommand()) {
+        if (crudCommand == "delete" || crudCommand == "undelete" || crudCommand == "remove")
+            return handle_rm(addrs);
+        return usage("You may only use --delete, --undelete, or --remove on monitors.");
     }
-
-    // Once we know how many exported appearances there will be (see loadAllAppearances), we will decide
-    // what to cache. If the user has either told us via the command line or the config file, we will
-    // use those settings. By default, user and config cache settins are off (0), so if they are
-    // not zero, we know the user has made their desires known.
-    const CToml* conf = getGlobalConfig("acctExport");
-
-    // Caching options (i.e. write_opt) are as per config file...
-    write_opt = xor_options(conf->getConfigBool("settings", "cache_txs", false),
-                            conf->getConfigBool("settings", "cache_traces", false));
-    if (write_opt)
-        write_opt |= CACHE_BYCONFIG;
-
-    // ...unless user has explicitly told us what to do on the command line...
-    if (contains(origCmd, "write")) {
-        write_opt = xor_options(cache_txs, cache_traces);
-        write_opt |= (CACHE_BYUSER);
-    }
-
-    // Where will we start?
-    blknum_t firstBlockToVisit = NOPOS;
 
     // We need at least one address to scrape...
     if (addrs.size() == 0)
         EXIT_USAGE("You must provide at least one Ethereum address.");
-
-    SHOW_FIELD(CTransaction, "traces");
 
     if ((appearances + receipts + logs + traces) > 1)
         EXIT_USAGE("Please export only one of list, receipts, logs, or traces.");
@@ -214,18 +187,34 @@ bool COptions::parseArguments(string_q& command) {
     if (emitter && !logs)
         EXIT_USAGE("The emitter option is only available when exporting logs.");
 
-    if (emitter && allMonitors.size() > 1)
+    if (emitter && addrs.size() > 1)
         EXIT_USAGE("The emitter option is only available when exporting logs from a single address.");
 
     if (factory && !traces)
         EXIT_USAGE("The facotry option is only available when exporting traces.");
 
+    if (count && (receipts || logs || traces || emitter || factory))
+        EXIT_USAGE("--count option is only available with --appearances option.");
+
+    if ((accounting || statements) && (addrs.size() != 1))
+        EXIT_USAGE("You may only use --accounting option with a single address.");
+
+    if ((accounting || statements) && freshen)
+        EXIT_USAGE("Do not use the --accounting option with --freshen.");
+
+    if ((accounting || statements) && (appearances || logs || traces))
+        EXIT_USAGE("Do not use the --accounting option with other options.");
+
+    // Where will we start?
+    blknum_t firstBlockToVisit = NOPOS;
+
     for (auto addr : addrs) {
         CMonitor monitor;
-
         monitor.setValueByName("address", toLower(addr));
         monitor.setValueByName("name", toLower(addr));
-
+        monitor.clearLocks();
+        monitor.finishParse();
+        monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION : FM_STAGING);
         if (monitor.exists()) {
             string_q unused;
             if (monitor.isLocked(unused))
@@ -235,167 +224,24 @@ bool COptions::parseArguments(string_q& command) {
                     "Quit the already running program or, if it is not running, "
                     "remove the lock\n\tfile: " +
                     monitor.getMonitorPath(addr) + +".lck'. Proceeding anyway...");
-            monitor.clearLocks();
-            monitor.finishParse();
-            monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION : FM_STAGING);
             string_q msg;
             if (monitor.isLocked(msg))  // If locked, we fail
                 EXIT_USAGE(msg);
             firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
-            //        } else {
-            //            monitor.clearLocks();
-            //            monitor.finishParse();
-            //            monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION :
-            //            FM_STAGING); cleanMonitorStage(); if (visitTypes & VIS_FINAL)
-            //                forEveryFileInFolder(indexFolder_blooms, visitFinalIndexFiles, this);
-            //            if (visitTypes & VIS_STAGING)
-            //                forEveryFileInFolder(indexFolder_staging, visitStagingIndexFiles, this);
-            //            if (visitTypes & VIS_UNRIPE)
-            //                forEveryFileInFolder(indexFolder_unripe, visitUnripeIndexFiles, this);
-            //            //            for (auto monitor : allMonitors) {
-            //            monitor.moveToProduction();
-            //            LOG4(monitor.address, " freshened to ", monitor.getLastVisited(true /* fresh */));
-            //            //            }
-            //            string_q msg;
-            //            if (monitor.isLocked(msg))  // If locked, we fail
-            //                EXIT_USAGE(msg);
-            //            firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
+            LOG_TEST("Monitor found for", addr);
+            LOG_TEST("Monitor path", monitor.getMonitorPath(monitor.address));
+            LOG_TEST("Last visited block", monitor.getLastVisitedBlock());
+        } else {
+            LOG_TEST("Monitor not found for", addr);
         }
-        //        if (monitor.exists()) {
         allMonitors.push_back(monitor);
-        //        } else {
-        //            LOG4("Monitor not found: ", monitor.address, ". Skipping...");
-        //        }
     }
 
-    if (allMonitors.size() == 0)
-        EXIT_USAGE("You must provide at least one Ethereum address.");
-
-    if (!freshen_internal()) //getEnvStr("FRESHEN_FLAG S")))
-        return usage("'freshen_internal' returned false.");
-
-    if (count) {
-        if (receipts || logs || traces || emitter || factory)
-            EXIT_USAGE("--count option is only available with --appearances option.");
-        bool isText = expContext().exportFmt != JSON1 && expContext().exportFmt != API1;
-        string_q format =
-            getGlobalConfig("acctExport")->getConfigStr("display", "format", isText ? STR_DISPLAY_MONITORCOUNT : "");
-        expContext().fmtMap["monitorcount_fmt"] = cleanFmt(format);
-        expContext().fmtMap["header"] = isNoHeader ? "" : cleanFmt(format);
-        for (auto monitor : allMonitors) {
-            CMonitorCount monCount;
-            monCount.address = monitor.address;
-            monCount.fileSize = fileSize(monitor.getMonitorPath(monitor.address));
-            monCount.nRecords = monCount.fileSize / sizeof(CAppearance_base);
-            counts.push_back(monCount);
-        }
-
-    } else {
-        // show certain fields and hide others
-        // SEP4("default field hiding: " + defHide);
-        string_q hide = substitute(defHide, "|CLogEntry: data, topics", "");
-        manageFields(hide, false);
-        // SEP4("default field showing: " + defShow);
-        string_q show =
-            defShow + (isApiMode() ? "|CTransaction:encoding,function,input,etherGasCost|CTrace:traceAddress" : "");
-        manageFields(show, true);
-
-        if (expContext().exportFmt != JSON1 && expContext().exportFmt != API1) {
-            string_q format;
-
-            format = getGlobalConfig("acctExport")->getConfigStr("display", "format", STR_DISPLAY_TRANSACTION);
-            expContext().fmtMap["transaction_fmt"] = cleanFmt(format);
-            manageFields("CTransaction:" + format);
-
-            if (format.empty())
-                EXIT_USAGE("For non-json export a 'trans_fmt' string is required. Check your config file.");
-            if (!contains(toLower(format), "trace"))
-                HIDE_FIELD(CTransaction, "traces");
-
-            format = getGlobalConfig("acctExport")->getConfigStr("display", "receipt", STR_DISPLAY_RECEIPT);
-            expContext().fmtMap["receipt_fmt"] = cleanFmt(format);
-            manageFields("CReceipt:" + format);
-
-            format = getGlobalConfig("acctExport")->getConfigStr("display", "log", STR_DISPLAY_LOGENTRY);
-            expContext().fmtMap["logentry_fmt"] = cleanFmt(format);
-            manageFields("CLogEntry:" + format);
-
-            format = getGlobalConfig("acctExport")->getConfigStr("display", "statement", STR_DISPLAY_RECONCILIATION);
-            expContext().fmtMap["reconciliation_fmt"] = cleanFmt(format);
-            manageFields("CReconciliation:" + format);
-
-            format = getGlobalConfig("acctExport")->getConfigStr("display", "trace", STR_DISPLAY_TRACE);
-            expContext().fmtMap["trace_fmt"] = cleanFmt(format);
-            manageFields("CTrace:" + format);
-
-            // This doesn't really work because CAppearance_base is not a subclass of CBaseNode. We phony it here for
-            // future reference.
-            format =
-                getGlobalConfig("acctExport")->getConfigStr("display", "appearances", STR_DISPLAY_APPEARANCEDISPLAY);
-            expContext().fmtMap["appearancedisplay_fmt"] = cleanFmt(format);
-            manageFields("CAppearanceDisplay:" + format);
-        }
-        HIDE_FIELD(CFunction, "stateMutability");
-        HIDE_FIELD(CParameter, "str_default");
-        HIDE_FIELD(CParameter, "components");
-        HIDE_FIELD(CParameter, "internalType");
-        HIDE_FIELD(CTransaction, "datesh");
-        HIDE_FIELD(CTransaction, "time");
-        HIDE_FIELD(CTransaction, "age");
-
-        expContext().fmtMap["header"] = "";
-        if (!isNoHeader) {
-            if (traces) {
-                expContext().fmtMap["header"] = cleanFmt(expContext().fmtMap["trace_fmt"]);
-            } else if (receipts) {
-                expContext().fmtMap["header"] = cleanFmt(expContext().fmtMap["receipt_fmt"]);
-            } else if (logs) {
-                expContext().fmtMap["header"] = cleanFmt(expContext().fmtMap["logentry_fmt"]);
-            } else if (appearances) {
-                expContext().fmtMap["header"] = cleanFmt(expContext().fmtMap["appearancedisplay_fmt"]);
-            } else if (statements) {
-                expContext().fmtMap["header"] = cleanFmt(expContext().fmtMap["reconciliation_fmt"]);
-            } else {
-                expContext().fmtMap["header"] = cleanFmt(expContext().fmtMap["transaction_fmt"]);
-            }
-        }
-
-        if (freshen)
-            expContext().exportFmt = NONE1;
-
-        if (accounting || statements) {
-            if (addrs.size() != 1)
-                EXIT_USAGE("You may only use --accounting option with a single address.");
-            if (freshen)
-                EXIT_USAGE("Do not use the --accounting option with --freshen.");
-            if (appearances || logs || traces)
-                EXIT_USAGE("Do not use the --accounting option with other options.");
-            expContext().accountedFor = addrs[0];
-            bytesOnly = substitute(expContext().accountedFor, "0x", "");
-            articulate = true;
-            manageFields("CTransaction:statements", true);
-            manageFields("CTransaction:reconciliations", false);
-            bool nodeHasBals = nodeHasBalances(false);
-            string_q rpcProvider = getGlobalConfig()->getConfigStr("settings", "rpcProvider", "http://localhost:8545");
-            if (!nodeHasBals) {
-                string_q balanceProvider = getGlobalConfig()->getConfigStr("settings", "balanceProvider", rpcProvider);
-                if (rpcProvider == balanceProvider || balanceProvider.empty())
-                    EXIT_USAGE("--accounting requires historical balances. The RPC server does not have them.");
-                setRpcProvider(balanceProvider);
-                if (!nodeHasBalances(false))
-                    EXIT_USAGE("balanceServer is set, but it does not have historical state.");
-            }
-        }
-    }
-
-    if (logs) {
-        SHOW_FIELD(CLogEntry, "blockNumber");
-        SHOW_FIELD(CLogEntry, "transactionIndex");
-    }
+    if (!setDisplayFormatting())
+        return false;
 
     if (appearances || count)
         articulate = false;
-
     if (articulate) {
         abi_spec.loadAbisFromKnown();
         for (auto monitor : allMonitors) {
@@ -404,23 +250,35 @@ bool COptions::parseArguments(string_q& command) {
         }
     }
 
-    // Handle the easy cases first...
-    if (isCrudCommand()) {
-        if (crudCommand == "delete" || crudCommand == "undelete" || crudCommand == "remove")
-            return handle_rm(addrs);
-        return usage("You may only use --delete, --undelete, or --remove on monitors.");
+    // Are we visiting unripe and/or staging in our search?
+    if (staging)
+        visitTypes |= VIS_STAGING;
+    if (unripe) {
+        if (!(visitTypes & VIS_STAGING))
+            EXIT_USAGE("You must also specify --staging when using --unripe.");
+        visitTypes |= VIS_UNRIPE;
     }
 
     // Last block depends on scrape type or user input `end` option (with appropriate check)
-    // clang-format off
     blknum_t lastBlockToVisit = max((blknum_t)1, (visitTypes & VIS_UNRIPE)    ? unripeBlk
-                                    : (visitTypes & VIS_STAGING) ? stagingBlk
-                                    : finalizedBlk);
-    // clang-format on
+                                                 : (visitTypes & VIS_STAGING) ? stagingBlk
+                                                                              : finalizedBlk);
 
     // Mark the range...
     listRange = make_pair((firstBlockToVisit == NOPOS ? 0 : firstBlockToVisit), lastBlockToVisit);
-    listRange = make_pair(0, NOPOS);
+
+    if (!freshen_internal())  // getEnvStr("FRESHEN_FLAG S")))
+        return usage("'freshen_internal' returned false.");
+
+    if (count) {
+        for (auto monitor : allMonitors) {
+            CMonitorCount monCount;
+            monCount.address = monitor.address;
+            monCount.fileSize = fileSize(monitor.getMonitorPath(monitor.address));
+            monCount.nRecords = monCount.fileSize / sizeof(CAppearance_base);
+            counts.push_back(monCount);
+        }
+    }
 
     // If the chain is behind the monitor (for example, the user is re-syncing), quit silently...
     if (latest < listRange.first) {
@@ -505,7 +363,6 @@ bool COptions::parseArguments(string_q& command) {
     LOG_TEST_BOOL("emitter", emitter);
     LOG_TEST_BOOL("count", count);
     LOG_TEST_BOOL("clean", clean);
-    // LOG_TEST("counts", counts);
 
     EXIT_NOMSG(true);
 }
@@ -606,56 +463,130 @@ COptions::COptions(void) {
 COptions::~COptions(void) {
 }
 
-//------------------------------------------------------------------------
-int xor_options(bool txs, bool traces) {
-    int ret = CACHE_NONE;
-    if (txs)
-        ret |= CACHE_TXS;
-    if (traces)
-        ret |= CACHE_TRACES;
-    return ret;
+//--------------------------------------------------------------------------------
+bool COptions::setDisplayFormatting(void) {
+    ENTER("setDisplayFormatting");
+
+    if (count) {
+        bool isText = expContext().exportFmt != JSON1 && expContext().exportFmt != API1;
+        string_q format =
+            getGlobalConfig("acctExport")->getConfigStr("display", "format", isText ? STR_DISPLAY_MONITORCOUNT : "");
+        expContext().fmtMap["monitorcount_fmt"] = cleanFmt(format);
+        expContext().fmtMap["header"] = isNoHeader ? "" : cleanFmt(format);
+
+    } else {
+        string_q hide = substitute(defHide, "|CLogEntry: data, topics", "");
+        manageFields(hide, false);
+        string_q show =
+            defShow + (isApiMode() ? "|CTransaction:encoding,function,input,etherGasCost|CTrace:traceAddress" : "");
+        manageFields(show, true);
+        if (expContext().exportFmt != JSON1 && expContext().exportFmt != API1) {
+            string_q format;
+
+            format = getGlobalConfig("acctExport")->getConfigStr("display", "format", STR_DISPLAY_TRANSACTION);
+            expContext().fmtMap["transaction_fmt"] = cleanFmt(format);
+            manageFields("CTransaction:" + format);
+
+            if (format.empty())
+                EXIT_USAGE("For non-json export a 'trans_fmt' string is required. Check your config file.");
+            if (!contains(toLower(format), "trace"))
+                HIDE_FIELD(CTransaction, "traces");
+
+            format = getGlobalConfig("acctExport")->getConfigStr("display", "receipt", STR_DISPLAY_RECEIPT);
+            expContext().fmtMap["receipt_fmt"] = cleanFmt(format);
+            manageFields("CReceipt:" + format);
+
+            format = getGlobalConfig("acctExport")->getConfigStr("display", "log", STR_DISPLAY_LOGENTRY);
+            expContext().fmtMap["logentry_fmt"] = cleanFmt(format);
+            manageFields("CLogEntry:" + format);
+
+            format = getGlobalConfig("acctExport")->getConfigStr("display", "statement", STR_DISPLAY_RECONCILIATION);
+            expContext().fmtMap["reconciliation_fmt"] = cleanFmt(format);
+            manageFields("CReconciliation:" + format);
+
+            format = getGlobalConfig("acctExport")->getConfigStr("display", "trace", STR_DISPLAY_TRACE);
+            expContext().fmtMap["trace_fmt"] = cleanFmt(format);
+            manageFields("CTrace:" + format);
+
+            // This doesn't really work because CAppearance_base is not a subclass of CBaseNode. We phony it here for
+            // future reference.
+            format =
+                getGlobalConfig("acctExport")->getConfigStr("display", "appearances", STR_DISPLAY_APPEARANCEDISPLAY);
+            expContext().fmtMap["appearancedisplay_fmt"] = cleanFmt(format);
+            manageFields("CAppearanceDisplay:" + format);
+        }
+        HIDE_FIELD(CFunction, "stateMutability");
+        HIDE_FIELD(CParameter, "str_default");
+        HIDE_FIELD(CParameter, "components");
+        HIDE_FIELD(CParameter, "internalType");
+        HIDE_FIELD(CTransaction, "datesh");
+        HIDE_FIELD(CTransaction, "time");
+        HIDE_FIELD(CTransaction, "age");
+        SHOW_FIELD(CTransaction, "traces");
+
+        expContext().fmtMap["header"] = "";
+        if (!isNoHeader) {
+            if (traces) {
+                expContext().fmtMap["header"] = cleanFmt(expContext().fmtMap["trace_fmt"]);
+            } else if (receipts) {
+                expContext().fmtMap["header"] = cleanFmt(expContext().fmtMap["receipt_fmt"]);
+            } else if (logs) {
+                expContext().fmtMap["header"] = cleanFmt(expContext().fmtMap["logentry_fmt"]);
+            } else if (appearances) {
+                expContext().fmtMap["header"] = cleanFmt(expContext().fmtMap["appearancedisplay_fmt"]);
+            } else if (statements) {
+                expContext().fmtMap["header"] = cleanFmt(expContext().fmtMap["reconciliation_fmt"]);
+            } else {
+                expContext().fmtMap["header"] = cleanFmt(expContext().fmtMap["transaction_fmt"]);
+            }
+        }
+
+        if (logs) {
+            SHOW_FIELD(CLogEntry, "blockNumber");
+            SHOW_FIELD(CLogEntry, "transactionIndex");
+        }
+
+        if (freshen)
+            expContext().exportFmt = NONE1;
+
+        if (accounting || statements) {
+            expContext().accountedFor = allMonitors[0].address;
+            bytesOnly = substitute(expContext().accountedFor, "0x", "");
+            articulate = true;
+            manageFields("CTransaction:statements", true);
+            manageFields("CTransaction:reconciliations", false);
+            bool nodeHasBals = nodeHasBalances(false);
+            string_q rpcProvider = getGlobalConfig()->getConfigStr("settings", "rpcProvider", "http://localhost:8545");
+            if (!nodeHasBals) {
+                string_q balanceProvider = getGlobalConfig()->getConfigStr("settings", "balanceProvider", rpcProvider);
+                if (rpcProvider == balanceProvider || balanceProvider.empty())
+                    EXIT_USAGE("--accounting requires historical balances. The RPC server does not have them.");
+                setRpcProvider(balanceProvider);
+                if (!nodeHasBalances(false))
+                    EXIT_USAGE("balanceServer is set, but it does not have historical state.");
+            }
+        }
+    }
+    return true;
 }
 
-//------------------------------------------------------------------------
-string_q report_cache(int opt) {
-    ostringstream os;
-    if (opt == CACHE_NONE) {
-        os << "CACHE_NONE ";
+#define LOG_TEST_VAL(a, b)                                                                                             \
+    {                                                                                                                  \
+        if (b != 0)                                                                                                    \
+            LOG_TEST(a, "--value--")                                                                                   \
     }
-    if (opt & CACHE_TXS) {
-        os << "CACHE_TXS ";
-    }
-    if (opt & CACHE_TRACES) {
-        os << "CACHE_TRACES ";
-    }
-    if (opt & CACHE_BYCONFIG) {
-        os << "CACHE_BYCONFIG ";
-    }
-    if (opt & CACHE_BYUSER) {
-        os << "CACHE_BYUSER ";
-    }
-    if (opt & CACHE_BYDEFAULT) {
-        os << "CACHE_BYDEFAULT ";
-    }
-    return os.str();
-}
-
-// TODO(tjayrush): If an abi file is changed, we should re-articulate.
-// TODO(tjayrush): accounting can not be freshen, appearances, logs, receipts, traces, but must be articulate - why?
-// TODO(tjayrush): accounting must be exportFmt API1 - why?
-// TODO(tjayrush): accounting must be for one monitor address - why?
-// TODO(tjayrush): accounting requires node balances - why?
-// TODO(tjayrush): Used to do this: if any ABI files was newer, re-read abi and re-articulate in cache
-// TODO(tjayrush): What does prefundAddrMap and prefundWeiMap do? Needs testing
-// TODO(tjayrush): What does blkRewardMap do? Needs testing
-// TODO(tjayrush): Reconciliation loads traces -- plus it reduplicates the isSuicide, isGeneration, isUncle shit
-// TODO(tjayrush): updateLastExport is really weird
-// TODO(tjayrush): writeLastBlock is really weird
-// TODO(tjayrush): We used to write traces sometimes
-// TODO(tjayrush): We used to cache the monitored txs - I think it was pretty fast (we used the monitor staging folder)
 
 //------------------------------------------------------------------------------------------------
 bool COptions::freshen_internal(void) {
+    LOG_TEST_VAL("stats.nFiles", stats.nFiles);
+    LOG_TEST_VAL("stats.nSkipped", stats.nSkipped);
+    LOG_TEST_VAL("stats.nChecked", stats.nChecked);
+    LOG_TEST_VAL("stats.nBloomMisses", stats.nBloomMisses);
+    LOG_TEST_VAL("stats.nBloomHits", stats.nBloomHits);
+    LOG_TEST_VAL("stats.nFalsePositive", stats.nFalsePositive);
+    LOG_TEST_VAL("stats.nPositive", stats.nPositive);
+    LOG_TEST_VAL("stats.nRecords", stats.nRecords);
+
     // Clean the monitor stage of previously unfinished scrapes
     cleanMonitorStage();
 
@@ -673,11 +604,14 @@ bool COptions::freshen_internal(void) {
         LOG4(monitor.address, " freshened to ", monitor.getLastVisited(true /* fresh */));
     }
 
-    // // ENTER("freshen_internal");
-    // nodeNotRequired();
-
-    // ostringstream base;
-    // base << "acctScrape " << freshen_flags << " [ADDRS] ;";
+    LOG_TEST_VAL("stats.nFiles", stats.nFiles);
+    LOG_TEST_VAL("stats.nSkipped", stats.nSkipped);
+    LOG_TEST_VAL("stats.nChecked", stats.nChecked);
+    LOG_TEST_VAL("stats.nBloomMisses", stats.nBloomMisses);
+    LOG_TEST_VAL("stats.nBloomHits", stats.nBloomHits);
+    LOG_TEST_VAL("stats.nFalsePositive", stats.nFalsePositive);
+    LOG_TEST_VAL("stats.nPositive", stats.nPositive);
+    LOG_TEST_VAL("stats.nRecords", stats.nRecords);
 
     // size_t cnt = 0, cnt2 = 0;
     // string_q tenAddresses;
@@ -691,7 +625,8 @@ bool COptions::freshen_internal(void) {
     //             cnt = 0;
     //         }
     //     } else {
-    //         LOG4(cTeal, "Updating addresses ", f.address, " ", cnt2, " of ", fa.size(), string_q(80, ' '), cOff, "\r");
+    //         LOG4(cTeal, "Updating addresses ", f.address, " ", cnt2, " of ", fa.size(), string_q(80, ' '), cOff,
+    //         "\r");
     //     }
     //     cnt2++;
     // }
@@ -720,3 +655,17 @@ bool COptions::freshen_internal(void) {
     return true;
     // // EXIT_NOMSG(true);
 }
+
+// TODO(tjayrush): If an abi file is changed, we should re-articulate.
+// TODO(tjayrush): accounting can not be freshen, appearances, logs, receipts, traces, but must be articulate - why?
+// TODO(tjayrush): accounting must be exportFmt API1 - why?
+// TODO(tjayrush): accounting must be for one monitor address - why?
+// TODO(tjayrush): accounting requires node balances - why?
+// TODO(tjayrush): Used to do this: if any ABI files was newer, re-read abi and re-articulate in cache
+// TODO(tjayrush): What does prefundAddrMap and prefundWeiMap do? Needs testing
+// TODO(tjayrush): What does blkRewardMap do? Needs testing
+// TODO(tjayrush): Reconciliation loads traces -- plus it reduplicates the isSuicide, isGeneration, isUncle shit
+// TODO(tjayrush): updateLastExport is really weird
+// TODO(tjayrush): writeLastBlock is really weird
+// TODO(tjayrush): We used to write traces sometimes
+// TODO(tjayrush): We used to cache the monitored txs - I think it was pretty fast (we used the monitor staging folder)
