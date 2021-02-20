@@ -1,14 +1,236 @@
 acctExport argc: 10 [1:0xf503017d7baf7fbc0fff7492b751025c6a78179b] [2:--accounting] [3:--ether] [4:--start] [5:10277780] [6:--end] [7:10296792] [8:--fmt] [9:api] 
 acctExport 0xf503017d7baf7fbc0fff7492b751025c6a78179b --accounting --ether --start 10277780 --end 10296792 --fmt api 
+TIME ~ CLOCK - <INFO>  : Monitor found for: 0xf503017d7baf7fbc0fff7492b751025c6a78179b
+TIME ~ CLOCK - <INFO>  : Monitor path: /Users/jrush/.quickBlocks/mocked/monitors/0xf503017d7baf7fbc0fff7492b751025c6a78179b.acct.bin
+TIME ~ CLOCK - <INFO>  : Last visited block: 11854827
+TIME ~ CLOCK - <INFO>  : m.getLastVisitedBlock(): 11854827
+TIME ~ CLOCK - <INFO>  : options->fileRange.first: 11854827
+TIME ~ CLOCK - <INFO>  : m.getLastVisitedBlock(): 11854827
+TIME ~ CLOCK - <INFO>  : options->fileRange.first: 11857782
+TIME ~ CLOCK - <INFO>  : stats.nFiles: --value--
+TIME ~ CLOCK - <INFO>  : stats.nSkipped: --value--
 TIME ~ CLOCK - <INFO>  : nMonitors: 1
 TIME ~ CLOCK - <INFO>  : exportRange.first: 10277780
 TIME ~ CLOCK - <INFO>  : exportRange.second: 10296792
-TIME ~ CLOCK - <INFO>  : listRange.first: 0
-TIME ~ CLOCK - <INFO>  : listRange.second: 18446744073709551615
+TIME ~ CLOCK - <INFO>  : listRange.first: 11854827
+TIME ~ CLOCK - <INFO>  : listRange.second: 11863676
 TIME ~ CLOCK - <INFO>  : first_record: 0
 TIME ~ CLOCK - <INFO>  : max_records: 18446744073709551615
 TIME ~ CLOCK - <INFO>  : articulate: true
 {"data": [
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: false
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 8 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -304,6 +526,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-16 16:09:04 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "hash": "0x4bbabbb0cf842635caea3dcc46107ca3dbf88fcb096ae7feaabcd6c039cafa65",
   "blockHash": "0xba60d83b8de8f8af15c6de40c36a39a75b3b94a8cca228134e33cac402969cf2",
@@ -356,21 +579,21 @@ TIME ~ CLOCK - <INFO>  : articulate: true
     "name": "approve",
     "inputs": [
       {
-        "name": "_spender",
+        "name": "usr",
         "value": "0x7d655c57f71464b6f83811c55d84009cd9f5221c"
       },
       {
-        "name": "_value",
+        "name": "wad",
         "value": "5000000000000000000"
       }
     ],
     "outputs": [
       {
-        "name": "_success"
+        "name": "val_0"
       }
     ]
   },
-  "compressedTx": "approve ( _spender: 0x7d655c57f71464b6f83811c55d84009cd9f5221c, _value: 5000000000000000000 )",
+  "compressedTx": "approve ( usr: 0x7d655c57f71464b6f83811c55d84009cd9f5221c, wad: 5000000000000000000 )",
   "statements": [
     {
       "blockNumber": 10279295,
@@ -390,6 +613,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-16 21:46:15 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 8 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -687,6 +911,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-16 21:50:17 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 8 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -982,6 +1207,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-16 23:04:31 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 8 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -1544,6 +1770,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-17 00:05:54 UTC",
   "ether": 0.040000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 68 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -10379,6 +10606,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-17 02:23:26 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 50 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -15476,6 +15704,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-17 03:33:24 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 8 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -15771,6 +16000,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-17 13:50:29 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 50 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -20868,6 +21098,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-17 14:13:58 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 71 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -30424,6 +30655,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-18 13:33:25 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 44 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -34499,6 +34731,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-18 14:01:48 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "hash": "0x717d21a307469b781a8231f177fcb2b2a683d537ddeea2da6eec69f4b12b1c42",
   "blockHash": "0x733f333febe506bb353d8ad78d0a743330cd5b2eaa0f103968877d1e9265be28",
@@ -34551,21 +34784,21 @@ TIME ~ CLOCK - <INFO>  : articulate: true
     "name": "approve",
     "inputs": [
       {
-        "name": "_spender",
+        "name": "usr",
         "value": "0x7d655c57f71464b6f83811c55d84009cd9f5221c"
       },
       {
-        "name": "_value",
+        "name": "wad",
         "value": "5000000000000000000"
       }
     ],
     "outputs": [
       {
-        "name": "_success"
+        "name": "val_0"
       }
     ]
   },
-  "compressedTx": "approve ( _spender: 0x7d655c57f71464b6f83811c55d84009cd9f5221c, _value: 5000000000000000000 )",
+  "compressedTx": "approve ( usr: 0x7d655c57f71464b6f83811c55d84009cd9f5221c, wad: 5000000000000000000 )",
   "statements": [
     {
       "blockNumber": 10290317,
@@ -34586,6 +34819,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-18 14:47:23 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 5 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -34751,6 +34985,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-18 14:47:23 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 17 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -35613,6 +35848,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-18 20:04:05 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "hash": "0x54df753f5a53c2ee4ef08e6b03e5e44cf1ceab98459b9bacd6f3c7aeee5d54d8",
   "blockHash": "0x8b5178b7a72f9f2169a6c0860ac1fe75c913404216282b6544abb45b1ffff757",
@@ -35665,21 +35901,21 @@ TIME ~ CLOCK - <INFO>  : articulate: true
     "name": "approve",
     "inputs": [
       {
-        "name": "_spender",
+        "name": "usr",
         "value": "0x7d655c57f71464b6f83811c55d84009cd9f5221c"
       },
       {
-        "name": "_value",
+        "name": "wad",
         "value": "5000000000000000000"
       }
     ],
     "outputs": [
       {
-        "name": "_success"
+        "name": "val_0"
       }
     ]
   },
-  "compressedTx": "approve ( _spender: 0x7d655c57f71464b6f83811c55d84009cd9f5221c, _value: 5000000000000000000 )",
+  "compressedTx": "approve ( usr: 0x7d655c57f71464b6f83811c55d84009cd9f5221c, wad: 5000000000000000000 )",
   "statements": [
     {
       "blockNumber": 10292014,
@@ -35700,6 +35936,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-18 21:07:17 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 8 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -35998,6 +36235,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-18 21:07:17 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 8 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -36560,6 +36798,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-18 21:20:11 UTC",
   "ether": 0.200000000000000002
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 8 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -36855,6 +37094,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-18 21:33:11 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "hash": "0x510acf20070895b13a5e7fe050e4756a22c0f274ae7d6416a175a863c7cdcb23",
   "blockHash": "0x5f464a4fec4ef7df373e331c1804662b2a64030f22735d611b7d939e14224f15",
@@ -36907,21 +37147,21 @@ TIME ~ CLOCK - <INFO>  : articulate: true
     "name": "approve",
     "inputs": [
       {
-        "name": "_spender",
+        "name": "usr",
         "value": "0x7d655c57f71464b6f83811c55d84009cd9f5221c"
       },
       {
-        "name": "_value",
+        "name": "wad",
         "value": "5000000000000000000"
       }
     ],
     "outputs": [
       {
-        "name": "_success"
+        "name": "val_0"
       }
     ]
   },
-  "compressedTx": "approve ( _spender: 0x7d655c57f71464b6f83811c55d84009cd9f5221c, _value: 5000000000000000000 )",
+  "compressedTx": "approve ( usr: 0x7d655c57f71464b6f83811c55d84009cd9f5221c, wad: 5000000000000000000 )",
   "statements": [
     {
       "blockNumber": 10293554,
@@ -36942,6 +37182,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-19 02:52:22 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 8 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -37240,6 +37481,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-19 02:52:22 UTC",
   "ether": 0.000000000000000000
 }
+TIME ~ CLOCK - <INFO>  : passes: true
 --1 : 107 : 0
 --  0: _donations (tuple[])
 --      struct BulkCheckout.Donation[][token(address) amount(uint256) dest(address) ]
@@ -57576,6 +57818,7 @@ TIME ~ CLOCK - <INFO>  : articulate: true
   "date": "2020-06-19 14:30:01 UTC",
   "ether": 0.100000000000000001
 }
+TIME ~ CLOCK - <INFO>  : passes: false
 ], "types": [
 { "type": "CTransaction", "fields": [{ "name": "hash", "type": "hash" }, { "name": "blockHash", "type": "hash" }, { "name": "blockNumber", "type": "blocknum" }, { "name": "transactionIndex", "type": "blocknum" }, { "name": "timestamp", "type": "timestamp" }, { "name": "from", "type": "address" }, { "name": "to", "type": "address" }, { "name": "value", "type": "wei" }, { "name": "gas", "type": "gas" }, { "name": "gasPrice", "type": "gas" }, { "name": "isError", "type": "unumber" }, { "name": "hasToken", "type": "unumber" }, { "name": "receipt", "type": "object" }, { "name": "traces", "type": "object|ts_array" }, { "name": "articulatedTx", "type": "object" }, { "name": "compressedTx", "type": "text" }, { "name": "statements", "type": "object|ts_array" }, { "name": "gasCost", "type": "wei" }, { "name": "gasUsed", "type": "gas" }, { "name": "date", "type": "date" }, { "name": "ether", "type": "ether" }] }
 ], "meta": {"unripe": "0xdeadbeef","ripe": "0xdeadbeef","staging": "0xdeadbeef","finalized": "0xdeadbeef","client": "0xdeadbeef", "namedFrom": {"0x00de4b13153673bcae2616b67bf822500d325fc3": { "tags": "31-Gitcoin Grants:Grant", "name": "Grant 0472 Example Public Health Project", "count": 1 },"0x054993ab0f2b1acc0fdc65405ee203b4271bebe6": { "tags": "00-Active", "name": "Name 0x054993ab", "count": 1 },"0x0b16f058257f43db6ec84a7b3c77766cb808face": { "tags": "31-Gitcoin Grants:Friends", "name": "Name 0x0b16f058", "count": 1 },"0x3564e17d5f6b7c9a3c6bd6248bf7b3eeb4927e50": { "tags": "31-Gitcoin Grants:Friends", "name": "Name 0x3564e17d", "count": 1 },"0x3a051cff039d0ea6964c0f9f01db6e61cc521748": { "tags": "31-Gitcoin Grants:Friends", "name": "Name 0x3a051cff", "count": 1 },"0x4535c6045343de2a1f307b00cae54ba1b42d904c": { "tags": "31-Gitcoin Grants:Friends", "name": "Name 0x4535c604", "count": 1 },"0x4f1b01b761fc9347d5844c49abed5a235d34569e": { "tags": "31-Gitcoin Grants:Friends", "name": "Name 0x4f1b01b7", "count": 1 },"0x5b93ff82faaf241c15997ea3975419dddd8362c5": { "tags": "31-Gitcoin Grants:Friends", "name": "Name 0x5b93ff82", "count": 1 },"0x5ca323d77930c84524e9b06b20c5027ec4e54480": { "tags": "31-Gitcoin Grants:Friends", "name": "Name 0x5ca323d7", "count": 1 },"0x62051bfd3a4f7039a849142e6e5ea172cbda5949": { "tags": "31-Gitcoin Grants:Grant", "name": "Grant 0467 Gitcoin Developer Grant - Walid Mujahid وليد مجاهد", "count": 1 },"0x6f620ba7907a3d9a6dda9821eeb4e59b3f69c367": { "tags": "31-Gitcoin Grants:Grant", "name": "Grant 0864 Dutch Swap: Digital Dutch Auctions for Everyone!", "count": 1 },"0x89c65d0759a25ca4b4ae0fd1b4827d00018dc931": { "tags": "31-Gitcoin Grants:Friends", "name": "Name 0x89c65d07", "count": 1 },"0xc8d61e23839794b162da78a5c927fd7b2cd92055": { "tags": "31-Gitcoin Grants:Friends", "name": "Name 0xc8d61e23", "count": 1 }}

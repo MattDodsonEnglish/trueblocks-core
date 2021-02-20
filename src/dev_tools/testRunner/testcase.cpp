@@ -448,11 +448,11 @@ void establishTestMonitors(void) {
 
     const char* STR_UNZIP_CMD =
         "cd [{PATH}] && "
-        "rm -fR mocked && "
+        "rm -fR mocks && "
         "rm -fR monitors && "
         "gunzip --keep *.gz && "
         "tar -xvf monitors.tar 2>/dev/null && rm -f monitors.tar && "
-        "tar -xvf mocked.tar 2>/dev/null && rm -f mocked.tar";
+        "tar -xvf mocks.tar 2>/dev/null && rm -f mocks.tar";
 
     string_q cmd = substitute(STR_UNZIP_CMD, "[{PATH}]", configPath("mocked/"));
     // LOG_INFO(cmd);

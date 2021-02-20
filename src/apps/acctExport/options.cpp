@@ -286,12 +286,6 @@ bool COptions::parseArguments(string_q& command) {
         EXIT_NOMSG(false);
     }
 
-    //    // If there's nothing to scrape, quit silently...
-    //    if (listRange.first >= listRange.second) {
-    //        LOG8("Account scraper is up to date.");
-    //        EXIT_NOMSG(false);
-    //    }
-
     if (start != NOPOS)
         exportRange.first = start;
     if (end != NOPOS)

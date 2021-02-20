@@ -85,7 +85,7 @@ endif()
 # Copy the mock data and testing monitors
 #---------------------------------------------------------------
 message(STATUS "Copying mocked data to ${DEST_PATH}/mocked")
-file(COPY "${SOURCE_PATH}/mocked/mocked.tar.gz" DESTINATION "${DEST_PATH}/mocked/" FILE_PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ)
+file(COPY "${SOURCE_PATH}/mocked/mocks.tar.gz" DESTINATION "${DEST_PATH}/mocked/" FILE_PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ)
 file(COPY "${SOURCE_PATH}/mocked/monitors.tar.gz" DESTINATION "${DEST_PATH}/mocked/" FILE_PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ)
 
 #---------------------------------------------------------------

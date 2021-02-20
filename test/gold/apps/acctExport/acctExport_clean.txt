@@ -5,6 +5,8 @@ acctExport --clean
 ,{ "path": "$CACHE/0x0ece224fbc24d40b446c6a94a142dc41fae76f2d.acct.bin", "sizeThen": 120680, "sizeNow": 120680}
 ,{ "path": "$CACHE/0x1234567890123456789012345678901234567890.acct.bin", "sizeThen": 8248, "sizeNow": 8248}
 ,{ "path": "$CACHE/0x807640a13483f8ac783c557fcdf27be11ea4ac7a.acct.bin", "sizeThen": 470248, "sizeNow": 470248}
+,{ "path": "$CACHE/0x8b3b3b624c3c0397d3da8fd861512393d51dcbac.acct.bin", "sizeThen": 504488, "sizeNow": 504488}
+,{ "path": "$CACHE/0xbb9bc244d798123fde783fcc1c72d3bb8c189413.acct.bin", "sizeThen": 1729264, "sizeNow": 1729264}
 ,{ "path": "$CACHE/0xd2f5852eb4b0c12c23a97914b2a9d954cf621781.acct.bin", "sizeThen": 104, "sizeNow": 104}
 ,{ "path": "$CACHE/0xf503017d7baf7fbc0fff7492b751025c6a78179b.acct.bin", "sizeThen": 3824, "sizeNow": 3824}
 ]

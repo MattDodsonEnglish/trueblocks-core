@@ -132,6 +132,7 @@ bool COptions::handle_traces(void) {
                     } else if (factory) {
                         cout << ((isJson() && !first) ? ", " : "");
                         cout << copy.Format() << endl;
+                        first = false;
                     }
                 }
             }
