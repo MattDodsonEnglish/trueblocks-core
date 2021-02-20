@@ -93,6 +93,7 @@ class COptions : public CAbiOptions {
 
     bool loadOneAddress(CAppearanceArray_base& apps, const address_t& addr);
     bool loadAllAppearances(void);
+    bool freshen_internal(void);
 
     bool handle_accounting(void);
     bool handle_appearances(void);
@@ -114,7 +115,6 @@ class COptions : public CAbiOptions {
 extern bool visitFinalIndexFiles(const string_q& path, void* data);
 extern bool visitStagingIndexFiles(const string_q& path, void* data);
 extern bool visitUnripeIndexFiles(const string_q& path, void* data);
-extern bool freshen_internal(CMonitorArray& list, const string_q& freshen_flags);
 
 //--------------------------------------------------------------------------------
 inline string_q plural(const string_q& in) {

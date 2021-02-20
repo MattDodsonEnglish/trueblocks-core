@@ -271,7 +271,7 @@ bool COptions::parseArguments(string_q& command) {
     if (allMonitors.size() == 0)
         EXIT_USAGE("You must provide at least one Ethereum address.");
 
-    if (!freshen_internal(allMonitors, "")) //getEnvStr("FRESHEN_FLAG S")))
+    if (!freshen_internal()) //getEnvStr("FRESHEN_FLAG S")))
         return usage("'freshen_internal' returned false.");
 
     if (count) {
@@ -655,51 +655,68 @@ string_q report_cache(int opt) {
 // TODO(tjayrush): We used to cache the monitored txs - I think it was pretty fast (we used the monitor staging folder)
 
 //------------------------------------------------------------------------------------------------
-bool freshen_internal(CMonitorArray& fa, const string_q& freshen_flags) {
-    // ENTER("freshen_internal");
-    nodeNotRequired();
+bool COptions::freshen_internal(void) {
+    // Clean the monitor stage of previously unfinished scrapes
+    cleanMonitorStage();
 
-    ostringstream base;
-    base << "acctScrape " << freshen_flags << " [ADDRS] ;";
+    if (visitTypes & VIS_FINAL)
+        forEveryFileInFolder(indexFolder_blooms, visitFinalIndexFiles, this);
 
-    size_t cnt = 0, cnt2 = 0;
-    string_q tenAddresses;
-    for (auto f : fa) {
-        bool needsUpdate = true;
-        if (needsUpdate) {
-            LOG4(cTeal, "Needs update ", f.address, string_q(80, ' '), cOff);
-            tenAddresses += (f.address + " ");
-            if (!(++cnt % 10)) {  // we don't want to do too many addrs at a time
-                tenAddresses += "|";
-                cnt = 0;
-            }
-        } else {
-            LOG4(cTeal, "Updating addresses ", f.address, " ", cnt2, " of ", fa.size(), string_q(80, ' '), cOff, "\r");
-        }
-        cnt2++;
+    if (visitTypes & VIS_STAGING)
+        forEveryFileInFolder(indexFolder_staging, visitStagingIndexFiles, this);
+
+    if (visitTypes & VIS_UNRIPE)
+        forEveryFileInFolder(indexFolder_unripe, visitUnripeIndexFiles, this);
+
+    for (auto monitor : allMonitors) {
+        monitor.moveToProduction();
+        LOG4(monitor.address, " freshened to ", monitor.getLastVisited(true /* fresh */));
     }
 
-    // Process them until we're done
-    uint64_t cur = 0;
-    while (!tenAddresses.empty()) {
-        string_q thisFive = nextTokenClear(tenAddresses, '|');
-        string_q cmd = substitute(base.str(), "[ADDRS]", thisFive);
-        // LOG_CALL(cmd);
-        // clang-format off
-        uint64_t n = countOf(thisFive, ' ');
-        if (fa.size() > 1)
-            LOG_INFO(cTeal, "Updating addresses ", cur+1, "-", (cur+n), " of ", fa.size(), string_q(80, ' '), cOff);
-        cur += n;
-        LOG_TEST("cmd: ", cmd);
-        if (system(cmd.c_str())) {}  // Don't remove cruft. Silences compiler warnings
-        // clang-format on
-        if (!tenAddresses.empty())
-            usleep(50000);  // this sleep is here so that chifra remains responsive to Cntl+C. Do not remove
-    }
+    // // ENTER("freshen_internal");
+    // nodeNotRequired();
 
-    for (CMonitor& f : fa)
-        f.needsRefresh = (f.cntBefore != f.getRecordCount());
+    // ostringstream base;
+    // base << "acctScrape " << freshen_flags << " [ADDRS] ;";
+
+    // size_t cnt = 0, cnt2 = 0;
+    // string_q tenAddresses;
+    // for (auto f : fa) {
+    //     bool needsUpdate = true;
+    //     if (needsUpdate) {
+    //         LOG4(cTeal, "Needs update ", f.address, string_q(80, ' '), cOff);
+    //         tenAddresses += (f.address + " ");
+    //         if (!(++cnt % 10)) {  // we don't want to do too many addrs at a time
+    //             tenAddresses += "|";
+    //             cnt = 0;
+    //         }
+    //     } else {
+    //         LOG4(cTeal, "Updating addresses ", f.address, " ", cnt2, " of ", fa.size(), string_q(80, ' '), cOff, "\r");
+    //     }
+    //     cnt2++;
+    // }
+
+    // // Process them until we're done
+    // uint64_t cur = 0;
+    // while (!tenAddresses.empty()) {
+    //     string_q thisFive = nextTokenClear(tenAddresses, '|');
+    //     string_q cmd = substitute(base.str(), "[ADDRS]", thisFive);
+    //     // LOG_CALL(cmd);
+    //     // clang-format off
+    //     uint64_t n = countOf(thisFive, ' ');
+    //     if (fa.size() > 1)
+    //         LOG_INFO(cTeal, "Updating addresses ", cur+1, "-", (cur+n), " of ", fa.size(), string_q(80, ' '), cOff);
+    //     cur += n;
+    //     LOG_TEST("cmd: ", cmd);
+    //     if (system(cmd.c_str())) {}  // Don't remove cruft. Silences compiler warnings
+    //     // clang-format on
+    //     if (!tenAddresses.empty())
+    //         usleep(50000);  // this sleep is here so that chifra remains responsive to Cntl+C. Do not remove
+    // }
+
+    // for (CMonitor& f : fa)
+    //     f.needsRefresh = (f.cntBefore != f.getRecordCount());
 
     return true;
-    // EXIT_NOMSG(true);
+    // // EXIT_NOMSG(true);
 }
