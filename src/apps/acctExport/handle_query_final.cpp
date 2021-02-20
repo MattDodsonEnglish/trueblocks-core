@@ -21,7 +21,8 @@ bool visitFinalIndexFiles(const string_q& path, void* data) {
         // are inclusive. This silently skips unknown files in the folder (such as shell scripts).
         if (!contains(path, "-") || !endsWith(path, ".bloom")) {
             options->stats.nSkipped++;
-            return true; //!shouldQuit();
+            // TODO(tjayrush): should we do this? (see below too.)
+            return true;  //! shouldQuit();
         }
 
         timestamp_t unused;
@@ -31,7 +32,7 @@ bool visitFinalIndexFiles(const string_q& path, void* data) {
         // Note that `start` and `end` options are ignored when scanning
         if (!rangesIntersect(options->scanRange, options->fileRange)) {
             options->stats.nSkipped++;
-            return true; //!shouldQuit();
+            return true;  //! shouldQuit();
         }
 
         options->possibles.clear();
@@ -46,11 +47,11 @@ bool visitFinalIndexFiles(const string_q& path, void* data) {
         }
 
         // LOG4("Scanning ", path);
-        return options->visitBinaryFile(path, data); // && !shouldQuit();
+        return options->visitBinaryFile(path, data);  // && !shouldQuit();
     }
 
-    ASSERT(0);  // should not happen
-    return true; //!shouldQuit();
+    ASSERT(0);    // should not happen
+    return true;  //! shouldQuit();
 }
 
 //---------------------------------------------------------------
@@ -104,7 +105,8 @@ bool COptions::visitBinaryFile(const string_q& path, void* data) {
         CMonitor* monitor = &possibles[mo];
         if (hitMap[monitor->address]) {
             if (!monitor->openCacheFile1())
-                EXIT_FAIL("Could not open cache file " + monitor->getMonitorPath(monitor->address, monitor->fm_mode) + ".");
+                EXIT_FAIL("Could not open cache file " + monitor->getMonitorPath(monitor->address, monitor->fm_mode) +
+                          ".");
 
             CAppearanceArray_base items;
             items.reserve(300000);

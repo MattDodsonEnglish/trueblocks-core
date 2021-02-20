@@ -667,9 +667,7 @@ COption::COption(const string_q& ln, const string_q& sn, const string_q& t, size
 
 //--------------------------------------------------------------------------------
 bool COptionsBase::usage(const string_q& errMsg) const {
-    if (errMsg.empty() ||
-        contains(errMsg, "Invalid option:") ||
-        isApiMode()) {
+    if (errMsg.empty() || contains(errMsg, "Invalid option:") || isApiMode()) {
         cerr << usageStr(errMsg);
     } else {
         cerr << usageStr(errMsg + " Quitting...");

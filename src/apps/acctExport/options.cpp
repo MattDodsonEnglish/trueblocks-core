@@ -35,7 +35,6 @@ static const COption params[] = {
     COption("end", "E", "<blknum>", OPT_HIDDEN | OPT_DEPRECATED, "last block to process (inclusive)"),
     COption("first_record", "c", "<blknum>", OPT_HIDDEN | OPT_FLAG, "the first record to process"),
     COption("max_records", "e", "<blknum>", OPT_HIDDEN | OPT_FLAG, "the maximum number of records to process before reporting"),  // NOLINT
-    COption("list", "L", "", OPT_HIDDEN | OPT_SWITCH, "freshen first, then list the appearances of the address(es)"),
     COption("clean", "", "", OPT_HIDDEN | OPT_SWITCH, "clean (i.e. remove duplicate appearances) from all existing monitors"),  // NOLINT
     COption("staging", "s", "", OPT_HIDDEN | OPT_SWITCH, "enable search of staging (not yet finalized) folder"),
     COption("unripe", "u", "", OPT_HIDDEN | OPT_SWITCH, "enable search of unripe (neither staged nor finalized) folder (assumes --staging)"),  // NOLINT
@@ -60,7 +59,6 @@ bool COptions::parseArguments(string_q& command) {
     bool write_traces = false;
     blknum_t start = NOPOS;
     blknum_t end = NOPOS;
-    bool list = false;
     bool staging = false;
     bool unripe = false;
     // END_CODE_LOCAL_INIT
@@ -142,9 +140,6 @@ bool COptions::parseArguments(string_q& command) {
         } else if (startsWith(arg, "-e:") || startsWith(arg, "--max_records:")) {
             if (!confirmBlockNum("max_records", max_records, arg, latest))
                 return false;
-
-        } else if (arg == "-L" || arg == "--list") {
-            list = true;
 
         } else if (arg == "--clean") {
             clean = true;
@@ -229,19 +224,19 @@ bool COptions::parseArguments(string_q& command) {
 
     for (auto addr : addrs) {
         CMonitor monitor;
-        
+
         monitor.setValueByName("address", toLower(addr));
         monitor.setValueByName("name", toLower(addr));
-        
+
         if (monitor.exists()) {
             string_q unused;
             if (monitor.isLocked(unused))
                 LOG_ERR(
-                        "The cache file is locked. The program is either already "
-                        "running or it did not end cleanly the\n\tlast time it ran. "
-                        "Quit the already running program or, if it is not running, "
-                        "remove the lock\n\tfile: " +
-                        monitor.getMonitorPath(addr) + +".lck'. Proceeding anyway...");
+                    "The cache file is locked. The program is either already "
+                    "running or it did not end cleanly the\n\tlast time it ran. "
+                    "Quit the already running program or, if it is not running, "
+                    "remove the lock\n\tfile: " +
+                    monitor.getMonitorPath(addr) + +".lck'. Proceeding anyway...");
             monitor.clearLocks();
             monitor.finishParse();
             monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION : FM_STAGING);
@@ -249,38 +244,37 @@ bool COptions::parseArguments(string_q& command) {
             if (monitor.isLocked(msg))  // If locked, we fail
                 EXIT_USAGE(msg);
             firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
-//        } else {
-//            monitor.clearLocks();
-//            monitor.finishParse();
-//            monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION : FM_STAGING);
-//            cleanMonitorStage();
-//            if (visitTypes & VIS_FINAL)
-//                forEveryFileInFolder(indexFolder_blooms, visitFinalIndexFiles, this);
-//            if (visitTypes & VIS_STAGING)
-//                forEveryFileInFolder(indexFolder_staging, visitStagingIndexFiles, this);
-//            if (visitTypes & VIS_UNRIPE)
-//                forEveryFileInFolder(indexFolder_unripe, visitUnripeIndexFiles, this);
-//            //            for (auto monitor : allMonitors) {
-//            monitor.moveToProduction();
-//            LOG4(monitor.address, " freshened to ", monitor.getLastVisited(true /* fresh */));
-//            //            }
-//            string_q msg;
-//            if (monitor.isLocked(msg))  // If locked, we fail
-//                EXIT_USAGE(msg);
-//            firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
+            //        } else {
+            //            monitor.clearLocks();
+            //            monitor.finishParse();
+            //            monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION :
+            //            FM_STAGING); cleanMonitorStage(); if (visitTypes & VIS_FINAL)
+            //                forEveryFileInFolder(indexFolder_blooms, visitFinalIndexFiles, this);
+            //            if (visitTypes & VIS_STAGING)
+            //                forEveryFileInFolder(indexFolder_staging, visitStagingIndexFiles, this);
+            //            if (visitTypes & VIS_UNRIPE)
+            //                forEveryFileInFolder(indexFolder_unripe, visitUnripeIndexFiles, this);
+            //            //            for (auto monitor : allMonitors) {
+            //            monitor.moveToProduction();
+            //            LOG4(monitor.address, " freshened to ", monitor.getLastVisited(true /* fresh */));
+            //            //            }
+            //            string_q msg;
+            //            if (monitor.isLocked(msg))  // If locked, we fail
+            //                EXIT_USAGE(msg);
+            //            firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
         }
-//        if (monitor.exists()) {
-            allMonitors.push_back(monitor);
-//        } else {
-//            LOG4("Monitor not found: ", monitor.address, ". Skipping...");
-//        }
+        //        if (monitor.exists()) {
+        allMonitors.push_back(monitor);
+        //        } else {
+        //            LOG4("Monitor not found: ", monitor.address, ". Skipping...");
+        //        }
     }
 
     if (allMonitors.size() == 0)
         EXIT_USAGE("You must provide at least one Ethereum address.");
 
-//    if (!freshen_internal(allMonitors, "")) //getEnvStr("FRESHEN_FLAG S")))
-//        return usage("'freshen_internal' returned false.");
+    //    if (!freshen_internal(allMonitors, "")) //getEnvStr("FRESHEN_FLAG S")))
+    //        return usage("'freshen_internal' returned false.");
 
     if (count) {
         if (receipts || logs || traces || emitter || factory)
@@ -445,56 +439,56 @@ bool COptions::parseArguments(string_q& command) {
         scanRange.first = start;
     if (end != NOPOS)
         scanRange.second = end;
-    
-//    // Accumulate the addresses into the allMonitors list and decide where we should start
-//    for (auto addr : addrs) {
-//        CMonitor monitor;
-//
-//        monitor.setValueByName("address", toLower(addr));
-//        monitor.setValueByName("name", toLower(addr));
-//
-//        if (monitor.exists()) {
-//            string_q unused;
-//            if (monitor.isLocked(unused))
-//                LOG_ERR(
-//                        "The cache file is locked. The program is either already "
-//                        "running or it did not end cleanly the\n\tlast time it ran. "
-//                        "Quit the already running program or, if it is not running, "
-//                        "remove the lock\n\tfile: " +
-//                        monitor.getMonitorPath(addr) + +".lck'. Proceeding anyway...");
-//            monitor.clearLocks();
-//            monitor.finishParse();
-//            monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION : FM_STAGING);
-//            string_q msg;
-//            if (monitor.isLocked(msg))  // If locked, we fail
-//                EXIT_USAGE(msg);
-//            firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
-//        } else {
-//            monitor.clearLocks();
-//            monitor.finishParse();
-//            monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION : FM_STAGING);
-//            cleanMonitorStage();
-//            if (visitTypes & VIS_FINAL)
-//                forEveryFileInFolder(indexFolder_blooms, visitFinalIndexFiles, this);
-//            if (visitTypes & VIS_STAGING)
-//                forEveryFileInFolder(indexFolder_staging, visitStagingIndexFiles, this);
-//            if (visitTypes & VIS_UNRIPE)
-//                forEveryFileInFolder(indexFolder_unripe, visitUnripeIndexFiles, this);
-//            //            for (auto monitor : allMonitors) {
-//            monitor.moveToProduction();
-//            LOG4(monitor.address, " freshened to ", monitor.getLastVisited(true /* fresh */));
-//            //            }
-//            string_q msg;
-//            if (monitor.isLocked(msg))  // If locked, we fail
-//                EXIT_USAGE(msg);
-//            firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
-//        }
-//        if (monitor.exists()) {
-//            allMonitors.push_back(monitor);
-//        } else {
-//            LOG4("Monitor not found: ", monitor.address, ". Skipping...");
-//        }
-//    }
+
+    //    // Accumulate the addresses into the allMonitors list and decide where we should start
+    //    for (auto addr : addrs) {
+    //        CMonitor monitor;
+    //
+    //        monitor.setValueByName("address", toLower(addr));
+    //        monitor.setValueByName("name", toLower(addr));
+    //
+    //        if (monitor.exists()) {
+    //            string_q unused;
+    //            if (monitor.isLocked(unused))
+    //                LOG_ERR(
+    //                        "The cache file is locked. The program is either already "
+    //                        "running or it did not end cleanly the\n\tlast time it ran. "
+    //                        "Quit the already running program or, if it is not running, "
+    //                        "remove the lock\n\tfile: " +
+    //                        monitor.getMonitorPath(addr) + +".lck'. Proceeding anyway...");
+    //            monitor.clearLocks();
+    //            monitor.finishParse();
+    //            monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION : FM_STAGING);
+    //            string_q msg;
+    //            if (monitor.isLocked(msg))  // If locked, we fail
+    //                EXIT_USAGE(msg);
+    //            firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
+    //        } else {
+    //            monitor.clearLocks();
+    //            monitor.finishParse();
+    //            monitor.fm_mode = (fileExists(monitor.getMonitorPath(monitor.address)) ? FM_PRODUCTION : FM_STAGING);
+    //            cleanMonitorStage();
+    //            if (visitTypes & VIS_FINAL)
+    //                forEveryFileInFolder(indexFolder_blooms, visitFinalIndexFiles, this);
+    //            if (visitTypes & VIS_STAGING)
+    //                forEveryFileInFolder(indexFolder_staging, visitStagingIndexFiles, this);
+    //            if (visitTypes & VIS_UNRIPE)
+    //                forEveryFileInFolder(indexFolder_unripe, visitUnripeIndexFiles, this);
+    //            //            for (auto monitor : allMonitors) {
+    //            monitor.moveToProduction();
+    //            LOG4(monitor.address, " freshened to ", monitor.getLastVisited(true /* fresh */));
+    //            //            }
+    //            string_q msg;
+    //            if (monitor.isLocked(msg))  // If locked, we fail
+    //                EXIT_USAGE(msg);
+    //            firstBlockToVisit = min(firstBlockToVisit, monitor.getLastVisited());
+    //        }
+    //        if (monitor.exists()) {
+    //            allMonitors.push_back(monitor);
+    //        } else {
+    //            LOG4("Monitor not found: ", monitor.address, ". Skipping...");
+    //        }
+    //    }
 
     LOG_TEST("nMonitors", allMonitors.size());
     LOG_TEST("scanRange.first", scanRange.first);

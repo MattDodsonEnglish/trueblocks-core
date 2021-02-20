@@ -402,7 +402,7 @@ blknum_t CMonitor::getLastVisited(bool fresh) const {
     if (lastVisitedBlock == NOPOS || fresh) {
         // If the monitor exists, the next block is stored in the database...
         if (fileExists(getMonitorLast(address))) {
-            ((CMonitor*)this)->lastVisitedBlock = str_2_Uint(asciiFileToString(getMonitorLast(address))); // NOLINT
+            ((CMonitor*)this)->lastVisitedBlock = str_2_Uint(asciiFileToString(getMonitorLast(address)));  // NOLINT
 
         } else {
             // Accounts can receive ETH counter-factually. By default, we ignore
@@ -410,7 +410,7 @@ blknum_t CMonitor::getLastVisited(bool fresh) const {
             // of a contract) or the zero block. User can change this setting.
             if (getGlobalConfig("acctExport")->getConfigBool("settings", "start-when-deployed", true)) {
                 blknum_t deployed = getDeployBlock(address);
-                ((CMonitor*)this)->lastVisitedBlock = (deployed == NOPOS ? 0 : deployed); // NOLINT
+                ((CMonitor*)this)->lastVisitedBlock = (deployed == NOPOS ? 0 : deployed);  // NOLINT
             }
         }
     }

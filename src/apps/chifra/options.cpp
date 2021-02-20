@@ -116,28 +116,17 @@ COptions::~COptions(void) {
 }
 
 //------------------------------------------------------------------------------------------------
-map<string, string> cmdMap = {{"slurp", "ethslurp"},
-                              {"entities", "ethNames --entities"},
-                              {"names", "ethNames"},
-                              {"tags", "ethNames --tags"},
-                              {"abis", "grabABI"},
-                              {"blocks", "getBlock"},
-                              {"transactions", "getTrans"},
-                              {"receipts", "getReceipt"},
-                              {"logs", "getLogs"},
-                              {"traces", "getTrace"},
-                              {"quotes", "ethQuote"},
-                              {"state", "getState"},
-                              {"tokens", "getTokenInfo"},
-                              {"when", "whenBlock"},
-                              {"where", "whereBlock"},
-                              {"status", "cacheStatus"},
-                              {"monitor", "acctExport"},
-                              {"export", "acctExport"},
-                              {"scrape", "blockScrape"},
-                              {"dive", "turboDive"},
-                              {"serve", "tbServer"},
-                              {"pins", "pinStatus"},
+map<string, string> cmdMap = {{"slurp", "ethslurp"},        {"entities", "ethNames --entities"},
+                              {"names", "ethNames"},        {"tags", "ethNames --tags"},
+                              {"abis", "grabABI"},          {"blocks", "getBlock"},
+                              {"transactions", "getTrans"}, {"receipts", "getReceipt"},
+                              {"logs", "getLogs"},          {"traces", "getTrace"},
+                              {"quotes", "ethQuote"},       {"state", "getState"},
+                              {"tokens", "getTokenInfo"},   {"when", "whenBlock"},
+                              {"where", "whereBlock"},      {"status", "cacheStatus"},
+                              {"monitor", "acctExport"},    {"export", "acctExport"},
+                              {"scrape", "blockScrape"},    {"dive", "turboDive"},
+                              {"serve", "tbServer"},        {"pins", "pinStatus"},
                               {"explore", "ethscan.py"}};
 
 //------------------------------------------------------------------------------------------------
@@ -178,35 +167,35 @@ string_q getSubcommands(void) {
 }
 
 //------------------------------------------------------------------------------------------------
-const char* STR_FULL_HELP = 
-                "MONITORS|"
-                "  monitor       add, remove, clean, and list appearances of address(es) on the chain|"
-                "  export        export details for each appearance (as txs, logs, traces, balances, reconciliations, etc.)|"
-                "SHARED DATA|"
-                "  entities      list and/or share entities (groups of addresses)|"
-                "  names         list and/or share named addresses|"
-                "  tags          list and/or share tags (subgroups of addresses)|"
-                "  abis          list and/or share abi signatures|"
-                "BLOCKCHAIN DATA|"
-                "  blocks        export block-related data|"
-                "  transactions  export transaction-related data|"
-                "  receipts      export receipt-related data|"
-                "  logs          export log-related data|"
-                "  traces        export trace-related data|"
-                "  state         export parts of the state for given address(es)|"
-                "  tokens        export data related to ERC20 and/or ERC721 token(s)|"
-                "  when          return a date given a block number or a block number given a date|"
-                "ADMIN|"
-                "  init          initialize TrueBlocks databases|"
-                "  scrape        scrape the chain and build an index of address appearances (aka digests)|"
-                "  serve         serve the TrueBlocks API via tbServer|"
-                "  pins          query the status of the pinning system|"
-                "  status        query the status of the system|"
-                "OTHER|"
-                "  explore       open the configured block explorer for the given address|"
-                "  slurp         export details by querying EtherScan (note: will not return as many appearances as --list)|"
-                "  quotes        return prices collected from configured remote API|"
-                "  where         determine the location of block(s), either local or remote cache, or on-chain";
+const char* STR_FULL_HELP =
+    "MONITORS|"
+    "  monitor       add, remove, clean, and list appearances of address(es) on the chain|"
+    "  export        export details for each appearance (as txs, logs, traces, balances, reconciliations, etc.)|"
+    "SHARED DATA|"
+    "  entities      list and/or share entities (groups of addresses)|"
+    "  names         list and/or share named addresses|"
+    "  tags          list and/or share tags (subgroups of addresses)|"
+    "  abis          list and/or share abi signatures|"
+    "BLOCKCHAIN DATA|"
+    "  blocks        export block-related data|"
+    "  transactions  export transaction-related data|"
+    "  receipts      export receipt-related data|"
+    "  logs          export log-related data|"
+    "  traces        export trace-related data|"
+    "  state         export parts of the state for given address(es)|"
+    "  tokens        export data related to ERC20 and/or ERC721 token(s)|"
+    "  when          return a date given a block number or a block number given a date|"
+    "ADMIN|"
+    "  init          initialize TrueBlocks databases|"
+    "  scrape        scrape the chain and build an index of address appearances (aka digests)|"
+    "  serve         serve the TrueBlocks API via tbServer|"
+    "  pins          query the status of the pinning system|"
+    "  status        query the status of the system|"
+    "OTHER|"
+    "  explore       open the configured block explorer for the given address|"
+    "  slurp         export details by querying EtherScan (note: will not return as many appearances as --list)|"
+    "  quotes        return prices collected from configured remote API|"
+    "  where         determine the location of block(s), either local or remote cache, or on-chain";
 
 // if (mocked) {
 //     string_q which = origMode;
@@ -249,7 +238,6 @@ const char* STR_FULL_HELP =
 //     }
 //     tool_flags += " --mocked ";
 // }
-
 
 // This will probably break in the real usage.
 // CStringArray scraper = {"--restart", "--pause", "--quit"};

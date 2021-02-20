@@ -6,22 +6,22 @@ on      ,cmd  ,fast  ,export  ,apps/acctExport ,help                  ,n    ,@h
 on      ,cmd  ,fast  ,export  ,apps/acctExport ,help_long             ,n    ,help
 on      ,both ,fast  ,export  ,apps/acctExport ,no_params             ,y    ,
 
-##on     ,both ,fast  ,monitor ,apps/acctExport ,mon_list2             ,n    ,addrs = 0x1234567890123456789012345678901234567890 & start = 1000000 & end = 2200000 & fmt = csv
-##on     ,both ,fast  ,monitor ,apps/acctExport ,mon_test              ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & start = 100000 & end = 2000000
-##on     ,both ,fast  ,monitor ,apps/acctExport ,mon_chifra            ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & start = 100000 & end = 2000000                                                                     ,chifra
-##on     ,both ,fast  ,monitor ,apps/acctExport ,mon_final             ,n    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b 0x1234567890123456789012345678901234567890 & start = 3000000 & end = 4500000 & fmt = csv & no_header
-##on     ,both ,fast  ,monitor ,apps/acctExport ,mon_prefund1          ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & start = 0 & end = 0
-##on     ,both ,fast  ,monitor ,apps/acctExport ,mon_prefund2          ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & start = 0 & end = 1
-##on     ,both ,fast  ,monitor ,apps/acctExport ,mon_prefund3          ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & start = 1 & end = 2
-##on     ,cmd  ,slow  ,monitor ,apps/acctExport ,mon_speed_test        ,y    ,addrs = 0x1234567890123456789012345678901234567890 & end = 7000000
-##on     ,cmd  ,slow  ,monitor ,apps/acctExport ,mon_seed_1            ,y    ,addrs = 0x807640a13483f8ac783c557fcdf27be11ea4ac7a 0xf503017d7baf7fbc0fff7492b751025c6a78179b & end = 10296792
-##on     ,both ,fast  ,monitor ,apps/acctExport ,mon_to_file           ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & start = 100000 & end = 2000000 & to_file
+##on    ,both ,fast  ,monitor ,apps/acctExport ,mon_list2             ,n    ,addrs = 0x1234567890123456789012345678901234567890 & start = 1000000 & end = 2200000 & fmt = csv
+##on    ,both ,fast  ,monitor ,apps/acctExport ,mon_test              ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & start = 100000 & end = 2000000
+##on    ,both ,fast  ,monitor ,apps/acctExport ,mon_chifra            ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & start = 100000 & end = 2000000                                                                     ,chifra
+##on    ,both ,fast  ,monitor ,apps/acctExport ,mon_final             ,n    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b 0x1234567890123456789012345678901234567890 & start = 3000000 & end = 4500000 & fmt = csv & no_header
+##on    ,both ,fast  ,monitor ,apps/acctExport ,mon_prefund1          ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & start = 0 & end = 0
+##on    ,both ,fast  ,monitor ,apps/acctExport ,mon_prefund2          ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & start = 0 & end = 1
+##on    ,both ,fast  ,monitor ,apps/acctExport ,mon_prefund3          ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & start = 1 & end = 2
+##on    ,cmd  ,slow  ,monitor ,apps/acctExport ,mon_speed_test        ,y    ,addrs = 0x1234567890123456789012345678901234567890 & end = 7000000
+##on    ,cmd  ,slow  ,monitor ,apps/acctExport ,mon_seed_1            ,y    ,addrs = 0x807640a13483f8ac783c557fcdf27be11ea4ac7a 0xf503017d7baf7fbc0fff7492b751025c6a78179b & end = 10296792
+##on    ,both ,fast  ,monitor ,apps/acctExport ,mon_to_file           ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & start = 100000 & end = 2000000 & to_file
 
 #on     ,both ,fast  ,export  ,apps/acctExport ,export_apps           ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & appearances & fmt = json & max_records = 1
-#on     ,both ,fast  ,export  ,apps/acctExport ,export_apps_c         ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & appearances & count
+on      ,both ,fast  ,export  ,apps/acctExport ,export_apps_c         ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & appearances & count
 #on     ,both ,fast  ,export  ,apps/acctExport ,export                ,n    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & fmt = txt & max_records = 2
-#on     ,both ,fast  ,export  ,apps/acctExport ,export_c              ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & count
-#on     ,both ,fast  ,export  ,apps/acctExport ,export_c_fail         ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & count & logs
+on      ,both ,fast  ,export  ,apps/acctExport ,export_c              ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & count
+on      ,both ,fast  ,export  ,apps/acctExport ,export_c_fail         ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & count & logs
 #on     ,both ,fast  ,export  ,apps/acctExport ,export_receipts       ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & receipts & fmt = json & max_records = 5
 #on     ,both ,fast  ,export  ,apps/acctExport ,export_logs           ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & logs & fmt = json & end = 001506480
 #off    ,both ,fast  ,export  ,apps/acctExport ,export_logs_art       ,y    ,addrs = 0x001d14804b399c6ef80e64576f657660804fec0b & logs & fmt = json & end = 001506480 & articulate

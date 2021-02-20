@@ -6,7 +6,7 @@
 #include "options.h"
 
 //-----------------------------------------------------------------------
-extern bool removeAbi(const string_q& path, void *data);
+extern bool removeAbi(const string_q& path, void* data);
 int main(int argc, const char* argv[]) {
     pinlib_init(quickQuitHandler);
 
@@ -66,7 +66,7 @@ int main(int argc, const char* argv[]) {
                 ASSERT(accounting);
                 // for (int i = 0 ; i < 100 ; i++) {
                 //    forEveryFileInFolder(getCachePath("abis/"), removeAbi, nullptr);
-                    options.handle_accounting();
+                options.handle_accounting();
                 //}
             }
         }
@@ -94,7 +94,8 @@ int main(int argc, const char* argv[]) {
         ostringstream oss;
         oss << "Exported " << padNum6T(options.nProcessed) << " ";
         oss << (!options.className.empty() ? (plural(options.className) + " from ") : "of ");
-        oss << padNum6T(options.nTransactions) << " transactions for address " << (options.allMonitors.size() ? options.allMonitors[0].address : "");
+        oss << padNum6T(options.nTransactions) << " transactions for address "
+            << (options.allMonitors.size() ? options.allMonitors[0].address : "");
         LOG_INFO(oss.str());
     }
 

@@ -136,7 +136,7 @@ bool COptions::parseArguments(string_q& command) {
                 address = terms[0];
             if (!isAddress(address) || isZeroAddr(address))
                 return usage("You must provide an address to crud commands.");
-            if (!processEditCommand(terms, to_custom)) // returns true on success
+            if (!processEditCommand(terms, to_custom))  // returns true on success
                 return false;
         }
     }

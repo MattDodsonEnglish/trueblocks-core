@@ -59,7 +59,7 @@ class CMonitor : public CAccountName {
     void writeAnArray(const CAppearanceArray_base& array);
     void writeARecord(blknum_t bn, blknum_t tx_id);
     bool openCacheFile1(void);
-    blknum_t getLastVisited(bool fresh=false) const;
+    blknum_t getLastVisited(bool fresh = false) const;
     bool isLocked(string_q& msg) const;
     bool clearLocks(void);
     void moveToProduction(void);

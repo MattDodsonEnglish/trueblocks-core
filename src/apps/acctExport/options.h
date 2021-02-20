@@ -52,7 +52,7 @@ class COptions : public CAbiOptions {
     blkrange_t fileRange;
     size_t visitTypes;
 
-    //CMonitorArray monitors;
+    // CMonitorArray monitors;
     CMonitorCountArray counts;
     CAppearanceArray_base apps;
     uint64_t nProcessed;

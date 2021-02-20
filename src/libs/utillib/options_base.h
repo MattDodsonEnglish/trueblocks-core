@@ -136,7 +136,7 @@ class COptionsBase {
                             bool required = false) const;
     string_q get_notes(void) const;
     string_q format_notes(const CStringArray& strs) const;
-    
+
     bool confirmEnum(const string_q& name, string_q& value, const string_q& arg) const;
     bool confirmBlockNum(const string_q& name, blknum_t& value, const string_q& arg, blknum_t latest) const;
     bool confirmUint(const string_q& name, uint64_t& value, const string_q& arg) const;

@@ -25,7 +25,7 @@ bool COptions::handle_status(ostream& os) {
         modes += (status.is_docker ? "docker|" : "");
         modes += (status.is_archive ? "archive|" : "");
         modes += (status.is_tracing ? "tracing|" : "");
-        //modes += (status.has_eskey ? "eskey|" : "");
+        // modes += (status.has_eskey ? "eskey|" : "");
         modes = (modes.empty() ? "" : " (" + substitute(trim(modes, '|'), "|", ", ") + ")");
         string_q report = STR_TERSE_REPORT;
         replaceAll(report, "[{MODES}]", modes);
@@ -501,7 +501,7 @@ bool noteABI(const string_q& path, void* data) {
         if (isTestMode()) {
             abii.nFunctions = abii.nEvents = abii.nOther = abii.sizeInBytes = 36963;
         } else {
-            counter->options->abi_spec = CAbi(); // reset
+            counter->options->abi_spec = CAbi();  // reset
             loadAbiFile(path, &counter->options->abi_spec);
             abii.nFunctions = counter->options->abi_spec.nFunctions();
             abii.nEvents = counter->options->abi_spec.nEvents();

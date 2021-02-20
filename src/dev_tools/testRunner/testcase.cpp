@@ -455,10 +455,10 @@ void establishTestMonitors(void) {
         "tar -xvf mocked.tar 2>/dev/null && rm -f mocked.tar";
 
     string_q cmd = substitute(STR_UNZIP_CMD, "[{PATH}]", configPath("mocked/"));
-    //LOG_INFO(cmd);
-    // // clang-format off
+    // LOG_INFO(cmd);
+    // clang-format off
     if (system(cmd.c_str())) {}  // Don't remove cruft. Silences compiler warnings
-    // // clang-format on
+    // clang-format on
 }
 
 CStringArray commands = {"COPYFILE|cp", "RMFILE|rm", "MOVEFILE|mv", "TOUCHFILE|touch", "RESET"};
