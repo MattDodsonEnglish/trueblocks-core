@@ -229,6 +229,7 @@ COptions::COptions(void) {
 
     // BEG_ERROR_MSG
     // END_ERROR_MSG
+    establishTestMonitors();
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -255,14 +256,6 @@ bool COptions::cleanTest(const string_q& path, const string_q& testName) {
 }
 
 //---------------------------------------------------------------------------------------------------
-void establishMonitor(const address_t& addr) {
-    LOG_TEST("Loading monitor", addr + "...");
-    CMonitor m;
-    if (!fileExists(m.getMonitorPath(addr)))
-        LOG_WARN("File not found ", m.getMonitorPath(addr));
-}
-
-//---------------------------------------------------------------------------------------------------
 void establishTestData(void) {
     cleanFolder(getCachePath("tmp/"));
 
@@ -271,13 +264,7 @@ void establishTestData(void) {
     // TODO(tjayrush): before running the tests. The tests fail if one removes this. The tests should not fail.
     doCommand("getBlock --uniq_tx 0");
     doCommand("getBlock --force 4369999");
-
-    establishTestMonitors();
-    establishMonitor("0xfdecc82ddfc56192e26f563c3d68cb544a96bfed");
-    establishMonitor("0xd2f5852eb4b0c12c23a97914b2a9d954cf621781");
-    establishMonitor("0x001d14804b399c6ef80e64576f657660804fec0b");
-    establishMonitor("0xf503017d7baf7fbc0fff7492b751025c6a78179b");
-    establishMonitor("0x05a56e2d52c817161883f50c441c3228cfe54d9f");
-    establishMonitor("0x6b92d76c9d0d40e53019ffa51b6f0c9b6bc657c9");
-    establishMonitor("0xffe8196bc259e8dedc544d935786aa4709ec3e64");
+    doCommand("getTrans --force 47055.0");
+    doCommand("getTrans --force 46147.0");
+    doCommand("grabABI 0x45f783cce6b7ff23b2ab2d70e416cdb7d6055f51");
 }

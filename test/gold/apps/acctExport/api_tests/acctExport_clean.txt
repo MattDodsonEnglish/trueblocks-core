@@ -1,42 +1,37 @@
 [
   {
-    "path": "$CACHE/0x1111111111111111111111111111111111111111.acct.bin",
-    "sizeThen": 87264,
-    "sizeNow": 87264
+    "path": "$CACHE/0x001d14804b399c6ef80e64576f657660804fec0b.acct.bin",
+    "sizeThen": 24,
+    "sizeNow": 24
   },
   {
-    "path": "$CACHE/0x1111122222111112222211111222221111122222.acct.bin",
-    "sizeThen": 8,
-    "sizeNow": 8
+    "path": "$CACHE/0x05a56e2d52c817161883f50c441c3228cfe54d9f.acct.bin",
+    "sizeThen": 2080,
+    "sizeNow": 2080
   },
   {
-    "path": "$CACHE/0x1234567812345678123456781234567812345678.acct.bin",
-    "sizeThen": 8,
-    "sizeNow": 8
+    "path": "$CACHE/0x0ece224fbc24d40b446c6a94a142dc41fae76f2d.acct.bin",
+    "sizeThen": 120680,
+    "sizeNow": 120680
   },
   {
     "path": "$CACHE/0x1234567890123456789012345678901234567890.acct.bin",
-    "sizeThen": 6104,
-    "sizeNow": 6104
+    "sizeThen": 8248,
+    "sizeNow": 8248
   },
   {
-    "path": "$CACHE/0x5555533333555553333355555333335555533333.acct.bin",
-    "sizeThen": 512,
-    "sizeNow": 256
+    "path": "$CACHE/0x807640a13483f8ac783c557fcdf27be11ea4ac7a.acct.bin",
+    "sizeThen": 470248,
+    "sizeNow": 470248
   },
   {
-    "path": "$CACHE/0x9876543210987654321098765432109876543210.acct.bin",
-    "sizeThen": 112192,
-    "sizeNow": 56096
+    "path": "$CACHE/0xd2f5852eb4b0c12c23a97914b2a9d954cf621781.acct.bin",
+    "sizeThen": 104,
+    "sizeNow": 104
   },
   {
-    "path": "$CACHE/0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359.acct.bin",
-    "sizeThen": 35800,
-    "sizeNow": 35800
-  },
-  {
-    "path": "$CACHE/0xfb744b951d094b310262c8f986c860df9ab1de65.acct.bin",
-    "sizeThen": 24,
-    "sizeNow": 24
+    "path": "$CACHE/0xf503017d7baf7fbc0fff7492b751025c6a78179b.acct.bin",
+    "sizeThen": 3824,
+    "sizeNow": 3824
   }
 ]

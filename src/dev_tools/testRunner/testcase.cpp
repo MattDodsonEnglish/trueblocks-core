@@ -452,11 +452,10 @@ void establishTestMonitors(void) {
         "rm -fR monitors && "
         "gunzip --keep *.gz && "
         "tar -xvf monitors.tar 2>/dev/null && rm -f monitors.tar && "
-        "tar -xvf mocked.tar 2>/dev/null && rm -f mocked.tar && "
-        "find .";
+        "tar -xvf mocked.tar 2>/dev/null && rm -f mocked.tar";
 
     string_q cmd = substitute(STR_UNZIP_CMD, "[{PATH}]", configPath("mocked/"));
-    LOG_INFO(cmd);
+    //LOG_INFO(cmd);
     // // clang-format off
     if (system(cmd.c_str())) {}  // Don't remove cruft. Silences compiler warnings
     // // clang-format on
