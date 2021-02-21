@@ -124,7 +124,7 @@ map<string, string> cmdMap = {{"slurp", "ethslurp"},        {"entities", "ethNam
                               {"quotes", "ethQuote"},       {"state", "getState"},
                               {"tokens", "getTokenInfo"},   {"when", "whenBlock"},
                               {"where", "whereBlock"},      {"status", "cacheStatus"},
-                              {"monitor", "acctExport"},    {"export", "acctExport"},
+                              {"monitor", "acctExport --appearances"},    {"export", "acctExport"},
                               {"scrape", "blockScrape"},    {"dive", "turboDive"},
                               {"serve", "tbServer"},        {"pins", "pinStatus"},
                               {"explore", "ethscan.py"}};
