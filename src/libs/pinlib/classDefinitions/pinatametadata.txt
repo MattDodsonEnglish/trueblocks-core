@@ -1,7 +1,7 @@
 [settings]
 class = CPinataMetadata
 fields = string name|\
-    CKeyValueArray keyvalues
+        CKeyValueArray keyvalues
 includes = utillib.h
 cpp_includes =
 serializable = true

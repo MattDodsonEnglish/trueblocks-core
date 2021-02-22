@@ -1,4 +1,6 @@
 [settings]
 class = CRPCResult
-fields = string jsonrpc|string result|string id
+fields = string jsonrpc|\
+        string result|\
+        string id
 includes = utillib.h
