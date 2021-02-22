@@ -4302,7 +4302,7 @@ tags	address	name	symbol	source	decimals	description	deleted	is_custom	is_prefun
 32-Kickback:Friends	0x9410a73737e73e105c7cbd57ba64a3073e6a0924	ejwessel		https://kickback.events/			false	false	false	false	false	false
 30-Contracts	0x941f40c2955ee09ba638409f67ef27c531fc055c	Vyper Multisend		EtherScan.io			false	false	false	true	false	false
 31-Gitcoin Grants:Grant	0x9423cd58e21c2e81d1bb4f476ac2cf90fe22e57b	Grant 0985 Nodedata		https://gitcoin.co/grants/985/nodedata			false	false	false	true	false	false
-36-Binance	0x9424b1412450d0f8fc2255faf6046b98213b76bd	Balancer BFactory		EtherScan.io			false	false	false	true	false	false
+36-Balancer	0x9424b1412450d0f8fc2255faf6046b98213b76bd	Balancer BFactory		EtherScan.io			false	false	false	true	false	false
 81-Other	0x943bbeef41460a3f0f3ac7f7a062128ad0ba9cb1	Dgxswap		EtherScan.io			false	false	false	true	false	false
 50-Tokens:ERC20	0x943ed852dadb5c3938ecdc6883718df8142de4c8	FTI	FTI	On chain	18		false	false	false	true	true	false
 81-Other	0x9448b35b4c9eea695dedff285e0cd8bc6c65e2b1	SPARA	BRA	On chain	18		false	false	false	true	true	false

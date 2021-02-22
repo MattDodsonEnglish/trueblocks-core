@@ -13,7 +13,7 @@ TIME ~ CLOCK - <INFO>  : nMonitors: 1
 TIME ~ CLOCK - <INFO>  : exportRange.first: 100000
 TIME ~ CLOCK - <INFO>  : exportRange.second: 2000000
 TIME ~ CLOCK - <INFO>  : listRange.first: 11854827
-TIME ~ CLOCK - <INFO>  : listRange.second: 11864608
+TIME ~ CLOCK - <INFO>  : listRange.second: --latest--
 TIME ~ CLOCK - <INFO>  : first_record: 0
 TIME ~ CLOCK - <INFO>  : max_records: 18446744073709551615
 blocknumber	transactionindex	date	timestamp	from	to	ether	ethergasprice	gasused	hash	iserror	encoding	compressedtx

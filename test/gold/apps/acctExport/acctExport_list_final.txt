@@ -20,7 +20,7 @@ TIME ~ CLOCK - <INFO>  : nMonitors: 2
 TIME ~ CLOCK - <INFO>  : exportRange.first: 3000000
 TIME ~ CLOCK - <INFO>  : exportRange.second: 3375498
 TIME ~ CLOCK - <INFO>  : listRange.first: 11854827
-TIME ~ CLOCK - <INFO>  : listRange.second: 11863676
+TIME ~ CLOCK - <INFO>  : listRange.second: --latest--
 TIME ~ CLOCK - <INFO>  : first_record: 0
 TIME ~ CLOCK - <INFO>  : max_records: 18446744073709551615
 TIME ~ CLOCK - <INFO>  : appearances: true

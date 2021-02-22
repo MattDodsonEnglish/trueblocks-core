@@ -39,21 +39,6 @@ bool COptions::handle_options(void) {
     LOG_INFO(cYellow, "handling options...", cOff);
     counter = CCounter();  // reset
 
-// OLD_CODE
-#if 1
-    // read in and prepare the options for all tools
-    CStringBoolMap tools;
-    string_q contents = asciiFileToString("../src/cmd-line-options.csv");
-    CStringArray lines;
-    explode(lines, contents, '\n');
-    for (auto line : lines) {
-        CCommandOption opt(line);
-        if (!opt.tool.empty() && opt.tool != "all" && opt.tool != "tool" && opt.tool != "templates") {
-            optionArray.push_back(opt);
-            tools[opt.group + "/" + opt.tool] = true;
-        }
-    }
-#else
     if (!fileExists("../src/cmd-line-options.csv"))
         return usage("Could not find cmd-line-options.csv file in folder " + getCWD());
     // read in and prepare the options for all tools
@@ -61,8 +46,7 @@ bool COptions::handle_options(void) {
     CStringArray lines;
     asciiFileToLines("../src/cmd-line-options.csv", lines);
     for (auto line : lines) {
-        line = trim(nextTokenClear(line, '#'));
-        if (!line.empty()) {
+        if (!startsWith(line, '#')) {
             CCommandOption opt(line);
             if (!opt.tool.empty() && opt.tool != "all" && opt.tool != "tool" && opt.tool != "templates") {
                 optionArray.push_back(opt);
@@ -70,7 +54,6 @@ bool COptions::handle_options(void) {
             }
         }
     }
-#endif
 
     // For each tool...
     for (auto tool : tools) {
