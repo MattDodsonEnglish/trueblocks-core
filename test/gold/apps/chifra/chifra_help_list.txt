@@ -1,9 +1,9 @@
 chifra argc: 3 [1:monitor] [2:--help] 
 chifra monitor --help 
 TIME ~ CLOCK - <INFO>  : mode: monitor
-TIME ~ CLOCK - : 4-----call_command ----> acctExport --help
-chifra monitor argc: 2 [1:--help] 
-chifra monitor --help 
+TIME ~ CLOCK - : 4-----call_command ----> acctExport --appearances --help
+chifra monitor argc: 3 [1:--appearances] [2:--help] 
+chifra monitor --appearances --help 
 PROG_NAME = [chifra monitor]
 
   Usage:    chifra monitor [-p|-r|-l|-t|-T|-C|-a|-i|-R|-U|-v|-h] <address> [address...] topics  

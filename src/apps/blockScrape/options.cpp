@@ -281,11 +281,11 @@ ScrapeState COptions::getCurrentState(void) {
     if (controlFile.empty())
         controlFile = configPath("cache/tmp/scraper-state.txt");
     stateStr = asciiFileToString(controlFile);
-    if (stateStr == "running")
+    if (stateStr == "running") {
         state = STATE_RUNNING;
-    else if (stateStr == "paused")
+    } else if (stateStr == "paused") {
         state = STATE_PAUSED;
-    else {
+    } else {
         state = STATE_STOPPED;
         stateStr = "stopped";
     }

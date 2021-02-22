@@ -19,7 +19,6 @@ TIME ~ CLOCK - <INFO>  : max_records: 18446744073709551615
 TIME ~ CLOCK - <INFO>  : statements: true
 TIME ~ CLOCK - <INFO>  : articulate: true
 { "data": [
-TIME ~ CLOCK - <INFO>  : passes: true
 {
   "blockNumber": 0,
   "transactionIndex": 2,
@@ -31,7 +30,6 @@ TIME ~ CLOCK - <INFO>  : passes: true
   "amountNet": "4200.0000000",
   "reconciled": true
 }
-TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "blockNumber": 202249,
   "transactionIndex": 0,
@@ -45,7 +43,6 @@ TIME ~ CLOCK - <INFO>  : passes: true
   "amountNet": "-4199.925320679510922664",
   "reconciled": true
 }
-TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "blockNumber": 1501459,
   "transactionIndex": 2,

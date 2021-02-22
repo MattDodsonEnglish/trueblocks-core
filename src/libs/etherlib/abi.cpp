@@ -295,7 +295,7 @@ const CBaseNode* CAbi::getObjectAt(const string_q& fieldName, size_t index) cons
     if (fieldName % "interfaces") {
         if (index == NOPOS) {
             CFunction empty;
-            ((CAbi*)this)->interfaces.push_back(empty);
+            ((CAbi*)this)->interfaces.push_back(empty);  // NOLINT
             index = interfaces.size() - 1;
         }
         if (index < interfaces.size())

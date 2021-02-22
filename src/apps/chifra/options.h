@@ -17,7 +17,7 @@ class COptions : public COptionsBase {
 
     bool parseArguments(string_q& command) {
         return true;
-    };
+    }
     void Init(void);
 
     bool call_command(int argc, const char* argv[]);

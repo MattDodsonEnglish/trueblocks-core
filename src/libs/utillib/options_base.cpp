@@ -689,7 +689,6 @@ void errorMessage(const string_q& msg) {
         cerr << endl
              << cRed << "  Warning: " << cOff << message << (endsWith(msg, '.') ? "" : ".") << " Quitting..." << endl
              << endl;
-        ;
     }
 }
 

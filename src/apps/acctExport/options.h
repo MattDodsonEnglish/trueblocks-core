@@ -33,6 +33,8 @@ class COptions : public CAbiOptions {
     uint64_t freshen_max;
     bool factory;
     bool emitter;
+    bool to;
+    bool from;
     bool count;
     blknum_t first_record;
     blknum_t max_records;

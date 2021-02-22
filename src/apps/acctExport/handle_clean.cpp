@@ -15,8 +15,8 @@ bool cleanMonitorFile(const string_q& path, void* data) {
 
     } else {
         if (endsWith(path, "acct.bin")) {
-            size_t sizeThen = fileSize(path);
-            size_t nRecords = (fileSize(path) / sizeof(CAppearance_base));
+            size_t sizeThen = (fileSize(path) / sizeof(CAppearance_base));
+            blknum_t nRecords = (fileSize(path) / sizeof(CAppearance_base));
             if (!nRecords)
                 EXIT_NOMSG(!shouldQuit());
 
@@ -24,7 +24,7 @@ bool cleanMonitorFile(const string_q& path, void* data) {
             if (!buffer)
                 EXIT_NOMSG(!shouldQuit());  // continue anyway
 
-            bzero((void*)buffer, nRecords * sizeof(CAppearance_base));
+            bzero((void*)buffer, nRecords * sizeof(CAppearance_base));  // NOLINT
             CArchive archiveIn(READING_ARCHIVE);
             if (!archiveIn.Lock(path, modeReadOnly, LOCK_NOWAIT)) {
                 archiveIn.Release();
@@ -62,8 +62,9 @@ bool cleanMonitorFile(const string_q& path, void* data) {
                 cout << ",";
             first = false;
             CMonitor m;
+            size_t sizeNow = (fileSize(path) / sizeof(CAppearance_base));
             cout << "{ \"path\": \"" << substitute(path, m.getMonitorPath(""), "$CACHE/")
-                 << "\", \"sizeThen\": " << sizeThen << ", \"sizeNow\": " << fileSize(path) << "}" << endl;
+                 << "\", \"sizeThen\": " << sizeThen << ", \"sizeNow\": " << sizeNow << "}" << endl;
         }
     }
 

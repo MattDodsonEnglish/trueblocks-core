@@ -48,7 +48,7 @@ bool visitStagingIndexFiles(const string_q& path, void* data) {
         size_t nRecords = fileSize(path) / 59;
         options->stats.nRecords += nRecords;
         CAppearanceArray_base items;
-        items.reserve(nRecords + 100); // little bit of extra room
+        items.reserve(nRecords + 100);  // little bit of extra room
 
         CStringArray lines;
         asciiFileToLines(path, lines);
@@ -83,11 +83,11 @@ bool visitStagingIndexFiles(const string_q& path, void* data) {
                 lockSection(false);
             }
         }
-        //string_q result = indexHit ? " index hit " + hits : " false positive";
-        //LOG_PROGRESS("Scanning", options->fileRange.first, options->listRange.second);
+        // string_q result = indexHit ? " index hit " + hits : " false positive";
+        // LOG_PROGRESS("Scanning", options->fileRange.first, options->listRange.second);
         return !shouldQuit();
     }
-    ASSERT(0); // should not happen
+    ASSERT(0);  // should not happen
 #endif
     return !shouldQuit();
 }

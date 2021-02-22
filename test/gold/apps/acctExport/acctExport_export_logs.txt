@@ -18,7 +18,6 @@ TIME ~ CLOCK - <INFO>  : first_record: 0
 TIME ~ CLOCK - <INFO>  : max_records: 18446744073709551615
 TIME ~ CLOCK - <INFO>  : logs: true
 { "data": [
-TIME ~ CLOCK - <INFO>  : passes: true
 {
   "address": "0xbb9bc244d798123fde783fcc1c72d3bb8c189413",
   "blockNumber": 1700025,
@@ -31,7 +30,6 @@ TIME ~ CLOCK - <INFO>  : passes: true
   "data": "0x000000000000000000000000000000000000000000000001ee4cfb6d573c8000",
   "transactionIndex": 1
 }
-TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "address": "0xbb9bc244d798123fde783fcc1c72d3bb8c189413",
   "blockNumber": 1700028,
@@ -44,7 +42,6 @@ TIME ~ CLOCK - <INFO>  : passes: true
   "data": "0x00000000000000000000000000000000000000000000000000b1a2bc2ec50000",
   "transactionIndex": 4
 }
-TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "address": "0xbb9bc244d798123fde783fcc1c72d3bb8c189413",
   "blockNumber": 1700031,
@@ -57,7 +54,6 @@ TIME ~ CLOCK - <INFO>  : passes: true
   "data": "0x000000000000000000000000000000000000000000000002b5e3af16b1880000",
   "transactionIndex": 0
 }
-TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "address": "0xbb9bc244d798123fde783fcc1c72d3bb8c189413",
   "blockNumber": 1700040,
@@ -70,7 +66,6 @@ TIME ~ CLOCK - <INFO>  : passes: true
   "data": "0x0000000000000000000000000000000000000000204fce5e3e25026110000000",
   "transactionIndex": 0
 }
-TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "address": "0xbb9bc244d798123fde783fcc1c72d3bb8c189413",
   "blockNumber": 1700043,
@@ -83,7 +78,6 @@ TIME ~ CLOCK - <INFO>  : passes: true
   "data": "0x000000000000000000000000000000000000000000000002b5e3af16b1880000",
   "transactionIndex": 0
 }
-TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "address": "0xbb9bc244d798123fde783fcc1c72d3bb8c189413",
   "blockNumber": 1700044,
@@ -96,7 +90,6 @@ TIME ~ CLOCK - <INFO>  : passes: true
   "data": "0x00000000000000000000000000000000000000000000001b0d03c53c3771c000",
   "transactionIndex": 28
 }
-TIME ~ CLOCK - <INFO>  : passes: false
 ], "types": [
 { "type": "CLogEntry", "fields": [{ "name": "address", "type": "address" }, { "name": "blockNumber", "type": "blocknum" }, { "name": "logIndex", "type": "blocknum" }, { "name": "topics", "type": "object|ts_array" }, { "name": "data", "type": "text" }, { "name": "articulatedLog", "type": "object" }, { "name": "compressedLog", "type": "text" }, { "name": "transactionIndex", "type": "blocknum" }] }
 ] }

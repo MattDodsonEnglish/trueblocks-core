@@ -18,7 +18,6 @@ TIME ~ CLOCK - <INFO>  : first_record: 0
 TIME ~ CLOCK - <INFO>  : max_records: 5
 TIME ~ CLOCK - <INFO>  : articulate: true
 {"data": [
-TIME ~ CLOCK - <INFO>  : passes: true
 {
   "hash": "0x0",
   "blockHash": "0x0",
@@ -65,7 +64,6 @@ TIME ~ CLOCK - <INFO>  : passes: true
   "date": "2015-07-30 15:26:28 UTC",
   "ether": 5.000000000000000000
 }
-TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "hash": "0x0",
   "blockHash": "0x0",
@@ -112,7 +110,6 @@ TIME ~ CLOCK - <INFO>  : passes: true
   "date": "2015-07-30 15:28:03 UTC",
   "ether": 5.000000000000000000
 }
-TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "hash": "0x0",
   "blockHash": "0x0",
@@ -159,7 +156,6 @@ TIME ~ CLOCK - <INFO>  : passes: true
   "date": "2015-07-30 15:32:02 UTC",
   "ether": 3.750000000000000000
 }
-TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "hash": "0x0",
   "blockHash": "0x0",
@@ -206,7 +202,6 @@ TIME ~ CLOCK - <INFO>  : passes: true
   "date": "2015-07-30 15:38:33 UTC",
   "ether": 5.000000000000000000
 }
-TIME ~ CLOCK - <INFO>  : passes: true
 , {
   "hash": "0x0",
   "blockHash": "0x0",

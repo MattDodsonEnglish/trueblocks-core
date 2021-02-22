@@ -30,7 +30,8 @@ bool COptions::handle_accounting(void) {
             lastExported = app->blk - 1;
             break;
         }
-        LOG_TEST("passes", inRange((blknum_t)app->blk, exportRange.first, exportRange.second) ? "true" : "false");
+
+        // LOG_TEST("passes", inRange((blknum_t)app->blk, exportRange.first, exportRange.second) ? "true" : "false");
         if (inRange((blknum_t)app->blk, exportRange.first, exportRange.second)) {
             CBlock block;  // do not move this from this scope
             block.blockNumber = app->blk;
@@ -188,7 +189,7 @@ void COptions::articulateAll(CTransaction& trans) {
         trans.hasToken |= isTokenFunc(trans.input);
 
         for (size_t j = 0; j < trans.receipt.logs.size(); j++) {
-            CLogEntry* log = (CLogEntry*)&trans.receipt.logs[j];
+            CLogEntry* log = (CLogEntry*)&trans.receipt.logs[j];  // NOLINT
             trans.hasToken |= isTokenTopic(log->topics[0]);
             string_q str = log->Format();
             if (contains(str, bytesOnly)) {
@@ -201,7 +202,7 @@ void COptions::articulateAll(CTransaction& trans) {
         }
 
         for (size_t j = 0; j < trans.traces.size(); j++) {
-            CTrace* trace = (CTrace*)&trans.traces[j];
+            CTrace* trace = (CTrace*)&trans.traces[j];  // NOLINT
             trans.hasToken |= isTokenFunc(trace->action.input);
             abiMap[trace->action.to]++;
             if (abiMap[trace->action.to] == 1 || fileExists(getCachePath("abis/" + trace->action.to))) {

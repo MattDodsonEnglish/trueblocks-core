@@ -1,9 +1,9 @@
 chifra argc: 4 [1:monitor] [2:--delete] [3:--help] 
 chifra monitor --delete --help 
 TIME ~ CLOCK - <INFO>  : mode: monitor
-TIME ~ CLOCK - : 4-----call_command ----> acctExport --delete --help
-chifra monitor argc: 3 [1:--delete] [2:--help] 
-chifra monitor --delete --help 
+TIME ~ CLOCK - : 4-----call_command ----> acctExport --appearances --delete --help
+chifra monitor argc: 4 [1:--appearances] [2:--delete] [3:--help] 
+chifra monitor --appearances --delete --help 
 PROG_NAME = [chifra monitor]
 
   Usage:    chifra monitor [-p|-r|-l|-t|-T|-C|-a|-i|-R|-U|-v|-h] <address> [address...] topics  

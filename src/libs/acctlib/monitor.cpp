@@ -344,7 +344,7 @@ const CBaseNode* CMonitor::getObjectAt(const string_q& fieldName, size_t index) 
     if (fieldName % "stateHistory") {
         if (index == NOPOS) {
             CEthState empty;
-            ((CMonitor*)this)->stateHistory.push_back(empty);
+            ((CMonitor*)this)->stateHistory.push_back(empty);  // NOLINT
             index = stateHistory.size() - 1;
         }
         if (index < stateHistory.size())
@@ -536,7 +536,7 @@ bool CMonitor::loadAndSort(CAppearanceArray& items) {
 
     CAppearance_base* buffer = new CAppearance_base[nRecords];
     if (buffer) {
-        bzero((void*)buffer, nRecords * sizeof(CAppearance_base));
+        bzero((void*)buffer, nRecords * sizeof(CAppearance_base));  // NOLINT
         CArchive txCache(READING_ARCHIVE);
         if (txCache.Lock(fn, modeReadOnly, LOCK_NOWAIT)) {
             txCache.Read(buffer, sizeof(CAppearance_base), nRecords);
